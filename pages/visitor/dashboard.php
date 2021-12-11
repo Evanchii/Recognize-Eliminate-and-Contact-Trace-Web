@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../includes/dbconfig.php';
+include '../../includes/dbconfig.php';
 echo($_SESSION['uid']);
 
 echo '<pre>';

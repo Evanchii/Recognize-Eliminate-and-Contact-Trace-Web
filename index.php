@@ -5,8 +5,12 @@ include 'includes/dbconfig.php';
 // use 'includes/vendor/kreait/firebase-php/src/Firebase/Auth/SignIn/FailedToSignIn.php';
 $auth = $firebase->createAuth();
 
+
 if(isset($_POST['inSubmit'])) {
     session_start();
+    // echo '<pre>';
+    // var_dump($_SESSION);
+    // echo '</pre>';
     $email = $_POST['inEmail'];
     $password = $_POST['inPassword'];
 
@@ -17,23 +21,25 @@ if(isset($_POST['inSubmit'])) {
             $verIdToken = $auth->verifyIdToken($token);
             $uid = $verIdToken->claims()->get('sub');
 
-            $reference = $database->getReference("User/", $uid, "/type");
+            $reference = $database->getReference("Users/" . $uid . "/info/Type");
             $type = $reference->getValue();
+
+            // echo '<script>alert("'. $type .'");</script>';
 
             $_SESSION['uid'] = $uid;
             $_SESSION['token'] = $token;
             $_SESSION['type'] = $type;
 
-            if(type==0) {
-
-            } elseif (type==1) {
-
+            if($_SESSION['type']=="User") {
+                header('Location: modules/visitor/dashboard.php');
+            } elseif ($_SESSION['type']=="Establishment") {
+                header('Location: modules/establishment/dashboard.php');
             } else {
-
+                header('Location: modules/admin/dashboard.php');
             }
 
             // $_SESSION = "Logged in successfully!";
-            header('Location: pages/dashboard.php');
+            // header('Location: pages/dashboard.php');
             exit();
         } catch (InvalidToken $e) {
             echo '<script>alert("The token is invalid!")</script>';
@@ -88,6 +94,7 @@ if(isset($_POST['inSubmit'])) {
                 justify-items: stretch;
                 align-items: center;
                 justify-content: space-evenly;
+                border-radius: 15px;
             }
 
             .left {

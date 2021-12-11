@@ -27,11 +27,49 @@ if(isset($_POST['submit'])) {
         ];
         
         try {
+            #Firebase Auth Register
             $createdUser = $auth->createUser($userProperties);
 
+            #Upload Face Photo
+            $img = $_POST['inputFace'];
+            $folderPath = "Face/";
+            
+            $image_parts = explode(";base64,", $img);
+            $image_type_aux = explode("image/", $image_parts[0]);
+            $image_type = $image_type_aux[1];
+            
+            $image_base64 = base64_decode($image_parts[1]);
+            $fileName = $createdUser->uid . '.png'; //INSERT UID HERE
+            
+            $file = $folderPath . $fileName;
+            file_put_contents($file, $image_base64);
+            
+            // print_r($fileName);
+
+            $storage = $firebase->createStorage();
+            $storageClient = $storage->getStorageClient();
+            $defaultBucket = $storage->getBucket();
+
+            $defaultBucket->upload(
+                file_get_contents($file),
+                [
+                    'name' => $file
+                ]
+            );
+
+            $defaultBucket->upload(
+                file_get_contents($_FILES['idInput']['tmp_name']),
+                [
+                    'name' => "ID/" . $createdUser->uid . ".png"
+                ]
+            );
+
+            #Firebase Realtime Database push user data
             $query = [
                 $createdUser->uid => [
                     'info' => [
+                        'ID' => 'ID/' . $createdUser->uid . '.png',
+                        'faceID' => 'Face/' . $createdUser->uid . '.png',
                         'Type' => 'User',
                         'fName' => $fname,
                         'mName' => $mname,
@@ -74,6 +112,8 @@ if(isset($_POST['submit'])) {
             $auth->sendEmailVerificationLink($email);
 
             echo '<script>alert("Successfully Registered! Please check your inbox for your email verification link!")</script>';
+
+            header('Location: ../');
         } catch(Exception $e) {
             echo '<script>alert("${e}")</script>';
         }
@@ -141,6 +181,15 @@ if(isset($_POST['submit'])) {
             .hide {
                 display: none;
             }
+
+            .faceVideo {
+                margin: 0px auto;
+                border: 2px #333 solid;
+            }
+            .faceid {
+                width: 50vw;
+                background-color: #666;
+            }
         </style>
     </header>
     <body>
@@ -151,7 +200,7 @@ if(isset($_POST['submit'])) {
                 <img class="text-logo" src="../assets/text-logo.png" alt="">
             </div>
         </div>
-        <form action="signup.php" method="POST">
+        <form action="signup.php" method="POST" enctype="multipart/form-data">
             <input type="radio" name="usertype" value="visitor" id="typeVisitor" onchange="showForm(this);">
             <label for="visitor">Visitor</label><br>
             <input type="radio" name="usertype" value="establishment" id="typeEstablishment" onchange="showForm(this);">
@@ -227,7 +276,75 @@ if(isset($_POST['submit'])) {
                         </td>
                     </tr>
                 </table>
-                <h3>Step 2-3 UNDER CONTRUCTION</h3>
+
+                <h3>Step 2 Scan Face</h3>
+                <h4>Get Ready to take a photo of your face</h4>
+                <p>To verify your identity, we need to collect your information</p>
+                <div class="faceVideo" id="faceVideo">
+                    <video autoplay="true" id="videoElement" class="faceid"></video><br>
+                    <button type="button" id="screenshot-button">Take photo</button>
+                </div>
+                <div class="faceCanvas hide" id="faceCanvas">
+                    <img src="">
+                    <canvas id="canvas" style="display:none;"></canvas><br>
+                    <input type="hidden" name="inputFace" id="inputFace">
+                    <button type="button" id="retry-button">Retry</button>
+                </div>
+                <script>
+                    var video = document.querySelector("#videoElement");
+                    const screenshotButton = document.querySelector("#screenshot-button");
+                    const retryButton = document.querySelector("#retry-button");
+                    const img = document.querySelector("#faceCanvas img");
+                    const canvas = document.querySelector("#canvas");
+                    const faceInput = document.querySelector("#inputFace");
+
+                    if(navigator.mediaDevices.getUserMedia) {
+                    navigator.mediaDevices.getUserMedia({ video: true })
+                        .then(function (stream) {
+                            video.srcObject = stream;
+
+                            screenshotButton.onclick = video.onclick = function () {
+                                canvas.width = video.videoWidth;
+                                canvas.height = video.videoHeight;
+                                canvas.getContext("2d").drawImage(video, 0, 0);
+                                // Other browsers will fall back to image/png
+                                img.src = canvas.toDataURL("image/webp");
+                                faceInput.value = canvas.toDataURL("image/webp");
+
+                                document.getElementById("faceVideo").style.display = "none";
+                                document.getElementById("faceCanvas").style.display = "block";
+                            };
+
+                            retryButton.onclick = function() {
+                                document.getElementById("faceVideo").style.display = "block";
+                                document.getElementById("faceCanvas").style.display = "none";
+                                faceInput.value = "";
+                            }
+
+                        })
+                        .catch(function (err0r) {
+                        console.log("Something went wrong!");
+                        });
+                    }
+                </script>
+
+
+                <h3>Step 3 Upload ID</h3>
+                <h4>Make sure your ID is valid and is not expired</h4>
+                <input accept="image/*" type='file' id="imgInp" name="idInput" />
+                <img id="idPreview" class="hide faceid" src="#"/>
+
+                <script>
+                    imgInp.onchange = evt => {
+                        const idPreview = document.getElementById("idPreview");
+                        const [file] = imgInp.files
+                        if (file) {
+                            idPreview.style.display = "block";
+                            idPreview.src = URL.createObjectURL(file)
+                        }
+                    }
+                </script>
+
                 <h3>Step 4 Password</h3>
                 <table>
                     <tr>
