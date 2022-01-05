@@ -1,0 +1,315 @@
+
+body{
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #E3E3E3;
+  max-width: 1920px;
+  margin: 0 auto;
+
+}
+
+
+.grid{
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  grid-template-rows: 150px 1fr 50px;
+  grid-template-areas: 
+  "Navigation Header"
+  "Navigation Content"
+  "Footer Footer"
+  ;
+}
+
+/* .grid div:nth-child(odd){
+  background-color: grey;
+}
+
+.grid div:nth-child(even){
+  background-color: aliceblue;
+
+} */
+
+.Navigation{
+  grid-area: Navigation;
+  background-color: #0E73DF;
+  border-radius: 20px;
+  margin-right: 10px;
+  display: grid;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+
+}
+
+
+
+
+
+.Footer{
+  grid-area: Footer;
+}
+
+
+.Navigation .user-profile{
+  width: 100%;
+  height: 200px;
+  position: relative;
+  text-align: center;
+}
+
+.Navigation .user-profile img{
+  border-radius: 50%;
+  width: 80px;
+  margin: 0 auto;
+  display: block;
+  border: 5px solid #FEFEFE;
+}
+
+.Navigation .user-profile span{
+  font-size: 25px;
+  font-weight: 400;
+  color: #FFFFFF;
+}
+
+.Navigation h2{
+  width: 100%;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  color: #FFFFFF;
+  margin-top: 20px;
+  font-size: 40px;
+}
+
+.Navigation .divider{
+  width: 70%;
+  height: 1px;
+}
+
+.Navigation a{
+  text-decoration: none;
+  color: #FFFFFF;
+  font-weight: 500;
+  display: block;
+  font-size: 20px;
+  padding: 15px 10px;
+  text-transform: uppercase;
+  transition: 0.3s ease;
+}
+
+.Navigation .settings{
+  margin-top: 200px;
+  margin-bottom: 50px;
+}
+
+.Navigation a:hover{
+  background-color: #25A1CB;
+}
+
+.Navigation i{
+  margin-right: 10px;
+}
+
+
+
+
+
+.Header{
+  padding: 10px 20px;
+  grid-area: Header;
+  display: grid;
+  grid-template-columns: 70% 1fr;
+  grid-template-areas: 
+  "dashboard-date dashboard-notif";
+  background-color: #F3F3F3;
+  border-radius: 20px;
+  margin-bottom: 10px;
+}
+
+.Header .dashboard-date{
+  grid-area: dashboard-date;
+}
+
+.Header .dashboard-notif{
+  grid-area: dashboard-notif;
+}
+
+.Header .dashboard-date h2{
+  font-size: 50px;
+  margin: 0;
+  font-weight: 200;
+}
+.Header .dashboard-date input{
+  width: 220px;
+  font-size: 20px;
+}
+
+.Header .dashboard-notif i{
+  font-size: 40px;
+}
+
+.Header .dashboard-notif span{
+  font-size: 30px;
+  margin-left: 5px;
+  padding: 5px 15px;
+  background-color: #E5E5E5;
+  border-radius: 10px;
+  font-weight: bolder;
+  transition: 0.3s ease;
+}
+
+.Header .dashboard-notif span:hover{
+  background-color: #25A1CB;
+  color: #FEFEFE;
+  cursor: pointer;
+}
+
+
+
+
+.Content{
+  grid-area: Content;
+
+  display: grid;
+  grid-template-columns: 60% 1fr;
+  grid-template-rows: 120px 1fr;
+  grid-template-areas: 
+  "cases-title daily-cases"
+  "content daily-cases"
+  ;
+  gap: 12px;
+
+}
+
+.Content .content{
+  grid-area: content;
+}
+
+.Content .cases-title{
+  grid-area: cases-title;
+}
+
+
+.Content .cases-title{
+  padding: 10px 12px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  background-color: #F3F3F3;
+  border-radius: 20px;
+}
+
+.Content .cases-title h2{
+  margin: 0;
+}
+
+.content { 
+padding: 20px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  background-color: #f3f3f3;
+  border-radius: 20PX;
+  text-align: center;
+}
+
+.Content .box{
+	display: grid;
+	grid-template-columns: 33% 33% 33%;
+	align-items: start;
+	gap: 50px 1.5em;
+	margin: 30px;
+  
+}
+
+.cases {
+	background-color: yellow;
+	color:black;
+	border-radius: 20px;
+	padding: 30px;
+	width: 55%;
+	height: 55%;
+
+}
+
+.recoveries {
+	background-color: green;
+	color:white;
+	border-radius: 20px;
+	padding: 30px;
+	width: 55%;
+	height: 55%;
+}
+
+
+.deaths {
+	background-color: pink;
+	color:white;
+	border-radius: 20px;
+	padding: 30px;
+	width: 55%;
+	height: 55%;
+
+}
+
+
+.active {
+	background-color: blue;
+	color:white;
+	border-radius: 20px;
+	padding: 30px;
+	width: 55%;
+	height: 55%;
+}
+
+
+.vaccinated {
+	background-color: brown;
+	color:white;
+	border-radius: 20px;
+	padding: 30px;
+	width: 55%;
+	height: 55%;
+}
+
+.tested {
+	background-color: violet;
+	color:white;
+	border-radius: 20px;
+	padding: 30px;
+	width: 55%;
+	height: 55%;
+	
+}
+
+
+.Content .daily-cases{
+  background-color: #0E73DF;
+  border-radius: 20px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.Content .daily-cases h2{
+  text-align: center;
+  margin: 0;
+  font-size: 25px;
+  font-weight: 600;
+  border-radius: 20px;
+  height: 100px;
+  line-height: 100px;
+  background-color: #F3F3F3;
+}
+
+
+
+.Footer{
+  background-color: #E5E5E5;
+  text-align: center;
+}
+
+
+@media screen and (min-width: 736px){
+  .grid{
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    grid-template-rows: 150px 1fr 50px;
+    grid-template-areas: 
+    "Navigation Header"
+    "Navigation Content"
+    "Footer Footer"
+    ;
+  }
+}

@@ -106,7 +106,7 @@ if(isset($_POST['submit'])) {
                             'status' => false,
                         ],
                     ],
-                ]
+                ],
             );
             
             $auth->sendEmailVerificationLink($email);

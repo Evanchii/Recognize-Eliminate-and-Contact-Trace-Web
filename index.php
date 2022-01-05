@@ -2,12 +2,21 @@
 use Firebase\Auth\Token\Exception\InvalidToken;
 //Initialize Database
 include 'includes/dbconfig.php';
-// use 'includes/vendor/kreait/firebase-php/src/Firebase/Auth/SignIn/FailedToSignIn.php';
 $auth = $firebase->createAuth();
+session_start();
+
+if(isset($_SESSION['uid'])) {
+    if($_SESSION['type']=="User") {
+        header('Location: modules/visitor/dashboard.php');
+    } elseif ($_SESSION['type']=="Establishment") {
+        header('Location: modules/establishment/dashboard.php');
+    } else {
+        header('Location: modules/admin/dashboard.php');
+    }
+}
 
 
 if(isset($_POST['inSubmit'])) {
-    session_start();
     // echo '<pre>';
     // var_dump($_SESSION);
     // echo '</pre>';
@@ -31,11 +40,11 @@ if(isset($_POST['inSubmit'])) {
             $_SESSION['type'] = $type;
 
             if($_SESSION['type']=="User") {
-                header('Location: modules/visitor/dashboard.php');
+                header('Location: pages/visitor/dashboard.php');
             } elseif ($_SESSION['type']=="Establishment") {
-                header('Location: modules/establishment/dashboard.php');
+                header('Location: pages/establishment/dashboard.php');
             } else {
-                header('Location: modules/admin/dashboard.php');
+                header('Location: pages/admin/dashboard.php');
             }
 
             // $_SESSION = "Logged in successfully!";
@@ -139,24 +148,11 @@ if(isset($_POST['inSubmit'])) {
         </style>
     </header>
     <body>
-        <!-- Test Login -->
-        <!-- <h1>Login</h1>
-        <form action="index.php" method="POST">
-            <p>Email</p>
-            <input type="text" name="inEmail" placeholder="sample@email.com" required>
-            <p>Password</p>
-            <input type="Password" name="inPassword"placeholder="password" required>
-            <p><input type="submit" name="inSubmit" value="Log in"></p>
-        </form>
-        <!-- Link to open the modal ->
-        <p><a class="btn" href="#forgot" rel="modal:open">Open Modal</a></p> -->
-
         <div class="container">
             <div class="left center">
                 <img src="assets/logo.png" alt="REaCT Logo">
             </div>
             <div class="right">
-                <!-- Centered -->
                 <img src="assets/text-logo.png" alt="REaCT Login">
                 <form action="index.php" method="POST">
                     <p>Email</p>
@@ -165,7 +161,7 @@ if(isset($_POST['inSubmit'])) {
                     <input type="password" name="inPassword"placeholder="••••••••" required>
                     <p class="end"><a href="#forgot" rel="modal:open">Forgot Password</a></p>
                     <p class="center"><input type="submit" name="inSubmit" value="Log in"></p>
-                    <p>Don't have an account? <a href="modules/signup.php">Sign up now!</a></p>
+                    <p>Don't have an account? <a href="pages/signup.php">Sign up now!</a></p>
                 </form>
 
             </div>
@@ -199,6 +195,7 @@ if(isset($_POST['inSubmit'])) {
                     url: frm.attr('action'),
                     data: frm.serialize(),
                     success: function (data) {
+                        console.log("Data: "+ data);
                         frm.html(data);
                     },
                     error: function (data) {
