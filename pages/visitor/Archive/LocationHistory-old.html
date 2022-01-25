@@ -1,0 +1,476 @@
+<!-- 
+Review notes:
+• Apply changes from Dashboard
+• Make table row selectable: http://jsfiddle.net/65JPw/2/
+• Table data: Date / Time / Est / Branch
+• Remove visitor info, this removes the grid layout in .Content
+ -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <style type="text/css">
+    
+body{
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #E3E3E3;
+  max-width: 1920px;
+  margin: 0 auto;
+
+}
+
+
+.grid{
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  grid-template-rows: 150px 1fr 50px;
+  grid-template-areas: 
+  "Navigation Header"
+  "Navigation Content"
+  "Footer Footer"
+  ;
+}
+
+/* .grid div:nth-child(odd){
+  background-color: grey;
+}
+
+.grid div:nth-child(even){
+  background-color: aliceblue;
+
+} */
+
+.Navigation{
+  grid-area: Navigation;
+  background-color: #0E73DF;
+  border-radius: 20px;
+  margin-right: 10px;
+  display: grid;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+
+}
+
+
+
+
+
+.Footer{
+  grid-area: Footer;
+}
+
+
+.Navigation .user-profile{
+  width: 100%;
+  height: 200px;
+  position: relative;
+  text-align: center;
+}
+
+.Navigation .user-profile img{
+  border-radius: 50%;
+  width: 80px;
+  margin: 0 auto;
+  display: block;
+  border: 5px solid #FEFEFE;
+}
+
+.Navigation .user-profile span{
+  font-size: 25px;
+  font-weight: 400;
+  color: #FFFFFF;
+}
+
+.Navigation h2{
+  width: 100%;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  color: #FFFFFF;
+  margin-top: 20px;
+  font-size: 40px;
+}
+
+.Navigation .divider{
+  width: 70%;
+  height: 1px;
+}
+
+.Navigation a{
+  text-decoration: none;
+  color: #FFFFFF;
+  font-weight: 500;
+  display: block;
+  font-size: 20px;
+  padding: 15px 10px;
+  text-transform: uppercase;
+  transition: 0.3s ease;
+}
+
+.Navigation .settings{
+  margin-top: 200px;
+  margin-bottom: 50px;
+}
+
+.Navigation a:hover{
+  background-color: #25A1CB;
+}
+
+.Navigation i{
+  margin-right: 10px;
+}
+
+
+
+
+
+.Header{
+  padding: 10px 20px;
+  grid-area: Header;
+  display: grid;
+  grid-template-columns: 70% 1fr;
+  grid-template-areas: 
+  "dashboard-date dashboard-notif";
+  background-color: #F3F3F3;
+  border-radius: 20px;
+  margin-bottom: 10px;
+}
+
+.Header .dashboard-date{
+  grid-area: dashboard-date;
+}
+
+.Header .dashboard-notif{
+  grid-area: dashboard-notif;
+}
+
+.Header .dashboard-date h2{
+  font-size: 50px;
+  margin: 0;
+  font-weight: 200;
+}
+.Header .dashboard-date input{
+  width: 220px;
+  font-size: 20px;
+}
+
+.Header .dashboard-notif i{
+  font-size: 40px;
+}
+
+.Header .dashboard-notif span{
+  font-size: 30px;
+  margin-left: 5px;
+  padding: 5px 15px;
+  background-color: #E5E5E5;
+  border-radius: 10px;
+  font-weight: bolder;
+  transition: 0.3s ease;
+}
+
+.Header .dashboard-notif span:hover{
+  background-color: #25A1CB;
+  color: #FEFEFE;
+  cursor: pointer;
+}
+
+
+
+
+.Content{
+  grid-area: Content;
+  display: grid;
+  grid-template-columns: 80% 1fr;
+  grid-template-rows: 700px 1fr;
+  grid-template-areas: 
+  "status-image loc-history"
+  ;
+  grid-row-gap: 12px;
+
+}
+
+.Content .status-image{
+  grid-area: status-image;
+}
+.Content .status-image table{
+  border: 1px solid black;
+  padding: 10px;
+  margin: 1px;
+  table-layout: fixed;
+  width: 100%
+}
+.Content .status-image table tr td{
+  padding: 30px;
+  margin: auto;
+}
+.Content .loc-history{
+  margin-left: 10px;
+  grid-area: loc-history;
+  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+.Content .status-image img{
+  width: 200px;
+}
+
+
+.Content .status-image{
+  padding: 20px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  background-color: #f3f3f3;
+  border-radius: 20PX;
+  text-align: center;
+}
+
+.Content .status-image img{
+  width: 45%;
+  display: inline-block;
+  box-sizing: border-box;
+  border-radius: 10px;
+}
+
+.Content .loc-history{
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  text-align: center;
+}
+
+.Content .loc-history h2{
+  text-align: center;
+  margin: 0;
+  font-size: 25px;
+  font-weight: 600;
+  border-radius: 20px;
+  height: 100px;
+  line-height: 100px;
+  background-color: #F3F3F3;
+}
+.Content .loc-history .imgprof{
+  width: 100px;
+  
+}
+
+.Content .loc-history .history{
+  position: relative;
+  padding: 15px 0px;
+
+}
+.Content .loc-history .history table{
+  border: 1px solid black;
+  padding: 10px;
+  margin: 1px;
+  table-layout: auto;
+  width: 100%
+}
+.Content .loc-history .history table tr td p{
+  font-size: 16px;
+}
+.Content .loc-history .history table tr td{
+  padding: 16px;
+  margin: auto;
+}
+
+.Footer{
+  background-color: #E5E5E5;
+  text-align: center;
+}
+
+
+@media screen and (min-width: 736px){
+  .grid{
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    grid-template-rows: 150px 1fr 50px;
+    grid-template-areas: 
+    "Navigation Header"
+    "Navigation Content"
+    "Footer Footer"
+    ;
+  }
+}
+
+  </style>
+
+  <title>Location History</title>
+</head>
+<body>
+  
+  <div class="grid">
+
+    <div class="Navigation">
+
+      <h2>REaCT</h2>
+      <hr class="divider">
+      <div class="user-profile">
+
+        <img src="C:\Users\PC\Documents\Dashboard\Resources\userprof.png">
+        <span>Michael Eman Cordova</span>
+
+      </div>
+
+      <a href="#"><i class="fa fa-th-large" aria-hidden="true"></i>Dashboard</a>
+      <a href="#"><i class="fa fa-line-chart" aria-hidden="true"></i>Covid Cases</a>
+      <a href="#"><i class="fa fa-heartbeat" aria-hidden="true"></i>Health Status</a>
+      <a href="#" class="active"><i class="fa fa-lightbulb-o" aria-hidden="true"></i>Location History</a>
+
+
+      <div class="settings">
+
+        <a href="#"><i class="fa fa-cog" aria-hidden="true"></i>Setttings</a>
+
+      </div>
+    </div>
+    <div class="Header">
+      
+      <div class="dashboard-date">
+        
+        <h2>Dashboard</h2>
+        <input type="date" id="birthday" name="birthday">
+
+      </div>
+
+      <div class="dashboard-notif">
+
+        <i class="fa fa-bell" aria-hidden="true"></i>
+        <i class="fa fa-user-circle" aria-hidden="true"></i>
+        <span>My Account</span>
+      </div>
+
+    </div>
+    <div class="Content">
+
+      <div class="status-image">
+        <h3 style="text-align: left;">Visitors History</h3>
+        <table style="border-collapse: collapse;">
+          <tr style="background: rgba(30, 100, 255, 0.5);">
+            <td>
+              <h3>Name</h3>
+            </td>
+            <td>
+              <h3>Date Visited</h3>
+            </td>
+            <td>
+              <h3>Time</h3>
+            </td>
+          </tr>
+           <tr>
+            <td>
+              <p>Name</p>
+            </td>
+            <td>
+              <p>Date Visited</p>
+            </td>
+            <td>
+              <p>Time</p>
+            </td>
+          </tr>
+           <tr>
+            <td>
+              <p>Name</p>
+            </td>
+            <td>
+              <p>Date Visited</p>
+            </td>
+            <td>
+              <p>Time</p>
+            </td>
+          </tr>
+           <tr>
+            <td>
+              <p>Name</p>
+            </td>
+            <td>
+              <p>Date Visited</p>
+            </td>
+            <td>
+              <p>Time</p>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p>Name</p>
+            </td>
+            <td>
+              <p>Date Visited</p>
+            </td>
+            <td>
+              <p>Time</p>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="loc-history">
+        <h3>Visitor's Info</h3>
+        <img src="C:\Users\PC\Documents\Dashboard\Resources\userprof.png" class="imgprof">
+        <div class="history">
+          <table style="border-collapse: collapse;">
+            <tr style="background: rgba(30, 100, 255, 0.5);">
+              <td>
+                <p>Name</p>
+              </td>
+              <td>
+                <p>Name</p>
+              </td>
+            </tr>
+             <tr>
+              <td>
+                <p>Age</p>
+              </td>
+              <td>
+                <p>21</p>
+              </td>
+            </tr>
+            <tr style="background: rgba(30, 100, 255, 0.5);">
+              <td>
+                <p>Address</p>
+              </td>
+              <td>
+                <p>Address</p>
+              </td>
+            </tr>
+             <tr>
+              <td>
+                <p>Contact Number</p>
+              </td>
+              <td>
+                <p>Contact Number</p>
+              </td>
+            </tr >
+             <tr style="background: rgba(30, 100, 255, 0.5);">
+              <td>
+                <p>Date Visited</p>
+              </td>
+              <td>
+                <p>Date Visited</p>
+              </td>
+            </tr>
+          </table>
+        </div>
+        </div>
+  
+      </div>
+
+    </div>
+
+
+
+    <div class="Footer">
+
+      © 2021 REacT. All right reserved
+
+    </div>
+
+
+  </div>
+
+  
+</body>
+</html>

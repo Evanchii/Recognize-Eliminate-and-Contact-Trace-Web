@@ -1,0 +1,146 @@
+#userType {
+    min-height: 50vh;
+}
+
+.type {
+    cursor: pointer;
+    height: fit-content;
+    border-radius: 10px;
+    box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.75);
+    -webkit-box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.75);
+    padding: 2% 2%;
+    transition: 0.5s ease-in-out;
+}
+
+.type:hover {
+    box-shadow: 0px 0px 15px 2px rgba(0, 0, 0, 0.75);
+    -webkit-box-shadow: 0px 0px 15px 2px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0px 0px 15px 2px rgba(0, 0, 0, 0.75);
+    border: none;
+}
+
+.radioCard:checked~.radDesc {
+    border: 2px solid #0C112D;
+    box-shadow: 0px 0px 12px 1px rgba(0, 0, 0, 0.75);
+    -webkit-box-shadow: 0px 0px 12px 1px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0px 0px 12px 1px rgba(0, 0, 0, 0.75);
+}
+
+.sectTitle {
+    font-weight: bold;
+}
+
+.section {
+    display: inline-flex;
+    width: 100%;
+}
+
+.section span {
+    flex-grow: 1;
+    flex-basis: 0;
+    padding: 0% 2%;
+}
+
+.section input {
+    width: 100%;
+}
+
+table {
+    table-layout: fixed;
+    width: 100%;
+    margin-top: 2%;
+    border-spacing: 2rem 0rem;
+    border-collapse: separate;
+}
+
+table td input {
+    display: block;
+    width: 100%;
+}
+
+th {
+    padding-top: 0.5rem;
+}
+
+.type>img {
+    width: 10vw;
+}
+
+
+
+button img {
+    width: 5%;
+}
+
+.camButt {
+    padding: 1% 3%;
+}
+
+.containerCard {
+    margin-top: 5%;
+    width: 100%;
+    display: inline-flex;
+    justify-content: space-around;
+    align-content: center;
+}
+
+.navigationButton {
+    padding: 1.5% 3%;
+    font-size: 1em;
+    margin: 1% 3%;
+    margin-top: 4%;
+}
+
+.faceid {
+    margin: 2% auto;
+    width: 80%;
+    background-color: #0C112D;
+    object-fit: contain;
+}
+
+.idPreview {
+    width: 50%;
+    margin: auto;
+    background-color: #666;
+}
+
+.nav {
+    text-align: start;
+}
+
+@media (width: 480px),
+(orientation: portrait) {
+    .content {
+        width: 75vw;
+        margin: 15vh auto;
+        display: block;
+    }
+
+    .type {
+        flex-grow: 0.4;
+        flex-basis: 0;
+        font-size: 0.7em;
+    }
+
+    header img {
+        width: 25vw;
+    }
+
+    header h2 {
+        font-size: 1.7em;
+    }
+
+    .section {
+        flex-direction: column;
+    }
+
+    .section span {
+        padding: 3%;
+    }
+
+    .section input {
+        width: 90% !important;
+        margin: auto;
+    }
+}

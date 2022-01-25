@@ -3,7 +3,8 @@ include '../../functions/checkSession.php';
 
 $uid = $_SESSION["uid"];
 $infoRef = $database->getReference("Users/" . $uid . "/info");
-$linkRef = $database->getReference("appData/links/");
+$userHisRef = $database->getReference('Users/'.$uid.'/history');
+$historyRef = $database->getReference('History');
 
 if(!isset($_SESSION['fName'])) {
   $_SESSION["lName"] = $infoRef->getChild("lName")->getValue();
@@ -35,9 +36,10 @@ if ($imageReference -> exists()) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="../../styles/dashboard.css">
+    <link rel="stylesheet" type="text/css" href="../../styles/history.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="shortcut icon" href="../../assets/favicon.ico" type="image/x-icon">
-    <title>Dashboard | REaCT</title>
+    <title>Location History | REaCT</title>
 </head>
 
 <body>
@@ -53,17 +55,17 @@ if ($imageReference -> exists()) {
                 <span><?php echo $_SESSION['lName'].', '.$_SESSION['fName'].' '.$_SESSION['mName']?></span>
             </div>
             <hr class="divider">
-            <a href="#" class="active"><i class="fa fa-th-large" aria-hidden="true"></i>Dashboard</a>
+            <a href="dashboard.php"><i class="fa fa-th-large" aria-hidden="true"></i>Dashboard</a>
             <a href="cases.php"><i class="fa fa-line-chart" aria-hidden="true"></i>Covid Cases</a>
             <a href="#"><i class="fa fa-heartbeat" aria-hidden="true"></i>Health Status</a>
-            <a href="history.php"><i class="fa fa-lightbulb-o" aria-hidden="true"></i>Location History</a>
+            <a href="#" class="active"><i class="fa fa-lightbulb-o" aria-hidden="true"></i>Location History</a>
             <div class="settings">
                 <a href="#"><i class="fa fa-cog" aria-hidden="true"></i>Setttings</a>
             </div>
         </div>
         <div class="Header">
             <div class="dashboard-date">
-                <h2>Dashboard</h2>
+                <h2>Location History</h2>
             </div>
             <div class="dashboard-notif">
                 <span class="dropdown"><i class="fa fa-user-circle dropbtn" aria-hidden="true"></i>My Account
@@ -74,47 +76,34 @@ if ($imageReference -> exists()) {
             </div>
         </div>
         <div class="Content">
-            <div class="content-title">
-                <!-- Change User place holder insert FN -->
-                <h2>Welcome, <?php echo $_SESSION['fName'];?></h2>
-                <span>Here's the latest update in COVID-19 STATUS in Dagupan City</span>
+            <div>
+              <table>
+                <tr>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Establishment</th>
+                  <th>Branch</th>
+                </tr>
+                <?php 
+                if($userHisRef->getSnapshot()->hasChildren()) {
+                  // var_dump($userHisRef->getValue());
+                  $history = $userHisRef->getValue();
+                  foreach ($history as $date => $keySet) {
+                    foreach ($keySet as $key => $timestamp) {
+                      echo '<tr>
+                      <td>'.$date.'</td>
+                      <td>'.$historyRef->getChild($date.'/'.$timestamp.'/time')->getValue().'</td>
+                      <td>'.$historyRef->getChild($date.'/'.$timestamp.'/estName')->getValue().'</td>
+                      <td>'.$historyRef->getChild($date.'/'.$timestamp.'/branch')->getValue().'</td>
+                      </tr>';
+                    }
+                  }
+                } else {
+                  echo '<tr><th colspan="4">No data found!</h2><tr>';
+                }
+                ?>
+              </table>
             </div>
-            <div class="status-image">
-                <!-- Get photo/resources from FB -->
-                <img src="<?php echo $linkRef->getChild("brgy")->getValue();?>" alt="COVID STATUS">
-                <img src="<?php echo $linkRef->getChild("situationer")->getValue();?>" alt="COVID STATUS">
-            </div>
-            <div class="loc-history">
-                <div class="loc-title">
-                    <span>Location History</span>
-                </div>
-                <!-- Get data from RTDB -->
-                <div class="list-history">
-                    <?php 
-                      $userHisRef = $database->getReference('Users/'.$uid.'/history');
-                      $historyRef = $database->getReference('History');
-                      if($userHisRef->getSnapshot()->hasChildren()) {
-                        // var_dump($userHisRef->getValue());
-                        $history = $userHisRef->getValue();
-                        foreach ($history as $date => $keySet) {
-                          echo '<div class="history date-history">
-                              <h2>'.$date.'</h2>
-                            </div>';
-                          foreach ($keySet as $key => $timestamp) {
-                            echo '<div class="history">
-                              <span>'.$historyRef->getChild($date.'/'.$timestamp.'/estName')->getValue().'</span>
-                              <i class="fa fa-caret-right" aria-hidden="true"></i>
-                            </div>';
-                          }
-                        }
-                      } else {
-                        echo '<h2>No data found!</h2>';
-                      }
-                    ?>
-                </div>
-
-            </div>
-
         </div>
 
 

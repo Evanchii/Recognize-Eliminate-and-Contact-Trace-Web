@@ -3,22 +3,20 @@
 include '../includes/dbconfig.php';
 
 $auth = $firebase->createAuth();
-if(isset($_POST['submit'])) {
-    $usertype = $_POST['usertype'];
-    if($usertype == "visitor") {
-        $fname = $_POST['firstName'];
-        $mname = $_POST['middleName'];
-        $lname = $_POST['lastName'];
-        $cno = $_POST['contactNumber'];
-        $email = $_POST['emailAddress'];
-        $dob = $_POST['dob'];
-        $nostreet = $_POST['NoStreet'];
-        $ba = $_POST['barangay'];
-        $ci = $_POST['city'];
-        $pr = $_POST['province'];
-        $co = $_POST['country'];
-        $zip = $_POST['zip'];
-        $pass = $_POST['password'];
+if(isset($_POST['visSubmit'])) {
+        $fname = $_POST['visFName'];
+        $mname = $_POST['visMName'];
+        $lname = $_POST['visLName'];
+        $cno = $_POST['visCNo'];
+        $email = $_POST['visEmail'];
+        $dob = $_POST['visDOB'];
+        $nostreet = $_POST['visNo'];
+        $ba = $_POST['visBa'];
+        $ci = $_POST['visCi'];
+        $pr = $_POST['visPro'];
+        $co = $_POST['visCo'];
+        $zip = $_POST['visZip'];
+        $pass = $_POST['visPass'];
 
         $userProperties = [
             'email' => $email,
@@ -31,12 +29,12 @@ if(isset($_POST['submit'])) {
             $createdUser = $auth->createUser($userProperties);
 
             #Upload Face Photo
-            $img = $_POST['inputFace'];
+            $img = $_POST['visFace'];
             $folderPath = "Face/";
             
             $image_parts = explode(";base64,", $img);
-            $image_type_aux = explode("image/", $image_parts[0]);
-            $image_type = $image_type_aux[1];
+            // $image_type_aux = explode("image/", $image_parts[0]);
+            // $image_type = $image_type_aux[1];
             
             $image_base64 = base64_decode($image_parts[1]);
             $fileName = $createdUser->uid . '.png'; //INSERT UID HERE
@@ -57,41 +55,23 @@ if(isset($_POST['submit'])) {
                 ]
             );
 
+            $idFile = $_FILES['visID']['tmp_name'];
+
             $defaultBucket->upload(
-                file_get_contents($_FILES['idInput']['tmp_name']),
+                file_get_contents($idFile),
                 [
-                    'name' => "ID/" . $createdUser->uid . ".png"
+                    'name' => "ID/" . $createdUser->uid . '.png'
                 ]
             );
 
             #Firebase Realtime Database push user data
-            $query = [
-                $createdUser->uid => [
-                    'info' => [
-                        'ID' => 'ID/' . $createdUser->uid . '.png',
-                        'faceID' => 'Face/' . $createdUser->uid . '.png',
-                        'Type' => 'User',
-                        'fName' => $fname,
-                        'mName' => $mname,
-                        'lName' => $lname,
-                        'cNo' => $cno,
-                        'DoB' => $dob,
-                        'addNo' => $nostreet,
-                        'addBa' => $ba,
-                        'addCi' => $ci,
-                        'addPro' => $pr,
-                        'addCo' => $co,
-                        'addZip' => $zip,
-                        'status' => false,
-                    ],
-                ],
-            ];
-
             $database->getReference('Users')->update(
                 [
                     $createdUser->uid => [
                         'info' => [
-                            'Type' => 'User',
+                            'faceID' => 'Face/'.$createdUser->uid . '.png',
+                            'ID' => 'ID/'.$createdUser->uid. '.png',
+                            'Type' => 'visitor',
                             'fName' => $fname,
                             'mName' => $mname,
                             'lName' => $lname,
@@ -109,295 +89,365 @@ if(isset($_POST['submit'])) {
                 ],
             );
             
-            $auth->sendEmailVerificationLink($email);
+            // $auth->sendEmailVerificationLink($email);
 
             echo '<script>alert("Successfully Registered! Please check your inbox for your email verification link!")</script>';
 
             header('Location: ../');
         } catch(Exception $e) {
-            echo '<script>alert("${e}")</script>';
+            echo '<script>alert("'.$e.'")</script>';
         }
-    }
-    elseif ($usertype=="establishment") {
-        echo("ESTABLISHMENT UNDER CONSTRUCTION");
+} elseif(isset($_POST['estSubmit'])) {
+    $name = $_POST['estName'];
+    $branch = $_POST['estBra'];
+    $nostreet = $_POST['estNo'];
+    $ba = $_POST['estBa'];
+    $ci = $_POST['estCi'];
+    $pr = $_POST['estPro'];
+    $co = $_POST['estCo'];
+    $zip = $_POST['estZip'];
+    $cno = $_POST['estCNo'];
+    $email = $_POST['estEmail'];
+    $fname = $_POST['estFName'];
+    $mname = $_POST['estMName'];
+    $lname = $_POST['estLName'];
+    $pos = $_POST['estPos'];
+    $pass = $_POST['estPass'];
+
+    $userProperties = [
+        'email' => $email,
+        'emailVerified' => false,
+        'password' => $pass,
+    ];
+
+    try {
+        #Firebase Auth Register
+        $createdUser = $auth->createUser($userProperties);
+
+        $storage = $firebase->createStorage();
+        $storageClient = $storage->getStorageClient();
+        $defaultBucket = $storage->getBucket();
+
+        $defaultBucket->upload(
+            file_get_contents($_FILES['estDoc']['tmp_name']),
+            [
+                'name' => "Doc/" . $createdUser->uid . ".png"
+            ]
+        );
+
+        #Firebase Realtime Database push user data
+        $database->getReference('Users')->update(
+            [
+                $createdUser->uid => [
+                    'info' => [
+                        'doc' => 'Doc/' . $createdUser->uid . '.png',
+                        'Type' => 'establishment',
+                        'name' => $name,
+                        'branch' => $branch,
+                        'addNo' => $nostreet,
+                        'addBa' => $ba,
+                        'addCi' => $ci,
+                        'addPro' => $pr,
+                        'addCo' => $co,
+                        'addZip' => $zip,
+                        'cNo' => $cno,
+                        'fName' => $fname,
+                        'mName' => $mname,
+                        'lName' => $lname,
+                        'pos' => $pos,
+                        'status' => false,
+                    ],
+                ],
+            ],
+        );
+        
+        $auth->sendEmailVerificationLink($email);
+
+        echo '<script>alert("Successfully Registered! Please check your inbox for your email verification link!")</script>';
+
+        header('Location: ../');
+    } catch(Exception $e) {
+        echo '<script>alert("${e}")</script>';
     }
 }
 ?>
 <!DOCTYPE html>
 <html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="../assets/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../styles/public-common.css">
+    <link rel="stylesheet" href="../styles/signup.css">
+    <title>Sign up | REaCT</title>
+</head>
+
+<body>
     <header>
-        <title>Sign up - REaCT</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <style>
-            @import url('https://fonts.googleapis.com/css2?family=Asap:wght@400;500&family=Quicksand:wght@400;500&display=swap');
-            
-            * {
-                font-family: 'Asap', sans-serif;
-                font-family: 'Quicksand', sans-serif;
-                text-decoration: none;
-            }
-
-            body {
-                background-image: radial-gradient(#b5b5b5 10%, transparent 0%);
-                background-color: #e0e0e0;
-                background-position: 0 0, 50px 50px;
-                background-size: 20px 20px;
-            }
-
-            .center {
-                text-align: center;
-            }
-
-            .end {
-                text-align: right;
-            }
-
-            /* end of common */
-
-            .header {
-                display: flex;
-                align-items: center;
-            }
-
-            .logo {
-                width: 5%;
-            }
-
-            .text-logo {
-                width: 20%;
-            }
-
-            .header>p {
-                width: auto;
-            }
-
-            form {
-                background: white;
-                width: 60vw;
-                margin: auto;
-                padding: 20px;
-            }
-
-            .hide {
-                display: none;
-            }
-
-            .faceVideo {
-                margin: 0px auto;
-                border: 2px #333 solid;
-            }
-            .faceid {
-                width: 50vw;
-                background-color: #666;
-            }
-        </style>
+        <img src="../assets/text-logo.png" alt="REaCT">
+        <h2>Sign up</h2>
     </header>
-    <body>
-        <div class="header">
-            <a href="../">< Login</a>
-            <div class="center">
-                <img class="logo" src="../assets/logo.png" alt="">
-                <img class="text-logo" src="../assets/text-logo.png" alt="">
+    <div class="content">
+        <div id="userType" class="tabcontent">
+            <div class="sectionTitle center">
+                <h3>Step 1</h3>
+                <h1>Choose User Type</h1>
             </div>
+            <div class="containerCard">
+                <label class="type center" id="typeVisitor" onclick="select(this.id);">
+                    <input type="radio" class="radioCard" name="usertype" value="visitor"
+                        onclick="select(this.id);"><br>
+                    <img src="../assets/ic_visitor.svg" alt="Visitor" class="imgCircle">
+                    <h3>Visitor</h3>
+                </label>
+                <label class="type center" id="typeEst" onclick="select(this.id);">
+                    <input type="radio" class="radioCard" name="usertype" value="establishment"
+                        onclick="select(this);"><br>
+                    <img src=" ../assets/ic_establishment.svg" alt="Establishment" class="imgCircle">
+                    <h3>Establishment</h3>
+                </label>
+            </div>
+            <button type="button" class="navigationButton" id="s1Next" onclick="changeForm(event, 'step1' ,'')">Next</button>
         </div>
-        <form action="signup.php" method="POST" enctype="multipart/form-data">
-            <input type="radio" name="usertype" value="visitor" id="typeVisitor" onchange="showForm(this);">
-            <label for="visitor">Visitor</label><br>
-            <input type="radio" name="usertype" value="establishment" id="typeEstablishment" onchange="showForm(this);">
-            <label for="establishment">Establishment</label><br>
-            <div id="formVisitor" class="hide">
-                <h3>Step 1 Basic Data</h3>
-                <table>
-                    <tr>
-                        <th>Full Name</th>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label for="firstName">First Name</label><br>
-                            <input required type="text" name="firstName">
-                        </td>
-                        <td>
-                            <label for="middleName">Middle Name</label><br>
-                            <input required type="text" name="middleName">
-                        </td>
-                        <td>
-                            <label for="lastName">Last Name</label><br>
-                            <input required type="text" name="lastName">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Contact Details</th>
-                    </tr>
-                    <tr>
-                    <td>
-                            <label for="contactNumber">Contact Number</label><br>
-                            <input required type="tel" name="contactNumber">
-                        </td>
-                        <td>
-                            <label for="emailAddress">Email Address</label><br>
-                            <input required type="email" name="emailAddress">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label for="dob">Date of Birth</label><br>
-                            <input required type="date" name="dob">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Current Address</th>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label for="NoStreet">House Number and Street Address</label><br>
-                            <input required type="text" name="NoStreet">
-                        </td>
-                        <td>
-                            <label for="barangay">Barangay</label><br>
-                            <input required type="text" name="barangay">
-                        </td>
-                        <td>
-                            <label for="city">City</label><br>
-                            <input required type="text" name="city">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label for="province">Province</label><br>
-                            <input required type="text" name="province">
-                        </td>
-                        <td>
-                            <label for="country">Country</label><br>
-                            <input required type="text" name="country">
-                        </td>
-                        <td>
-                            <label for="zip">Zipcode</label><br>
-                            <input required type="number" name="zip">
-                        </td>
-                    </tr>
-                </table>
 
-                <h3>Step 2 Scan Face</h3>
-                <h4>Get Ready to take a photo of your face</h4>
-                <p>To verify your identity, we need to collect your information</p>
-                <div class="faceVideo" id="faceVideo">
-                    <video autoplay="true" id="videoElement" class="faceid"></video><br>
-                    <button type="button" id="screenshot-button">Take photo</button>
+        <form action="signup.php" name="visForm" method="POST" enctype="multipart/form-data">
+            <div id="formVisitor">
+                <!-- Visitor Form -->
+                <div id="visInfo" class="tabcontent hide">
+                    <!-- Insert progress indicator -->
+                    <div class="sectionTitle center">
+                        <h3>Step 2</h3>
+                        <h1>Basic Data</h1>
+                    </div>
+                    <div class="sectTitle">Full Name</div>
+                    <div class="section">
+                        <span>
+                            <label for="visFName">First Name</label><br>
+                            <input required type="text" name="visFName">
+                        </span>
+                        <span>
+                            <label for="visMName">Middle Name</label><br>
+                            <input required type="text" name="visMName">
+                        </span>
+                        <span>
+                            <label for="visLName">Last Name</label><br>
+                            <input required type="text" name="visLName">
+                        </span>
+                    </div>
+                    <div class="section">
+                        <span>
+                            <label for="visCNo">Contact Number</label><br>
+                            <input required type="tel" name="visCNo">
+                        </span>
+                        <span>
+                            <label for="visEmail">Email Address</label><br>
+                            <input required type="email" name="visEmail">
+                        </span>
+                        <span>
+                            <label for="visDOB">Date of Birth</label><br>
+                            <input required type="date" name="visDOB">
+                        </span>
+                    </div>
+                    <div class="sectTitle">Current Address</div>
+                    <div class="section">
+                        <span>
+                            <label for="visNo">House Number and Street</label><br>
+                            <input required type="text" name="visNo">
+                        </span>
+                        <span>
+                            <label for="visBa">Barangay</label><br>
+                            <input required type="text" name="visBa">
+                        </span>
+                        <span>
+                            <label for="visCi">City</label><br>
+                            <input required type="text" name="visCi">
+                        </span>
+                    </div>
+                    <div class="section">
+                        <span><label for="visPro">Province</label><br>
+                            <input required type="text" name="visPro"></span>
+                        <span><label for="visCo">Country</label><br>
+                            <input required type="text" name="visCo"></span>
+                        <span><label for="visZip">Zipcode</label><br>
+                            <input required type="number" name="visZip"></span>
+                    </div>
+                    <!-- Insert next button -->
+                    <button type="button" class="navigationButton" onclick="changeForm(event, 'userType', '')">Back</button>
+                    <button type="button" class="navigationButton" onclick="changeForm(event, 'visFace', 'visInfo')">Next</button>
                 </div>
-                <div class="faceCanvas hide" id="faceCanvas">
-                    <img src="">
-                    <canvas id="canvas" style="display:none;"></canvas><br>
-                    <input type="hidden" name="inputFace" id="inputFace">
-                    <button type="button" id="retry-button">Retry</button>
+                <div id="visFace" class="tabcontent hide center">
+                    <h3>Step 3</h3>
+                    <h1>Scan Face</h1>
+                    <h4>Get Ready to take a photo of your face</h4>
+                    <p>To verify your identity, we need to collect your information</p>
+                    <div class="faceVideo" id="faceVideo">
+                        <video autoplay="true" poster="../assets/loading.gif" id="videoElement"
+                            class="faceid"></video><br>
+                        <button type="button" class="camButt" id="screenshot-button"> <img src="../assets/camera.svg"
+                                alt=""> Take photo</button>
+                    </div>
+                    <div class="faceCanvas hide" id="faceCanvas">
+                        <img class="faceid" src="">
+                        <canvas id="canvas" style="display:none;"></canvas><br>
+                        <input type="hidden" name="visFace" id="visInpFace">
+                        <button type="button" class="camButt" id="retry-button"><img src="../assets/retry.svg"
+                                alt="">Retry</button>
+                    </div>
+                    <div class="nav">
+                        <button type="button" class="navigationButton" onclick="changeForm(event, 'visInfo', '')">Back</button>
+                        <button type="button" class="navigationButton hide" id="camNext"
+                            onclick="changeForm(event, 'visId', 'visFace')">Next</button>
+                    </div>
                 </div>
-                <script>
-                    var video = document.querySelector("#videoElement");
-                    const screenshotButton = document.querySelector("#screenshot-button");
-                    const retryButton = document.querySelector("#retry-button");
-                    const img = document.querySelector("#faceCanvas img");
-                    const canvas = document.querySelector("#canvas");
-                    const faceInput = document.querySelector("#inputFace");
+                <div id="visId" class="tabcontent hide center">
+                    <h3>Step 4</h3>
+                    <h1>Upload ID</h1>
+                    <h4>Make sure your ID is valid and is not expired</h4>
+                    <input accept="image/*" type='file' id="visID" name="visID" />
+                    <img id="IDPrev" class="hide idPreview" src="#" />
 
-                    if(navigator.mediaDevices.getUserMedia) {
-                    navigator.mediaDevices.getUserMedia({ video: true })
-                        .then(function (stream) {
-                            video.srcObject = stream;
-
-                            screenshotButton.onclick = video.onclick = function () {
-                                canvas.width = video.videoWidth;
-                                canvas.height = video.videoHeight;
-                                canvas.getContext("2d").drawImage(video, 0, 0);
-                                // Other browsers will fall back to image/png
-                                img.src = canvas.toDataURL("image/webp");
-                                faceInput.value = canvas.toDataURL("image/webp");
-
-                                document.getElementById("faceVideo").style.display = "none";
-                                document.getElementById("faceCanvas").style.display = "block";
-                            };
-
-                            retryButton.onclick = function() {
-                                document.getElementById("faceVideo").style.display = "block";
-                                document.getElementById("faceCanvas").style.display = "none";
-                                faceInput.value = "";
-                            }
-
-                        })
-                        .catch(function (err0r) {
-                        console.log("Something went wrong!");
-                        });
-                    }
-                </script>
-
-
-                <h3>Step 3 Upload ID</h3>
-                <h4>Make sure your ID is valid and is not expired</h4>
-                <input accept="image/*" type='file' id="imgInp" name="idInput" />
-                <img id="idPreview" class="hide faceid" src="#"/>
-
-                <script>
-                    imgInp.onchange = evt => {
-                        const idPreview = document.getElementById("idPreview");
-                        const [file] = imgInp.files
-                        if (file) {
-                            idPreview.style.display = "block";
-                            idPreview.src = URL.createObjectURL(file)
-                        }
-                    }
-                </script>
-
-                <h3>Step 4 Password</h3>
-                <table>
-                    <tr>
-                        <td>
-                            <label for="password">Password</label><br>
-                            <input required type="password" name="password" id="password" onchange="checkPassword()">
-                        </td>
-                        <td>
-                            <label for="confPass">Confirm Password</label><br>
-                            <input required type="password" name="confPass" id="confPass" onchange="checkPassword()">
-                        </td>
-                    </tr>
-                </table>
+                    <div class="nav">
+                        <button type="button" class="navigationButton" onclick="changeForm(event, 'visFace', '')">Back</button>
+                        <button type="button" class="navigationButton"
+                            onclick="changeForm(event, 'visPassword', 'visId')">Next</button>
+                    </div>
+                </div>
+                <div id="visPassword" class="tabcontent hide center">
+                    <h3>Step 5</h3>
+                    <h1>Password</h1>
+                    <table>
+                        <tr>
+                            <td class="start">
+                                <label for="visPass">Password</label><br>
+                                <input required type="password" name="visPass" id="visPass"
+                                    onkeyup="checkPassword('vis')">
+                            </td>
+                            <td class="start">
+                                <label for="visCPass">Confirm Password</label><br>
+                                <input required type="password" name="visCPass" id="visCPass"
+                                    onkeyup="checkPassword('vis')">
+                            </td>
+                        </tr>
+                    </table>
+                    <br>
+                    <input type="checkbox" required name="ToS" id="">
+                    <label for="ToS">I agree to the <a href="terms.php">Terms of Service</a> and <a
+                            href="privacy.php">Privacy
+                            Policy</a></label>
+                    <div class="nav">
+                        <button type="button" class="navigationButton" onclick="changeForm(event, 'visId', '')">Back</button>
+                        <input type="submit" disabled id="visSubmit" value="Submit" class="navigationButton" name="visSubmit">
+                    </div>
+                </div>
             </div>
-            <div id="formEstablishment" class="hide">
-                <p>UNDER CONSTRUCTION</p>
-            </div>
-            <input type="submit" id="submit" name="submit" class="hide">
         </form>
-        <!-- JQuery -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
-        <!-- jQuery Modal -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
 
-        <script>
-            document.getElementById('password').addEventListener("input", function (e) {
-                checkPassword();
-            });
-            document.getElementById('confPass').addEventListener("input", function (e) {
-                checkPassword();
-            });
-            
-            function showForm(radio) {
-                document.getElementById("submit").style.display = "block";
-                if(radio.value == "visitor") {
-                    document.getElementById("formEstablishment").style.display = "none";
-                    document.getElementById("formVisitor").style.display = "block";
-                }
-                else {
-                    document.getElementById("formVisitor").style.display = "none";
-                    document.getElementById("formEstablishment").style.display = "block";
-                }
-            }
+        <!-- Establishment Form -->
+        <form action="signup.php" name="estForm" method="POST" enctype="multipart/form-data">
+            <div id="formEstablishment">
+                <div id="estInfo" class="tabcontent hide">
+                    <!-- Insert progress indicator -->
+                    <div class="sectionTitle center">
+                        <h3>Step 2</h3>
+                        <h1>Basic Data</h1>
+                    </div>
+                    <div class="sectTitle">Establishment Information</div>
+                    <div class="section">
+                        <span><label for="estName">Name</label><br>
+                            <input required type="text" name="estName"></span>
+                        <span><label for="estBra">Branch</label><br>
+                            <input required type="text" name="estBra"></span>
+                    </div>
+                    <div class="sectTitle">Current Address</div>
+                    <div class="section">
+                        <span><label for="estNo">House Number and Street</label><br>
+                            <input required type="text" name="estNo"></span>
+                        <span><label for="estBa">Barangay</label><br>
+                            <input required type="text" name="estBa"></span>
+                        <span><label for="estCi">City</label><br>
+                            <input required type="text" name="estCi"></span>
+                    </div>
+                    <div class="section">
+                        <span><label for="estPro">Province</label><br>
+                            <input required type="text" name="estPro"></span>
+                        <span><label for="estCo">Country</label><br>
+                            <input required type="text" name="estCo"></span>
+                        <span><label for="estZip">Zipcode</label><br>
+                            <input required type="number" name="estZip"></span>
+                    </div>
+                    <div class="sectTitle">Contact Details</div>
+                    <div class="section">
+                        <span><label for="estCNo">Contact Number</label><br>
+                            <input required type="tel" name="estCNo"></span>
+                        <span><label for="estEmail">Email Address</label><br>
+                            <input required type="email" name="estEmail"></span>
+                    </div>
+                    <div class="sectTitle">Representative Information</div>
+                    <div class="section">
+                        <span><label for="estFName">First Name</label><br>
+                            <input required type="text" name="estFName"></span>
+                        <span><label for="estMName">Middle Name</label><br>
+                            <input required type="text" name="estMName"></span>
+                        <span><label for="estLName">Last Name</label><br>
+                            <input required type="text" name="estLName"></span>
+                    </div>
+                    <div class="section">
+                        <span><label for="estPos">Position</label><br>
+                            <input required type="text" name="estPos" style="width: 30%"></span>
+                    </div>
+                    <!-- Insert next button -->
+                    <button type="button" class="navigationButton" onclick="changeForm(event, 'userType', '')">Back</button>
+                    <button type="button" class="navigationButton" onclick="changeForm(event, 'estDocu', 'estInfo')">Next</button>
+                </div>
+                <div id="estDocu" class="tabcontent hide center">
+                    <h3>Step 3</h3>
+                    <h1>Upload Document</h1>
+                    <h4>Make sure your document is valid and is not expired</h4>
+                    <input accept="image/*" type='file' id="docInp" name="estDoc" />
+                    <img id="docPrev" class="hide idPreview" src="#" />
 
-            function checkPassword() {
-                var pass = document.getElementById("password").value;
-                var confPass = document.getElementById("confPass").value;
-                if(pass == confPass) {
-                    document.getElementById("submit").disabled = false;
-                } else
-                document.getElementById("submit").disabled = true;
-            }
-        </script>
-    </body>
+                    <div class="nav">
+                        <button type="button" class="navigationButton" onclick="changeForm(event, 'estInfo', '')">Back</button>
+                        <button type="button" class="navigationButton"
+                            onclick="changeForm(event, 'estPassword', 'estDocu')">Next</button>
+                    </div>
+                </div>
+                <div id="estPassword" class="tabcontent hide center">
+                    <h3>Step 4</h3>
+                    <h1>Password</h1>
+                    <table>
+                        <tr>
+                            <td>
+                                <label for="password">Password</label><br>
+                                <input required type="password" name="estPass" id="estPass"
+                                    onkeyup="checkPassword('est')">
+                            </td>
+                            <td>
+                                <label for="confPass">Confirm Password</label><br>
+                                <input required type="password" name="estCPass" id="estCPass"
+                                    onkeyup="checkPassword('est')">
+                            </td>
+                        </tr>
+                    </table>
+                    <br>
+                    <input type="checkbox" required name="ToS" id="">
+                    <label for="ToS">I agree to the <a href="terms.php">Terms of Service</a> and <a
+                            href="privacy.php">Privacy
+                            Policy</a></label>
+                    <div class="nav">
+                        <button type="button" class="navigationButton" onclick="changeForm(event, 'estDocu', '')">Back</button>
+                        <input type="submit" disabled id="estSubmit" value="Submit" name="estSubmit" class="navigationButton">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script src="../scripts/signup.js"></script>
+    <!-- JQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+    <!-- jQuery Modal -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+</body>
+
 </html>

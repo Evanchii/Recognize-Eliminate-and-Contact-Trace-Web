@@ -3,7 +3,7 @@ include '../../functions/checkSession.php';
 
 $uid = $_SESSION["uid"];
 $infoRef = $database->getReference("Users/" . $uid . "/info");
-$linkRef = $database->getReference("appData/links/");
+$appDataRef = $database->getReference("appData/");
 
 if(!isset($_SESSION['fName'])) {
   $_SESSION["lName"] = $infoRef->getChild("lName")->getValue();
@@ -35,9 +35,10 @@ if ($imageReference -> exists()) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="../../styles/dashboard.css">
+    <link rel="stylesheet" type="text/css" href="../../styles/cases.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="shortcut icon" href="../../assets/favicon.ico" type="image/x-icon">
-    <title>Dashboard | REaCT</title>
+    <title>COVID Cases | REaCT</title>
 </head>
 
 <body>
@@ -50,11 +51,13 @@ if ($imageReference -> exists()) {
                 <!-- PHP Get from Storage -->
                 <img src="<?php echo $image;?>">
                 <!-- PHP Get from RTDB -->
-                <span><?php echo $_SESSION['lName'].', '.$_SESSION['fName'].' '.$_SESSION['mName']?></span>
+                <span>
+          <?php echo $_SESSION['lName'].', '.$_SESSION['fName'].' '.$_SESSION['mName']?>
+        </span>
             </div>
             <hr class="divider">
-            <a href="#" class="active"><i class="fa fa-th-large" aria-hidden="true"></i>Dashboard</a>
-            <a href="cases.php"><i class="fa fa-line-chart" aria-hidden="true"></i>Covid Cases</a>
+            <a href="dashboard.php"><i class="fa fa-th-large" aria-hidden="true"></i>Dashboard</a>
+            <a href="#" class="active"><i class="fa fa-line-chart" aria-hidden="true"></i>Covid Cases</a>
             <a href="#"><i class="fa fa-heartbeat" aria-hidden="true"></i>Health Status</a>
             <a href="history.php"><i class="fa fa-lightbulb-o" aria-hidden="true"></i>Location History</a>
             <div class="settings">
@@ -63,56 +66,50 @@ if ($imageReference -> exists()) {
         </div>
         <div class="Header">
             <div class="dashboard-date">
-                <h2>Dashboard</h2>
+                <h2>COVID Cases</h2>
             </div>
             <div class="dashboard-notif">
                 <span class="dropdown"><i class="fa fa-user-circle dropbtn" aria-hidden="true"></i>My Account
-                <div class="dropdown-content">
-                    <a href="../logout.php"><i class="fa fa-sign-out-alt"></i>Log out</a>
-                </div>
-              </span>
+          <div class="dropdown-content">
+            <a href="../logout.php"><i class="fa fa-sign-out-alt"></i>Log out</a>
+          </div>
+        </span>
             </div>
         </div>
         <div class="Content">
             <div class="content-title">
-                <!-- Change User place holder insert FN -->
-                <h2>Welcome, <?php echo $_SESSION['fName'];?></h2>
-                <span>Here's the latest update in COVID-19 STATUS in Dagupan City</span>
+                <h4>Dagupan City, Pangasinan</h4>
+                <span>Covid-19 Status<br>As of <?php echo $appDataRef->getChild('covStatus/time')->getValue();?> | <?php echo $appDataRef->getChild('covStatus/date')->getValue();?></span>
             </div>
-            <div class="status-image">
-                <!-- Get photo/resources from FB -->
-                <img src="<?php echo $linkRef->getChild("brgy")->getValue();?>" alt="COVID STATUS">
-                <img src="<?php echo $linkRef->getChild("situationer")->getValue();?>" alt="COVID STATUS">
-            </div>
-            <div class="loc-history">
-                <div class="loc-title">
-                    <span>Location History</span>
-                </div>
-                <!-- Get data from RTDB -->
-                <div class="list-history">
-                    <?php 
-                      $userHisRef = $database->getReference('Users/'.$uid.'/history');
-                      $historyRef = $database->getReference('History');
-                      if($userHisRef->getSnapshot()->hasChildren()) {
-                        // var_dump($userHisRef->getValue());
-                        $history = $userHisRef->getValue();
-                        foreach ($history as $date => $keySet) {
-                          echo '<div class="history date-history">
-                              <h2>'.$date.'</h2>
-                            </div>';
-                          foreach ($keySet as $key => $timestamp) {
-                            echo '<div class="history">
-                              <span>'.$historyRef->getChild($date.'/'.$timestamp.'/estName')->getValue().'</span>
-                              <i class="fa fa-caret-right" aria-hidden="true"></i>
-                            </div>';
-                          }
-                        }
-                      } else {
-                        echo '<h2>No data found!</h2>';
-                      }
-                    ?>
+
+            <div class="stats">
+
+                <div class="box">
+                    <div class="cases mini-card">Total Cases<br><?php echo $appDataRef->getChild('covStatus/cases')->getValue();?></div>
+
+                    <div class="newCases mini-card">New Cases<br><?php echo $appDataRef->getChild('covStatus/newCases')->getValue();?></div>
+
+                    <div class="recoveries mini-card">Recoveries<br><?php echo $appDataRef->getChild('covStatus/recoveries')->getValue();?></div>
+
+                    <div class="deaths mini-card">Deaths<br><?php echo $appDataRef->getChild('covStatus/death')->getValue();?></div>
+
+                    <div class="activeCases mini-card">Active<br><?php echo $appDataRef->getChild('covStatus/active')->getValue();?></div>
+
+                    <div class="tested mini-card">Tested<br><?php echo $appDataRef->getChild('covStatus/tested')->getValue();?></div>
+
                 </div>
 
+            </div>
+
+            <div class="daily-cases">
+
+                <h2>Daily Cases</h2>
+                <p>
+                    <a href="https://www.facebook.com/DagupanPIO">
+                        <img src="<?php echo $appDataRef->getChild('links/daily')->getValue()?>"
+                            alt="No DATA found" onerror="//this.src='img/undefined.jpg'">
+                    </a>
+                </p>
             </div>
 
         </div>

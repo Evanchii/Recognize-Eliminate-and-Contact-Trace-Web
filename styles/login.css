@@ -1,0 +1,56 @@
+.left {
+    padding: 5%;
+}
+
+.left img {
+    width: 75%;
+}
+
+.right {
+    padding: 3%;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    align-items: center;
+}
+
+form input {
+    width: 100%;
+}
+
+.right img {
+    width: 50%;
+}
+
+.right p {
+    margin-top: 5%;
+}
+
+.float{
+	position:fixed;
+	width:60px;
+	height:60px;
+	bottom:40px;
+	right:40px;
+	background-color:#0C9;
+	color:#FFF;
+	border-radius:50px;
+	text-align:center;
+	box-shadow: 2px 2px 3px #999;
+}
+
+.my-float{
+	margin-top:22px;
+}
+
+@media (width: 480px), (orientation: portrait) {
+    .container {
+        width: 75vw;
+        margin: 15vh auto;
+        display: block;
+    }
+
+    .left>img {
+        width: 20vw;
+    }
+}

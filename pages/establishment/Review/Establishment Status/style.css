@@ -1,0 +1,377 @@
+
+html{
+  height: 100%;
+}
+
+body{
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #E3E3E3;
+  max-width: 1920px;
+  min-width: 1600px;
+  margin: 0 auto;
+  height: 100%;
+
+}
+
+.grid{
+  height: 100%;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  grid-template-rows: 150px 1fr 50px;
+  grid-template-areas: 
+  "Navigation Header"
+  "Navigation Content"
+  "Navigation Footer"
+  ;
+}
+
+
+.Navigation{
+  grid-area: Navigation;
+  height: 100%;
+  background-color: #0E73DF;
+  border-radius: 20px;
+  margin-right: 10px;
+  display: grid;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+
+.Navigation .user-profile{
+  width: 100%;
+  height: 200px;
+  position: relative;
+  text-align: center;
+}
+
+.Navigation .user-profile img{
+  border-radius: 50%;
+  width: 80px;
+  margin: 0 auto;
+  display: block;
+  border: 5px solid #FEFEFE;
+}
+
+.Navigation .user-profile span{
+  font-size: 25px;
+  font-weight: 400;
+  color: #FFFFFF;
+}
+
+.Navigation h2{
+  width: 100%;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  color: #FFFFFF;
+  margin-top: 20px;
+  font-size: 40px;
+}
+
+.Navigation .divider{
+  width: 70%;
+  height: 1px;
+}
+
+.Navigation a{
+  text-decoration: none;
+  color: #FFFFFF;
+  font-weight: 500;
+  display: block;
+  font-size: 20px;
+  padding: 15px 10px;
+  text-transform: uppercase;
+  transition: 0.3s ease;
+}
+
+.Navigation .settings{
+  margin-top: 200px;
+  margin-bottom: 50px;
+}
+
+.Navigation a:hover{
+  background-color: #25A1CB;
+}
+
+.Navigation i{
+  margin-right: 10px;
+}
+
+.Navigation a.active{
+  background-color: #25A1CB;
+}
+
+
+
+
+.Header{
+  padding: 10px 20px;
+  grid-area: Header;
+  display: grid;
+  grid-template-columns: 70% 1fr;
+  grid-template-areas: 
+  "dashboard-date dashboard-notif";
+  background-color: #F3F3F3;
+  border-radius: 20px;
+  margin-bottom: 10px;
+}
+
+.Header .dashboard-date{
+  grid-area: dashboard-date;
+}
+
+.Header .dashboard-notif{
+  grid-area: dashboard-notif;
+}
+
+.Header .dashboard-date h2{
+  font-size: 50px;
+  margin: 0;
+  font-weight: 200;
+}
+.Header .dashboard-date input{
+  width: 220px;
+  font-size: 20px;
+}
+
+.Header .dashboard-notif i{
+  font-size: 40px;
+}
+
+.Header .dashboard-notif span{
+  font-size: 30px;
+  margin-left: 5px;
+  padding: 5px 15px;
+  background-color: #E5E5E5;
+  border-radius: 10px;
+  font-weight: bolder;
+  transition: 0.3s ease;
+}
+
+.Header .dashboard-notif span:hover{
+  background-color: #25A1CB;
+  color: #FEFEFE;
+  cursor: pointer;
+}
+
+
+
+
+
+
+.Content{
+  display: grid;
+  grid-area: Content;
+  grid-template-columns: 70% 1fr;
+  grid-template-areas: 
+  "status-content daily-content";
+  grid-gap: 10px;
+  overflow-y: auto;
+}
+
+.Content .status-content{
+  grid-area: status-content;
+  display: grid;
+  grid-template-rows: 120px 1fr;
+  grid-template-areas: 
+  "content-header content-header"
+  "main-content main-content";
+}
+
+.Content .content-status{
+  grid-area: content-status;
+}
+
+
+
+
+.Content .content-header{
+  grid-area: content-header;
+  background-color: #F3F3F3;
+  padding: 10px 20px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+
+.Content .content-header h2{
+  font-size: 40px;
+  font-weight: 200;
+  margin: 0;
+}
+
+.Content .content-header span{
+  font-size: 20px;
+}
+
+
+.Content .content-status img{
+  width: 200px;
+}
+
+
+.Content .main-content{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: 
+  "content-cases content-status";
+}
+
+.Content .main-content{
+  grid-area: main-content;
+  background-color: #F3F3F3;
+  padding: 20px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  grid-gap: 20px;
+}
+
+
+.Content .main-content .content-cases{
+  background-color: rgba(172, 169, 169, 0.5);
+  border-radius: 20px;
+  position: relative;
+}
+
+.Content .main-content .content-cases h2.case-header{
+  text-align: center;
+  color: #FFFFFF;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 30px;
+
+}
+
+.Content .main-content .content-cases h1{
+  margin: 0;
+  font-weight: 200;
+  font-size: 150px;
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: 0.3s ease;
+
+}
+
+.Content .main-content .content-cases h1:hover{
+  font-size: 200px;
+  cursor: pointer;
+}
+
+.Content .main-content .content-cases h2.case-footer{
+  color: #FFFFFF;
+  font-weight: 300;
+  text-align: center;
+  font-size: 40px;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
+.Content .main-content .content-status{
+  grid-area: content-status;
+  padding: 10px;
+  background-color: rgba(172, 169, 169, 0.5);
+  border-radius: 20px;
+  text-align: center;
+  position: relative;
+}
+
+.Content .main-content .content-status h2.status-header{
+  text-align: center;
+  color: #FFFFFF;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 30px;
+}
+
+.Content .main-content .content-status img{
+  width: 200px;
+  border-radius: 20px;
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: 0.3s ease;
+}
+
+.Content .main-content .content-status img:hover{
+  width: 220px;
+  cursor: pointer;
+}
+
+.Content .main-content .content-status h2.status-footer{
+  color: #FFFFFF;
+  font-weight: 300;
+  text-align: center;
+  font-size: 40px;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
+
+.Content .daily-content{
+  grid-area: daily-content;
+  border-radius: 20px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+
+}
+
+.Content .daily-content h2{
+  z-index: 100;
+  text-align: center;
+  margin: 0;
+  font-size: 25px;
+  font-weight: 600;
+  border-radius: 20px;
+  height: 100px;
+  line-height: 100px;
+  background-color: #F3F3F3;
+}
+
+.Content .daily-content img{
+  width: 100%;
+  padding: 10px 0px;
+  border-radius: 0 0 10px 10px;
+
+}
+
+
+
+
+
+.Footer{
+  grid-area: Footer;
+  background-color: #E3E3E3;
+  text-align: center;
+  line-height: 50px;
+}
+
+
+
+
+@media screen and (min-width: 2500px){
+  html{
+    min-height: 100%;
+  }
+
+  body{
+    height: auto;
+  }
+
+}
+
+
+@media screen and (max-width: 800px){
+  .Navigation a{
+    font-size: 12px;
+  }
+}
