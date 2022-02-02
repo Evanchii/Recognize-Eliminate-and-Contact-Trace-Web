@@ -37,7 +37,7 @@ h6 {
 
 .Navigation {
     grid-area: Navigation;
-    background: linear-gradient(45deg, #262262, #5356A5);
+    background: linear-gradient(45deg, #04224e, #0C59CF);
     border-radius: 0px 20px 20px 0px;
     margin-right: 10px;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
@@ -59,8 +59,8 @@ h6 {
 
 .Navigation .user-profile img {
     border-radius: 50%;
-    width: 150px;
-    height: 150px;
+    aspect-ratio: 1/1;
+    width: 75%;
     margin: 0% auto;
     margin-bottom: 5%;
     object-fit: cover;
@@ -84,8 +84,16 @@ h6 {
     margin: 0;
     padding: 0;
     color: #FFFFFF;
-    margin-top: 20px;
-    font-size: 40px;
+    font-size: 2em;
+}
+
+.Navigation h3 {
+    width: 100%;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    color: #FFFFFF;
+    font-size: 1.3em;
 }
 
 .Navigation .divider {
@@ -165,7 +173,7 @@ h6 {
 }
 
 .Header .dashboard-notif span {
-    font-size: 2em;
+    font-size: 1.75em;
     margin-left: 5px;
     padding: 5px 15px;
     background-color: #E5E5E5;
@@ -207,7 +215,7 @@ h6 {
 }
 
 .Content .loc-history {
-    background: linear-gradient(45deg, #262262, #5356A5);
+    background: linear-gradient(45deg, #04224e, #0C59CF);
     border-radius: 20px 0px 0px 20px;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     margin-left: 10px;
@@ -273,8 +281,12 @@ h6 {
 }
 
 .Content .loc-history .history {
-    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: nowrap;
     padding: 15px 0px;
+    align-items: center;
 }
 
 .Content .loc-history .history:hover {
@@ -290,12 +302,9 @@ h6 {
 }
 
 .Content .loc-history .history i {
+    margin-left: 5%;
     color: #F3F3F3;
     font-size: 45px;
-    position: absolute;
-    top: 50%;
-    left: 85%;
-    transform: translate(-50%, -50%);
 }
 
 .Content .list-history .date-history {
@@ -318,7 +327,7 @@ h6 {
     border-radius: 20px;
     position: absolute;
     background-color: #f1f1f1;
-    min-width: 240px;
+    min-width: 220px;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 0;
 }
@@ -327,11 +336,13 @@ h6 {
 /* Links inside the dropdown */
 
 .dropdown-content a {
+    font-size: 0.75em;
     border-radius: 20px;
     color: black;
     padding: 12px 16px;
     text-decoration: none;
     display: block;
+    text-align: left;
 }
 
 

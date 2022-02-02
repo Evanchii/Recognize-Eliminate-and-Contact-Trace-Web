@@ -1,0 +1,55 @@
+/**
+  Default Markup
+**/
+
+body {
+    background: #F0E5E1 ;
+  }
+  
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  
+  
+  /**
+    Component
+  **/
+  
+  label {
+      width: 100%;
+  }
+  
+  .card-input-element {
+      display: none;
+  }
+  
+  .card-input {
+      margin: 10px;
+      padding: 00px;
+  }
+  
+  .card-input:hover {
+      cursor: pointer;
+  }
+  
+  .card-input-element:checked + .card-input {
+       box-shadow: 0 0 1px 1px #2ecc71;
+   }
+  
+  /* Evan */
+.covid {
+    display: flex;
+}
+  
+  .card-input-radio:checked + .card-input {
+    box-shadow: 0 0 1px 1px #2ecc71;
+}
+
+.card-input-radio {
+    display: none;
+}
+
+.card-input img {
+    width: 10%;
+}

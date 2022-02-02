@@ -1,0 +1,56 @@
+.Content {
+    grid-template-rows: 1fr 20%;
+    grid-template-areas: "graph loc-history""stats loc-history";
+    overflow-y: scroll;
+}
+
+.graph {
+    grid-area: graph;
+}
+
+.stats {
+    grid-area: stats;
+}
+
+.graph, .stats {
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    background-color: #F3F3F3;
+    border-radius: 20px;
+    padding: 2% 3%;
+}
+
+.con-stats div {
+    display: flex;
+    font-size: 1em;
+}
+
+.details h4 {
+    font-weight: normal;
+}
+
+.stats-item {
+    flex-basis: 0;
+    flex-grow: 1;
+    justify-content: center;
+}
+
+.details {
+    flex-direction: column;
+    margin: 0% 3%;
+}
+
+.icon {
+    align-items: center;
+}
+
+.con-stats {
+    height: 85%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#overview {
+    height: max-content;
+    width: max-content;
+}

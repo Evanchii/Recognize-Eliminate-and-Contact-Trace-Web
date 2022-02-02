@@ -1,0 +1,86 @@
+.Content {
+    grid-area: Content;
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+        "content1 content2"
+    ;
+    gap: 12px;
+    height: 98%;
+}
+
+.Content .content1 {
+    grid-area: content1;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    background-color: #f3f3f3;
+    border-radius: 20PX;
+    text-align: center;
+    padding-top: 80px;
+}
+
+
+.content1 a {
+    text-decoration: none;
+    display: block;
+    font-size: 20px;
+    padding: 17px;
+    transition: 0.3s ease;
+    color: #0E73DF;
+    background-color: white;
+    border: 3px solid #0E73DF;
+    margin-left: 25%;
+    margin-right: 25%;
+    margin-top: 30px;
+    font-weight: bold;
+    border-radius: 25px;
+}
+
+.content1 a:hover {
+    background-color: #0E73DF;
+    color: white;
+    border: 3px solid #0E73DF;
+}
+
+.content1 i {
+    margin-right: 10px;
+}
+
+.Content .content2 {
+    grid-area: content2;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    background-color: #f3f3f3;
+    border-radius: 20PX;
+    text-align: center;
+}
+
+.content2 .hotlines {
+    margin-top: 10%;
+}
+
+.content2 .logo {
+    width: 60%;
+    display: block;
+    margin-left: 80px;
+    margin-top: 10px;
+}
+
+
+.content2 .dev {
+    grid-area: dev;
+    display: grid;
+    grid-template-columns: 50% 1fr;
+    grid-template-areas:
+        "logo developers"
+    ;
+    margin-top: 200px;
+}
+
+.content2 .developers {
+    font-size: 1em;
+}
+
+.content2 a {
+    text-decoration: none;
+    color: blue;
+}

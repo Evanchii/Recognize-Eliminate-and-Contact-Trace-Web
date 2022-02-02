@@ -1,0 +1,153 @@
+<!-- 
+	DevNotes:
+	• Make DOH advisory a carousel to accomodate different Advisories for different variaties of COVID 19.
+	• Implement vaccination verification and dose #/vaccine brand + add redirect link for vaccination forms.
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href='https://fonts.googleapis.com/css?family=Asap' rel='stylesheet'>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <title>Health Status</title>
+  </head>
+<body>
+  
+  <div class="grid">
+
+    <div class="Navigation">
+
+      <h2>REaCT</h2>
+      <hr class="divider">
+      <div class="user-profile">
+
+        <img src="https://bestprofilepictures.com/wp-content/uploads/2021/04/Cool-Profile-Picture.jpg">
+        <span>Mark Denzel Ugaban</span>
+		<a href="#" style="font-size: 15px;"><i class="fa fa-user-circle-o" aria-hidden="true"></i>View Profile</a>
+
+      </div>
+
+      <a href="#"><i class="fa fa-th-large" aria-hidden="true"></i>Dashboard</a>
+      <a href="#"><i class="fa fa-line-chart" aria-hidden="true"></i>Covid Cases</a>
+      <a href="#" class="active"><i class="fa fa-heartbeat" aria-hidden="true"></i>Health Status</a>
+      <a href="#"><i class="fa fa-lightbulb-o" aria-hidden="true"></i>Location History</a>
+
+
+      <div class="settings">
+
+        <a href="#"><i class="fa fa-cog" aria-hidden="true"></i>Setttings</a>
+
+      </div>
+    </div>
+    <div class="Header">
+      
+      <div class="dashboard-date">
+        
+        <h2>Health Status</h2>
+        <input type="date" id="date" name="date">
+
+      </div>
+
+      <div class="dashboard-notif">
+
+        <i class="fa fa-bell" aria-hidden="true"></i>
+        <i class="fa fa-user-circle" aria-hidden="true"></i>
+        <span>My Account </span>
+      </div>
+
+    </div>
+    <div class="Content">
+    
+		<div class="covid-status">
+			
+			<h1>Covid-19 Status</h1>
+			
+			<div class="covid">
+				<button type="submit" class="c-btn negative active" value="Negative" id="negative"> 
+				<img src="Resources/negative.png" height ="100" width="100"/><br>
+				<h2>Negative</h2>
+				</button>
+				
+				<button type="submit" class="c-btn positive" value="Positive" id="positive"> 
+				<img src="Resources/positive.png" height ="100" width="100"/><br>
+				<h2>Positive</h2>
+				</button>
+				
+			</div>
+			
+				
+			
+		</div>
+        
+		<div class="health-advisory">
+			<img src="Resources/health-advisory.jpg" width="100%" class="health-adv">
+		</div>
+
+		<div class="vaccine-status">
+			
+			<h1>Vaccine Status</h1>
+			
+			<div class="vaccine">
+			<button type="submit" class="v-btn vaccinated" value="vaccinated" id="vaccinated"> 
+			<img src="Resources/vaccinated.png" height ="100" width="100"/>
+			<h2>Vaccinated</h2>
+			</button>
+			
+			<button type="submit" class="v-btn not-vaccinated active" value="not-vaccinated" id="not-vaccinated"> 
+			<img src="Resources/not-vaccinated.png" height ="100" width="100"/>
+			<h2>Not Vaccinated</h2>
+			</button>
+			
+			</div>
+			
+		</div>
+
+    </div>
+	
+
+
+    <div class="Footer">
+
+      © 2021 REacT. All right reserved
+
+    </div>
+
+
+  </div>
+
+  
+</body>
+
+		<script>
+		const room1  = document.querySelector('.covid');
+		const room2  = document.querySelector('.vaccine');
+		const btns1 = document.querySelectorAll('.c-btn'); 
+		const btns2 = document.querySelectorAll('.v-btn'); 
+		
+		room1.addEventListener('click', e => {
+
+		 btns1.forEach(btn => {
+
+			if(btn.getAttribute('id') === e.target.getAttribute('id'))
+			  btn.classList.add('active');
+			else
+			  btn.classList.remove('active');
+			});
+		});
+		
+		room2.addEventListener('click', e => {
+
+		 btns2.forEach(btn => {
+
+			if(btn.getAttribute('id') === e.target.getAttribute('id'))
+			  btn.classList.add('active');
+			else
+			  btn.classList.remove('active');
+			});
+		});
+				
+		</script>
+</html>

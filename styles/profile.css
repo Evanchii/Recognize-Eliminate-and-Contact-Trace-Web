@@ -1,0 +1,128 @@
+.Content {
+  grid-area: Content;
+
+  display: grid;
+  grid-template-columns: 20% 1fr;
+  grid-template-areas:
+    "profile profile-data"
+  ;
+  gap: 12px;
+
+}
+
+.Content .content {
+  grid-area: content;
+}
+
+.Content .profile {
+  grid-area: profile;
+  padding-top: 10%;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  background-color: #F3F3F3;
+  border-radius: 20px;
+  text-align: center;
+  height: 85vh;
+}
+
+.Content .profile h1 {
+  margin-top: 25px;
+}
+
+.Content .profile p {
+  font-size: 20px;
+}
+
+
+.Content .profile-data {
+  grid-area: profile-data;
+  background-color: #F3F3F3;
+  color: black;
+  border-radius: 20px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 85vh;
+}
+
+.Content .profile-data h2 {
+  padding: 2%;
+  color: white;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  font-weight: 600;
+  border-radius: 20px 0px 0px 0px;
+  width: 100%;
+  background-color: #0E73DF;
+}
+
+.avatar {
+  border-radius: 50%;
+  width: 80%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  object-fit: cover;
+  aspect-ratio: 1/1;
+}
+
+.faceid {
+  width: 100%;
+}
+
+.modal {
+  max-width: 55vw !important;
+}
+
+input {
+  font-family: Asap;
+  padding: 8px 17px;
+  margin: 10px 0;
+  box-sizing: border-box;
+  width: 100%;
+  border-radius: 6px;
+  border: 2px solid #ccc;
+  transition: 0.5s;
+  margin-right: 50px;
+}
+
+input:focus {
+  border: 2px solid #555;
+}
+
+th {
+  float: left;
+  margin-top: 17px;
+  margin-left: 40px;
+}
+
+
+table {
+  width: 97%;
+}
+
+.update-button {
+  font-weight: bold;
+  padding: 12px 20px;
+  width: 20%;
+  border-radius: 25px;
+  cursor: pointer;
+  color: #0E73DF;
+  background-color: white;
+  border: 3px solid #0E73DF;
+  margin: 40px;
+  margin-right: 40px;
+  float: right;
+}
+
+.update-button:hover {
+  background-color: #0E73DF;
+  color: white;
+  border: 3px solid #0E73DF;
+}
+
+.update-button:focus {
+  background-color: #0E73DF;
+  color: white;
+  border: 3px solid #0E73DF;
+}

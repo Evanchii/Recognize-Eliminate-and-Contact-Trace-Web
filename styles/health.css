@@ -1,0 +1,107 @@
+.Content{
+    grid-area: Content;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: 
+    "covid-status health-advisory"
+    "vaccine-status health-advisory"
+    ;
+    gap: 12px;
+    height: 98%;
+  
+  }
+  
+  .Content .covid{
+    grid-area: covid-status;
+    display: grid;
+    grid-template-columns: 50% 1fr;
+    grid-template-areas: 
+    "negative positive"
+    ;
+    gap: 20px;
+  }
+  
+  .Content .vaccine{
+    grid-area: vaccine-status;
+    display: grid;
+    grid-template-columns: 50% 1fr;
+    grid-template-areas: 
+    "vaccinated not-vaccinated"
+    ;
+    gap: 20px;
+    align-items: center;
+  }
+  
+  .Content .health-advisory{
+    grid-area: health-advisory;
+  }
+  
+  
+  .covid-status, .vaccine-status { 
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    background-color: #f3f3f3;
+    border-radius: 20PX;
+    text-align: center;
+    padding: 10%;
+  }
+  
+  .Content .health-advisory { 
+    padding: 20px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    background-color: #f3f3f3;
+    border-radius: 20px;
+    text-align: center;
+    margin-right:15px;
+  }
+
+  /* .card-input-radio:checked + .card-input {
+    box-shadow: 0 0 1px 1px #2ecc71;
+} */
+
+.card-input-radio {
+    display: none;
+}
+  
+  
+  .positive, .not-vaccinated{
+    padding: 7px;
+    border-radius: 70px;
+    color: red;
+    border: 5px solid #f3f3f3;
+    text-align: center;
+     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  }
+  
+  .positive:hover, .not-vaccinated:hover{
+      background-color: white;
+    border: 5px solid red;
+  }
+  
+  .negative, .vaccinated{
+    padding: 7px;
+    border-radius: 70px;
+    color: green;
+    border: 5px solid #f3f3f3;
+    text-align: center;
+     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  }
+  
+  .negative:hover, .vaccinated:hover{
+      background-color: white;
+    border: 5px solid green;
+  
+  }
+  
+  .health-adv{
+      border-radius: 20px;
+      box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+      max-height: 80vh;
+  }
+  
+  .card-input-radio:checked + .card-input{
+    border: 5px solid;
+    background-color: white;
+  }
+  
+  

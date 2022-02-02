@@ -1,3 +1,7 @@
+<!-- 
+  DevNotes:
+
+ -->
 <?php
 include '../../functions/checkSession.php';
 
@@ -35,9 +39,10 @@ if ($imageReference->exists()) {
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="../../styles/private-common.css">
+  <link rel="stylesheet" type="text/css" href="../../styles/settings.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="shortcut icon" href="../../assets/favicon.ico" type="image/x-icon">
-  <title>Dashboard | REaCT</title>
+  <title>Settings | REaCT</title>
 </head>
 
 <body>
@@ -53,17 +58,17 @@ if ($imageReference->exists()) {
         <span><?php echo $_SESSION['lName'] . ', ' . $_SESSION['fName'] . ' ' . $_SESSION['mName'] ?></span>
       </div>
       <hr class="divider">
-      <a href="#" class="active"><i class="fa fa-th-large" aria-hidden="true"></i>Dashboard</a>
+      <a href="dashboard.php"><i class="fa fa-th-large" aria-hidden="true"></i>Dashboard</a>
       <a href="cases.php"><i class="fa fa-line-chart" aria-hidden="true"></i>Covid Cases</a>
       <a href="health.php"><i class="fa fa-heartbeat" aria-hidden="true"></i>Health Status</a>
       <a href="history.php"><i class="fa fa-lightbulb-o" aria-hidden="true"></i>Location History</a>
       <div class="settings">
-        <a href="settings.php"><i class="fa fa-cog" aria-hidden="true"></i>Setttings</a>
+        <a href="#" class="active"><i class="fa fa-cog" aria-hidden="true"></i>Setttings</a>
       </div>
     </div>
     <div class="Header">
       <div class="dashboard-date">
-        <h2>Dashboard</h2>
+        <h2>Settings</h2>
       </div>
       <div class="dashboard-notif">
         <span class="dropdown"><i class="fa fa-user-circle dropbtn" aria-hidden="true"></i>My Account
@@ -75,46 +80,54 @@ if ($imageReference->exists()) {
       </div>
     </div>
     <div class="Content">
-      <div class="content-title">
-        <!-- Change User place holder insert FN -->
-        <h2>Welcome, <?php echo $_SESSION['fName']; ?></h2>
-        <span>Here's the latest update in COVID-19 STATUS in Dagupan City</span>
-      </div>
-      <div class="status-image">
-        <!-- Get photo/resources from FB -->
-        <img src="<?php echo $linkRef->getChild("brgy")->getValue(); ?>" alt="COVID STATUS">
-        <img src="<?php echo $linkRef->getChild("situationer")->getValue(); ?>" alt="COVID STATUS">
-      </div>
-      <div class="loc-history">
-        <div class="loc-title">
-          <span>Location History</span>
-        </div>
-        <!-- Get data from RTDB -->
-        <div class="list-history">
-          <?php
-          $userHisRef = $database->getReference('Users/' . $uid . '/history');
-          $historyRef = $database->getReference('History');
-          if ($userHisRef->getSnapshot()->hasChildren()) {
-            // var_dump($userHisRef->getValue());
-            $history = $userHisRef->getValue();
-            foreach ($history as $date => $keySet) {
-              echo '<div class="history date-history">
-                              <h2>' . $date . '</h2>
-                            </div>';
-              foreach ($keySet as $key => $timestamp) {
-                echo '<div class="history">
-                              <span>' . $historyRef->getChild($date . '/' . $timestamp . '/estName')->getValue() . '</span>
-                              <i class="fa fa-caret-right" aria-hidden="true"></i>
-                            </div>';
-              }
-            }
-          } else {
-            echo '<h2>No data found!</h2>';
-          }
-          ?>
-        </div>
+
+      <div class="content1">
+        <h2>Links</h2>
+        <hr style="margin-left:35%; margin-right:35%;">
+        </hr>
+        <a href="../aboutus.php"><i class="fa fa-info-circle" aria-hidden="true"></i>About Us</a>
+        <a href="../terms.php"><i class="fa fa-shield" aria-hidden="true"></i>Terms of Service</a>
+        <a href="../privacy.php"><i class="fa fa-shield" aria-hidden="true"></i>Privacy Policy</a>
+        <a href="mailto:team.react2021@gmail.com"><i class="fa fa-envelope" aria-hidden="true"></i>Contact Us</a>
+        <a href="../logout.php"><i class="fa fa-sign-out" aria-hidden="true"></i>Log out</a>
 
       </div>
+
+      <div class="content2">
+        <div class="hotlines">
+          <h2>Emergency Hotlines</h2>
+          <hr style="margin-left:15%; margin-right:15%;">
+          </hr>
+          <p><b>Philippine Department of Health COVID-19</b></p>
+          <a href="tel:(02)894-26843" style="color: blue;">02.894.COVID (02.894.26843)</a><span> or</span><br>
+          <a href="tel:1555" style="color: blue;">1555 (PLDT, Smart, Sun, and TNT Subscribers)</a>
+        </div>
+
+
+        <div class="dev">
+          <img src="../../assets/logo.png" class="logo">
+
+          <div class="developers">
+            <h3>DEVELOPED BY:</h3>
+            <hr style="margin-left:15%; margin-right:15%;">
+            </hr>
+
+            <p><b>Al Evan Castillo</b></br>
+              Project Manager<br><br>
+
+              <b>Mark Denzel Ugaban</b></br>
+              Front-end Developer<br><br>
+
+              <b>Michael Eman Cordova</b></br>
+              Quality Assurance<br><br>
+
+              <b>Jenny Fernandez</b></br>
+              System Designer
+            </p>
+          </div>
+        </div>
+      </div>
+
 
     </div>
 

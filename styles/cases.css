@@ -1,7 +1,7 @@
 .Content {
     width: 99%;
     grid-template-columns: 60% 40%;
-    grid-template-areas: "cases-title daily-cases" "content daily-cases";
+    grid-template-areas: "cases-title daily-cases""content daily-cases";
     gap: 12px;
 }
 
@@ -68,7 +68,7 @@
 
 .Content .daily-cases {
     height: 90vh;
-    background: linear-gradient( 45deg, #262262, #5356A5);
+    background: linear-gradient(45deg, #04224e, #0C59CF);
     border-radius: 20px;
 }
 

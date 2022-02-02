@@ -5,7 +5,7 @@
     $auth = $firebase->createAuth();
     if(!str_contains($email, "react-app.ga")) {
         try {
-            $auth->getPasswordResetLink($email);
+            $auth->sendPasswordResetLink($email);
             echo('<b>Password Reset Link has been sent to your email address! <br/>Can\'t find it? Check your SPAM folder!</b>');
         } catch (Exception $e) {
             if(str_contains($e->getMessage(), "EMAIL_NOT_FOUND")) {

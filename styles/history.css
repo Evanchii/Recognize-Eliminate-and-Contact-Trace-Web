@@ -1,5 +1,36 @@
 .Content {
     display: block;
-    width: 100%;
     height: max-content;
-}
+    width: 100%;
+    min-height: 85vh;
+    background-color: #f3f3f3;
+    border-radius: 15px 0px 0px 15px;
+    padding: 2% 3%;
+  }
+
+  table {
+    width: -webkit-fill-available;
+    border-collapse: collapse;
+  }
+
+  th {
+    background-color: #083b89;
+    color: white;
+    padding: 1% 2%;
+  }
+
+  td {
+    padding: 0.3% 1%;
+  }
+
+  tr:nth-child(even) td {
+    background-color: #cdcdcd;
+  }
+
+  table tr:first-child th:first-child {
+    border-radius: 10px 0px 0px 0px;
+  }
+
+  table tr:first-child th:last-child {
+    border-radius: 0px 10px 0px 0px;
+  }

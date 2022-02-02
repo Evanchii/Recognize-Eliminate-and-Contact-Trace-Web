@@ -32,7 +32,10 @@ if(isset($_POST['visSubmit'])) {
             $img = $_POST['visFace'];
             $folderPath = "Face/";
             
+            // image/jpg;base64kfjglkfjgklfbklfbfbnfbl
             $image_parts = explode(";base64,", $img);
+            // image/jpg kfjglkfjgklfbklfbfbnfbl
+
             // $image_type_aux = explode("image/", $image_parts[0]);
             // $image_type = $image_type_aux[1];
             
@@ -84,12 +87,13 @@ if(isset($_POST['visSubmit'])) {
                             'addCo' => $co,
                             'addZip' => $zip,
                             'status' => false,
+                            'vaccine' => false,
                         ],
                     ],
                 ],
             );
             
-            // $auth->sendEmailVerificationLink($email);
+            $auth->sendEmailVerificationLink($email);
 
             echo '<script>alert("Successfully Registered! Please check your inbox for your email verification link!")</script>';
 
@@ -282,14 +286,14 @@ if(isset($_POST['visSubmit'])) {
                     <div class="faceVideo" id="faceVideo">
                         <video autoplay="true" poster="../assets/loading.gif" id="videoElement"
                             class="faceid"></video><br>
-                        <button type="button" class="camButt" id="screenshot-button"> <img src="../assets/camera.svg"
+                        <button type="button" class="camButt" id="screenshot-button"> <img src="../assets/ic_camera.svg"
                                 alt=""> Take photo</button>
                     </div>
                     <div class="faceCanvas hide" id="faceCanvas">
                         <img class="faceid" src="">
                         <canvas id="canvas" style="display:none;"></canvas><br>
                         <input type="hidden" name="visFace" id="visInpFace">
-                        <button type="button" class="camButt" id="retry-button"><img src="../assets/retry.svg"
+                        <button type="button" class="camButt" id="retry-button"><img src="../assets/ic_retry.svg"
                                 alt="">Retry</button>
                     </div>
                     <div class="nav">
