@@ -162,7 +162,7 @@ if (!isset($_SESSION['name'])) {
               }
             }
           } else {
-            echo '<h2>No data found!</h2>';
+            echo '<h2 style="text-align: center; color: white;">No data found!</h2>';
           }
           ?>
         </div>

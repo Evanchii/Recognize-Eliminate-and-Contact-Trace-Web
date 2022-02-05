@@ -5,26 +5,19 @@ $uid = $_SESSION["uid"];
 $infoRef = $database->getReference("Users/" . $uid . "/info");
 $appDataRef = $database->getReference("appData/");
 
-if (!isset($_SESSION['fName'])) {
-    $_SESSION["lName"] = $infoRef->getChild("lName")->getValue();
-    $_SESSION["fName"] = $infoRef->getChild("fName")->getValue();
-    $_SESSION["mName"] = $infoRef->getChild("mName")->getValue();
-}
-
-
 // Firebase Storage
 $storage = $firebase->createStorage();
 $storageClient = $storage->getStorageClient();
 $defaultBucket = $storage->getBucket();
 
 
-$expiresAt = new DateTime('tomorrow', new DateTimeZone('Asia/Manila'));
-// echo $expiresAt->getTimestamp();
+// $expiresAt = new DateTime('tomorrow', new DateTimeZone('Asia/Manila'));
+// // echo $expiresAt->getTimestamp();
 
-$imageReference = $defaultBucket->object($infoRef->getChild("faceID")->getValue());
-if ($imageReference->exists()) {
-    $image = $imageReference->signedUrl($expiresAt);
-}
+// $imageReference = $defaultBucket->object($infoRef->getChild("faceID")->getValue());
+// if ($imageReference->exists()) {
+//     $image = $imageReference->signedUrl($expiresAt);
+// }
 ?>
 
 <!DOCTYPE html>
@@ -49,19 +42,20 @@ if ($imageReference->exists()) {
             <hr class="divider">
             <div class="user-profile">
                 <!-- PHP Get from Storage -->
-                <img src="<?php echo $image; ?>">
+                <img src="../../assets/logo.png">
                 <!-- PHP Get from RTDB -->
                 <span>
-                    <?php echo $_SESSION['lName'] . ', ' . $_SESSION['fName'] . ' ' . $_SESSION['mName'] ?>
+                    <?php echo (str_contains($uid, "Uv8vqq4rlrM2ADvfKv6t9KVvndA2")) ? 'Admin Demo' : $infoRef->getChild("addCi")->getValue(); ?>
                 </span>
             </div>
             <hr class="divider">
-            <a href="dashboard.php"><i class="fa fa-th-large" aria-hidden="true"></i>Dashboard</a>
-            <a href="#" class="active"><i class="fa fa-line-chart" aria-hidden="true"></i>Covid Cases</a>
-            <a href="health.php"><i class="fa fa-heartbeat" aria-hidden="true"></i>Health Status</a>
-            <a href="history.php"><i class="fa fa-lightbulb-o" aria-hidden="true"></i>Location History</a>
+            <a href="dashboard.php"><i class="fas fa-th-large" aria-hidden="true"></i>Dashboard</a>
+            <a href="#" class="active"><i class="fas fa-line-chart" aria-hidden="true"></i>Covid Cases</a>
+            <a href="applications.php"><i class="far fa-file" aria-hidden="true"></i>Applications</a>
+            <a href="users.php"><i class="fas fa-users" aria-hidden="true"></i>Users</a>
+            <a href="accounts.php"><i class="fas fa-user-cog" aria-hidden="true"></i>Sub-Accounts</a>
             <div class="settings">
-                <a href="settings.php"><i class="fa fa-cog" aria-hidden="true"></i>Setttings</a>
+                <a href="settings.php"><i class="fas fa-cog" aria-hidden="true"></i>Setttings</a>
             </div>
         </div>
         <div class="Header">
@@ -82,10 +76,8 @@ if ($imageReference->exists()) {
                 <h4>Dagupan City, Pangasinan</h4>
                 <span>Covid-19 Status<br>As of <?php echo $appDataRef->getChild('covStatus/time')->getValue(); ?> | <?php echo $appDataRef->getChild('covStatus/date')->getValue(); ?></span>
             </div>
-
             <div class="stats">
-
-            <div class="box">
+                <div class="box">
                     <div class="cases mini-card"><h3>Total Cases</h3><br><?php echo $appDataRef->getChild('covStatus/cases')->getValue(); ?></div>
                     <div class="tested mini-card"><h3>Total Tested</h3><br><?php echo $appDataRef->getChild('covStatus/tested')->getValue(); ?></div>
                     <div class="recoveries mini-card"><h3>Total Recoveries</h3><br><?php echo $appDataRef->getChild('covStatus/recoveries')->getValue(); ?></div>
@@ -93,11 +85,8 @@ if ($imageReference->exists()) {
                     <div class="newCases mini-card"><h3>New Cases</h3><br><?php echo $appDataRef->getChild('covStatus/newCases')->getValue(); ?></div>
                     <div class="activeCases mini-card"><h3>Total Active</h3><br><?php echo $appDataRef->getChild('covStatus/active')->getValue(); ?></div>
                 </div>
-
             </div>
-
             <div class="daily-cases">
-
                 <h2>Daily Cases</h2>
                 <p>
                     <a href="https://www.facebook.com/DagupanPIO">
@@ -105,18 +94,11 @@ if ($imageReference->exists()) {
                     </a>
                 </p>
             </div>
-
         </div>
-
-
-
         <div class="Footer">
-
             © 2021 REaCT. All right reserved
-
         </div>
-
-
+        <script src="https://kit.fontawesome.com/a2501cd80b.js" crossorigin="anonymous"></script>
     </div>
 
 

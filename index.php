@@ -131,7 +131,17 @@ if (isset($_POST['inSubmit'])) {
                 if(this.value == "vis") {
                     document.getElementById("email").value = "visitor@react-app.ga";
                     document.getElementById("password").value = "REaCT2021";
-                    $("#debugMenu .close-modal").click()
+                    $("#debugMenu .close-modal").click();
+                } 
+                else if (this.value == "est") {
+                    document.getElementById("email").value = "establishment@react-app.ga";
+                    document.getElementById("password").value = "REaCT2021";
+                    $("#debugMenu .close-modal").click();
+                }
+                else if (this.value == "adm") {
+                    document.getElementById("email").value = "admin@react-app.ga";
+                    document.getElementById("password").value = "REaCT2021";
+                    $("#debugMenu .close-modal").click();
                 }
                 else {
                     alert("Module not yet ready!");

@@ -1,0 +1,61 @@
+.Content {
+    grid-template-columns: 1fr 20%;
+    grid-column-gap: 12px;
+    grid-template-rows: 1fr;
+    max-height: 85vh;
+    grid-template-areas: "graph stats";
+    /* overflow-y: scroll; */
+}
+
+.graph {
+    grid-area: graph;
+    padding: 2% 3%;
+}
+
+.stats {
+    grid-area: stats;
+    padding: 5% 10%;
+    border-radius: 20px 0px 0px 20px !important;
+}
+
+.graph, .stats {
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    background-color: #F3F3F3;
+    border-radius: 20px;
+}
+
+.con-stats div {
+    display: flex;
+    font-size: 1em;
+}
+
+.details h4 {
+    font-weight: normal;
+}
+
+.stats-item {
+    width: 100%;
+    padding: 0% 7%;
+}
+
+.details {
+    flex-direction: column;
+    margin: 0% 3%;
+}
+
+.icon {
+    align-items: center;
+}
+
+.con-stats {
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#overview {
+    height: max-content;
+    width: max-content;
+}

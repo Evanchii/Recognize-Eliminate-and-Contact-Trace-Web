@@ -184,7 +184,7 @@ h6 {
 }
 
 .Header .dashboard-notif span:hover {
-    background-color: #424488;
+    background-color: #0C59CF;
     color: #FEFEFE;
     cursor: pointer;
 }
@@ -359,6 +359,30 @@ h6 {
     display: block;
     background: #fff;
 }
+
+.disabled-link {
+    pointer-events: none;
+}
+
+.pagination {
+    display: block;
+    float: right;
+  }
+  
+  .pagination a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    margin-top: 15%;
+  }
+
+  .pagination a.active {
+    background-color: #4CAF50;
+    color: white;
+  }
+
+  .pagination a:hover:not(.active) {background-color: #ddd;}
 
 
 /* @media screen and (min-width: 736px){

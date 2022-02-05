@@ -13,18 +13,18 @@ if (!isset($_SESSION['fName'])) {
 
 
 // Firebase Storage
-$storage = $firebase->createStorage();
-$storageClient = $storage->getStorageClient();
-$defaultBucket = $storage->getBucket();
+// $storage = $firebase->createStorage();
+// $storageClient = $storage->getStorageClient();
+// $defaultBucket = $storage->getBucket();
 
 
-$expiresAt = new DateTime('tomorrow', new DateTimeZone('Asia/Manila'));
+// $expiresAt = new DateTime('tomorrow', new DateTimeZone('Asia/Manila'));
 // echo $expiresAt->getTimestamp();
 
-$imageReference = $defaultBucket->object($infoRef->getChild("faceID")->getValue());
-if ($imageReference->exists()) {
-    $image = $imageReference->signedUrl($expiresAt);
-}
+// $imageReference = $defaultBucket->object($infoRef->getChild("faceID")->getValue());
+// if ($imageReference->exists()) {
+//     $image = $imageReference->signedUrl($expiresAt);
+// }
 ?>
 
 <!DOCTYPE html>
@@ -48,18 +48,16 @@ if ($imageReference->exists()) {
             <img class="text-logo" src="../../assets/text-logo.png" alt="REaCT ">
             <hr class="divider">
             <div class="user-profile">
-                <!-- PHP Get from Storage -->
-                <img src="<?php echo $image; ?>">
                 <!-- PHP Get from RTDB -->
-                <span>
-                    <?php echo $_SESSION['lName'] . ', ' . $_SESSION['fName'] . ' ' . $_SESSION['mName'] ?>
-                </span>
+                <h2><?php echo $_SESSION['name']; ?></h2>
+                <h3><?php echo $_SESSION['branch']; ?></h3>
             </div>
             <hr class="divider">
             <a href="dashboard.php"><i class="fa fa-th-large" aria-hidden="true"></i>Dashboard</a>
             <a href="#" class="active"><i class="fa fa-line-chart" aria-hidden="true"></i>Covid Cases</a>
-            <a href="health.php"><i class="fa fa-heartbeat" aria-hidden="true"></i>Health Status</a>
-            <a href="history.php"><i class="fa fa-lightbulb-o" aria-hidden="true"></i>Location History</a>
+            <a href="status.php"><i class="fa fa-heartbeat" aria-hidden="true"></i>Status</a>
+            <a href="history.php"><i class="fa fa-lightbulb-o" aria-hidden="true"></i>Visitor History</a>
+            <a href="accounts.php"><i class="fa fa-users" aria-hidden="true"></i>Accounts</a>
             <div class="settings">
                 <a href="settings.php"><i class="fa fa-cog" aria-hidden="true"></i>Setttings</a>
             </div>
@@ -85,13 +83,25 @@ if ($imageReference->exists()) {
 
             <div class="stats">
 
-            <div class="box">
-                    <div class="cases mini-card"><h3>Total Cases</h3><br><?php echo $appDataRef->getChild('covStatus/cases')->getValue(); ?></div>
-                    <div class="tested mini-card"><h3>Total Tested</h3><br><?php echo $appDataRef->getChild('covStatus/tested')->getValue(); ?></div>
-                    <div class="recoveries mini-card"><h3>Total Recoveries</h3><br><?php echo $appDataRef->getChild('covStatus/recoveries')->getValue(); ?></div>
-                    <div class="deaths mini-card"><h3>Total Deaths</h3><br><?php echo $appDataRef->getChild('covStatus/death')->getValue(); ?></div>
-                    <div class="newCases mini-card"><h3>New Cases</h3><br><?php echo $appDataRef->getChild('covStatus/newCases')->getValue(); ?></div>
-                    <div class="activeCases mini-card"><h3>Total Active</h3><br><?php echo $appDataRef->getChild('covStatus/active')->getValue(); ?></div>
+                <div class="box">
+                    <div class="cases mini-card">
+                        <h3>Total Cases</h3><br><?php echo $appDataRef->getChild('covStatus/cases')->getValue(); ?>
+                    </div>
+                    <div class="tested mini-card">
+                        <h3>Total Tested</h3><br><?php echo $appDataRef->getChild('covStatus/tested')->getValue(); ?>
+                    </div>
+                    <div class="recoveries mini-card">
+                        <h3>Total Recoveries</h3><br><?php echo $appDataRef->getChild('covStatus/recoveries')->getValue(); ?>
+                    </div>
+                    <div class="deaths mini-card">
+                        <h3>Total Deaths</h3><br><?php echo $appDataRef->getChild('covStatus/death')->getValue(); ?>
+                    </div>
+                    <div class="newCases mini-card">
+                        <h3>New Cases</h3><br><?php echo $appDataRef->getChild('covStatus/newCases')->getValue(); ?>
+                    </div>
+                    <div class="activeCases mini-card">
+                        <h3>Total Active</h3><br><?php echo $appDataRef->getChild('covStatus/active')->getValue(); ?>
+                    </div>
                 </div>
 
             </div>

@@ -27,14 +27,14 @@
     height: fit-content;
     width: 95%;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
     align-items: start;
     gap: 50px 1.5em;
     margin: 30px;
 }
 
 .mini-card {
-    color: black;
+    color: white;
     box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.75);
     -webkit-box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.75);
     -moz-box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.75);
@@ -43,27 +43,27 @@
 }
 
 .cases {
-    background-color: #FDFD96;
-}
-
-.newCases {
-    background-color: #77DD77;
-}
-
-.recoveries {
-    background-color: #F8C8DC;
-}
-
-.deaths {
-    background-color: #B1907F;
-}
-
-.activeCases {
-    background-color: #AEC6CF;
+    background-color: #1f3571;
 }
 
 .tested {
-    background-color: #CB99C9;
+    background-color: #1f3571;
+}
+
+.recoveries {
+    background-color: #1c7de4;
+}
+
+.deaths {
+    background-color: #1c7de4;
+}
+
+.newCases {
+    background-color: #fe5105;
+}
+
+.activeCases {
+    background-color: #fe5105;
 }
 
 .Content .daily-cases {
