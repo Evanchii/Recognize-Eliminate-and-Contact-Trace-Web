@@ -95,8 +95,7 @@ if (!isset($_SESSION['name'])) {
               label: 'Number of Visitors',
               data: [65, 59, 80, 81, 56, 55, 40],
               fill: false,
-              borderColor: 'rgb(12, 89, 207)',
-              tension: 0.1
+              borderColor: 'rgb(12, 89, 207)'
             }]
           };
           const myChart = new Chart(chart, {

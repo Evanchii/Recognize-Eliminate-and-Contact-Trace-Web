@@ -65,6 +65,23 @@ $historyRef = $database->getReference('History');
       display: block;
       float: right;
     }
+
+    td > button {
+      background: none;
+      border: none;
+      margin: 1%;
+      padding: 2%;
+      cursor: pointer;
+    }
+
+    tr>td:last-child {
+      text-align: center;
+      width: 10%;
+    }
+
+    .fa {
+      font-size: 1.8em;
+    }
   </style>
 </head>
 
@@ -109,12 +126,26 @@ $historyRef = $database->getReference('History');
         <button class="button right">Add Account</button>
         <table>
           <tr>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Name</th>
-            <th>Backend Account</th>
+            <th>Username</th>
+            <th>UID</th>
+            <th>Action</th>
           </tr>
-          <?php
+          <tr>
+            <td>HealthOrg</td>
+            <td>7521f399-d388-491a-9ed4-1c341bcc520d</td>
+            <td>
+            <button>
+                <i class="fas fa-eye"></i>
+              </button>
+            </td>
+          </tr>
+        </table>
+        <div class="pagination">
+          <a href="#" class="disabled-link">&laquo;</a>
+          <a href="#" class="disabled-link active">1</a>
+          <a href="#" class="disabled-link">&raquo;</a>
+        </div>
+          <!-- <php
           if ($userHisRef->getSnapshot()->hasChildren()) {
             // var_dump($userHisRef->getValue());
             $history = $userHisRef->getValue();
@@ -147,7 +178,7 @@ $historyRef = $database->getReference('History');
             </div>
             ';
           }
-          ?>
+          ?> -->
       </div>
     </div>
 

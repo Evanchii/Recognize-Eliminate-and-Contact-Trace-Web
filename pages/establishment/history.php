@@ -84,7 +84,19 @@ if (!isset($_SESSION['name'])) {
             <th>Name</th>
             <th>Backend Account</th>
           </tr>
-          <?php
+          <tr>
+            <td>2022-02-06</td>
+            <td>14:23:10</td>
+            <td>Dela Cruz, Juan Martinez</td>
+            <td>Unit-01</td>
+          </tr>
+        </table>
+        <div class="pagination">
+                <a href="#" class="disabled-link">&laquo;</a>
+                <a href="#" class="disabled-link active">1</a>
+                <a href="#" class="disabled-link">&raquo;</a>
+            </div>
+          <!-- <php
           if ($userHisRef->getSnapshot()->hasChildren()) {
             // var_dump($userHisRef->getValue());
             $history = $userHisRef->getValue();
@@ -117,7 +129,7 @@ if (!isset($_SESSION['name'])) {
             </div>
             ';
           }
-          ?>
+          ?> -->
       </div>
     </div>
 

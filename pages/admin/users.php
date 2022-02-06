@@ -39,6 +39,24 @@ $historyRef = $database->getReference('History');
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="shortcut icon" href="../../assets/favicon.ico" type="image/x-icon">
   <title>Users | REaCT</title>
+  <style>
+    td > button {
+      background: none;
+      border: none;
+      margin: 1%;
+      padding: 2%;
+      cursor: pointer;
+    }
+
+    tr>td:last-child {
+      text-align: center;
+      width: 10%;
+    }
+
+    .fa {
+      font-size: 1.8em;
+    }
+  </style>
 </head>
 
 <body>
@@ -81,12 +99,75 @@ $historyRef = $database->getReference('History');
       <div>
         <table>
           <tr>
-            <th>Date</th>
-            <th>Time</th>
             <th>Name</th>
-            <th>Backend Account</th>
+            <th>UID</th>
+            <th>User Type</th>
+            <th>Actions</th>
           </tr>
-          <?php
+          <tr>
+            <td>Dela Cruz, Juan Martinez</td>
+            <td>78d4aece-3e66-4f1e-9800-22d170869fc3</td>
+            <td>Visitor</td>
+            <td>
+              <button>
+                <i class="fas fa-eye"></i>
+              </button>
+              <button>
+                <i class="fas fa-toggle-on"></i>
+              </button>
+              <button>
+                <i class="fas fa-lock"></i>
+              </button>
+              <button>
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td>REaCT-Demo Dagupan-1</td>
+            <td>4476a9ee-a343-4fa3-bcc1-625b940d1c9d</td>
+            <td>Establishment</td>
+            <td>
+              <button>
+                <i class="fas fa-eye"></i>
+              </button>
+              <button>
+                <i class="fas fa-toggle-on"></i>
+              </button>
+              <button>
+                <i class="fas fa-lock"></i>
+              </button>
+              <button>
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td>Unit-01_REact-Demo</td>
+            <td>96a52e07-3648-4076-a136-b0760abc1d37</td>
+            <td>Establishment-Sub Account</td>
+            <td>
+              <button>
+                <i class="fas fa-eye"></i>
+              </button>
+              <button>
+                <i class="fas fa-toggle-on"></i>
+              </button>
+              <button>
+                <i class="fas fa-lock"></i>
+              </button>
+              <button>
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </td>
+          </tr>
+        </table>
+        <div class="pagination">
+          <a href="#" class="disabled-link">&laquo;</a>
+          <a href="#" class="disabled-link active">1</a>
+          <a href="#" class="disabled-link">&raquo;</a>
+        </div>
+        <!-- <php
           if ($userHisRef->getSnapshot()->hasChildren()) {
             // var_dump($userHisRef->getValue());
             $history = $userHisRef->getValue();
@@ -119,7 +200,7 @@ $historyRef = $database->getReference('History');
             </div>
             ';
           }
-          ?>
+          ?> -->
       </div>
     </div>
 

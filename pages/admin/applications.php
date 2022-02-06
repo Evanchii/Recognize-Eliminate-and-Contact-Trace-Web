@@ -39,6 +39,23 @@ $historyRef = $database->getReference('History');
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="shortcut icon" href="../../assets/favicon.ico" type="image/x-icon">
   <title>Applications | REaCT</title>
+  <style>
+    td > button {
+      background: none;
+      border: none;
+      margin: 2%;
+      padding: 2%;
+      cursor: pointer;
+    }
+
+    tr>td:last-child {
+      text-align: center;
+    }
+
+    .fa {
+      font-size: 1.8em;
+    }
+  </style>
 </head>
 
 <body>
@@ -81,12 +98,41 @@ $historyRef = $database->getReference('History');
       <div>
         <table>
           <tr>
-            <th>Date</th>
-            <th>Time</th>
             <th>Name</th>
-            <th>Backend Account</th>
+            <th>UID</th>
+            <th>User Type</th>
+            <th>Application</th>
+            <th>Action</th>
           </tr>
-          <?php
+          <tr>
+            <td>Dela Cruz, Juan Martinez</td>
+            <td>78d4aece-3e66-4f1e-9800-22d170869fc3</td>
+            <td>Visitor</td>
+            <td>Vaccination Confirmation</td>
+            <td>
+              <button>
+              <i class="far fa-eye" aria-hidden="true"></i>
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td>REaCT-Demo Dagupan-1</td>
+            <td>4476a9ee-a343-4fa3-bcc1-625b940d1c9d</td>
+            <td>Establishment</td>
+            <td>Account Confirmation</td>
+            <td>
+              <button>
+              <i class="far fa-eye" aria-hidden="true"></i>
+              </button>
+            </td>
+          </tr>
+        </table>
+        <div class="pagination">
+          <a href="#" class="disabled-link">&laquo;</a>
+          <a href="#" class="disabled-link active">1</a>
+          <a href="#" class="disabled-link">&raquo;</a>
+        </div>
+        <!-- <php
           if ($userHisRef->getSnapshot()->hasChildren()) {
             // var_dump($userHisRef->getValue());
             $history = $userHisRef->getValue();
@@ -119,7 +165,7 @@ $historyRef = $database->getReference('History');
             </div>
             ';
           }
-          ?>
+          ?> -->
       </div>
     </div>
 

@@ -65,6 +65,22 @@ if (!isset($_SESSION['name'])) {
       display: block;
       float: right;
     }
+
+    td > button {
+      background: none;
+      border: none;
+      margin: 2%;
+      padding: 2%;
+      cursor: pointer;
+    }
+
+    tr>td:last-child {
+      text-align: center;
+    }
+
+    .fa {
+      font-size: 1.8em;
+    }
   </style>
 </head>
 
@@ -107,12 +123,29 @@ if (!isset($_SESSION['name'])) {
         <button class="button right">Add Account</button>
         <table>
           <tr>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Name</th>
-            <th>Backend Account</th>
+            <th>Username</th>
+            <th>UID</th>
+            <th>Action</th>
           </tr>
-          <?php
+          <tr>
+            <td>Unit-01</td>
+            <td>96a52e07-3648-4076-a136-b0760abc1d37</td>
+            <td>
+                <button>
+                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                </button>
+                <button>
+                <i class="fa fa-trash" aria-hidden="true"></i>
+                </button>
+            </td>
+          </tr>
+        </table>
+          <div class="pagination">
+                <a href="#" class="disabled-link">&laquo;</a>
+                <a href="#" class="disabled-link active">1</a>
+                <a href="#" class="disabled-link">&raquo;</a>
+            </div>
+          <!-- <php
           if ($userHisRef->getSnapshot()->hasChildren()) {
             // var_dump($userHisRef->getValue());
             $history = $userHisRef->getValue();
@@ -145,7 +178,7 @@ if (!isset($_SESSION['name'])) {
             </div>
             ';
           }
-          ?>
+          ?> -->
       </div>
     </div>
 
