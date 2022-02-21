@@ -36,11 +36,10 @@ $historyRef = $database->getReference('History');
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="../../styles/private-common.css">
   <link rel="stylesheet" type="text/css" href="../../styles/history.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="shortcut icon" href="../../assets/favicon.ico" type="image/x-icon">
   <title>Users | REaCT</title>
   <style>
-    td > button {
+    td>button {
       background: none;
       border: none;
       margin: 1%;
@@ -87,12 +86,106 @@ $historyRef = $database->getReference('History');
       <div class="dashboard-date">
         <h2>Users</h2>
       </div>
-      <div class="dashboard-notif">
-        <span class="dropdown"><i class="fa fa-user-circle dropbtn" aria-hidden="true"></i>My Account
-          <div class="dropdown-content">
-            <a href="../logout.php"><i class="fa fa-sign-out"></i>Log out</a>
+      <div class="header-right">
+        <div class="notifications">
+          <div class="icon_wrap"><i class="far fa-bell"></i></div>
+
+          <div class="notification_dd">
+            <ul class="notification_ul">
+              <li class="starbucks success">
+                <div class="notify_icon">
+                  <span class="icon"></span>
+                </div>
+                <div class="notify_data">
+                  <div class="title">
+                    Lorem, ipsum dolor.
+                  </div>
+                  <div class="sub_title">
+                    Lorem ipsum dolor sit amet consectetur.
+                  </div>
+                </div>
+                <div class="notify_status">
+                  <p>Success</p>
+                </div>
+              </li>
+              <li class="baskin_robbins failed">
+                <div class="notify_icon">
+                  <span class="icon"></span>
+                </div>
+                <div class="notify_data">
+                  <div class="title">
+                    Lorem, ipsum dolor.
+                  </div>
+                  <div class="sub_title">
+                    Lorem ipsum dolor sit amet consectetur.
+                  </div>
+                </div>
+                <div class="notify_status">
+                  <p>Failed</p>
+                </div>
+              </li>
+              <li class="mcd success">
+                <div class="notify_icon">
+                  <span class="icon"></span>
+                </div>
+                <div class="notify_data">
+                  <div class="title">
+                    Lorem, ipsum dolor.
+                  </div>
+                  <div class="sub_title">
+                    Lorem ipsum dolor sit amet consectetur.
+                  </div>
+                </div>
+                <div class="notify_status">
+                  <p>Success</p>
+                </div>
+              </li>
+              <li class="pizzahut failed">
+                <div class="notify_icon">
+                  <span class="icon"></span>
+                </div>
+                <div class="notify_data">
+                  <div class="title">
+                    Lorem, ipsum dolor.
+                  </div>
+                  <div class="sub_title">
+                    Lorem ipsum dolor sit amet consectetur.
+                  </div>
+                </div>
+                <div class="notify_status">
+                  <p>Failed</p>
+                </div>
+              </li>
+              <li class="kfc success">
+                <div class="notify_icon">
+                  <span class="icon"></span>
+                </div>
+                <div class="notify_data">
+                  <div class="title">
+                    Lorem, ipsum dolor.
+                  </div>
+                  <div class="sub_title">
+                    Lorem ipsum dolor sit amet consectetur.
+                  </div>
+                </div>
+                <div class="notify_status">
+                  <p>Success</p>
+                </div>
+              </li>
+              <li class="show_all">
+                <p class="link">Show All Activities</p>
+              </li>
+            </ul>
           </div>
-        </span>
+        </div>
+
+        <div class="dashboard-notif">
+          <span class="dropdown"><i class="fa fa-user-circle dropbtn" aria-hidden="true"></i>My Account
+            <div class="dropdown-content">
+              <a href="../logout.php"><i class="fas fa-sign-out" aria-hidden="true"></i>Log out</a>
+            </div>
+          </span>
+        </div>
       </div>
     </div>
     <div class="Content">
@@ -214,10 +307,7 @@ $historyRef = $database->getReference('History');
 
 
   </div>
-
   <script src="https://kit.fontawesome.com/a2501cd80b.js" crossorigin="anonymous"></script>
-
-
 </body>
 
 </html>

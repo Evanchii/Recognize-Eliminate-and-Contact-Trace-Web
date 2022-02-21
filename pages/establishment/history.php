@@ -77,14 +77,32 @@ if (!isset($_SESSION['name'])) {
     </div>
     <div class="Content">
       <div>
-        <table>
-          <tr>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Name</th>
-            <th>Backend Account</th>
-          </tr>
-          <tr>
+        <div style="float: right; margin-bottom: 1%;">
+          <label for="search">Search: </label>
+          <input type="search" name="search" id="search">
+        </div>
+        <br>
+        <div id="data">
+          <table style="width: 100%;">
+            <tr>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Name</th>
+              <th>Backend Account</th>
+            </tr>
+            <tr>
+              <td colspan="4">
+                <h2 style="text-align: center;">Loading Data...</h2>
+              </td>
+            <tr>
+          </table>
+          <div class="pagination">
+            <a href="#" class="disabled-link">&laquo;</a>
+            <a href="#" class="disabled-link active">1</a>
+            <a href="#" class="disabled-link">&raquo;</a>
+          </div>
+        </div>
+        <!-- <tr>
             <td>2022-02-06</td>
             <td>14:23:10</td>
             <td>Dela Cruz, Juan Martinez</td>
@@ -95,8 +113,8 @@ if (!isset($_SESSION['name'])) {
                 <a href="#" class="disabled-link">&laquo;</a>
                 <a href="#" class="disabled-link active">1</a>
                 <a href="#" class="disabled-link">&raquo;</a>
-            </div>
-          <!-- <php
+            </div> -->
+        <!-- <php
           if ($userHisRef->getSnapshot()->hasChildren()) {
             // var_dump($userHisRef->getValue());
             $history = $userHisRef->getValue();
@@ -141,6 +159,44 @@ if (!isset($_SESSION['name'])) {
 
     </div>
 
+    <!-- JQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+    <!-- jQuery Modal -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+
+    <script>
+      loadPage(1);
+
+      function loadPage(page) {
+        $.ajax({
+          url: "data/history-controller.php",
+          type: "POST",
+          data: {
+            "page": page
+          }
+        }).done(function(data) {
+          $("#data").html(data);
+          // var modalBody = document.getElementById('user-info-modal');
+          // modalBody.html(data);
+        });
+      }
+
+      function searchData(page, data) {
+        $.ajax({
+          url: "data/search-history-controller.php",
+          type: "POST",
+          data: {
+            "page": page,
+            "data": data
+          }
+        }).done(function(data) {
+          $("#data").html(data);
+          // var modalBody = document.getElementById('user-info-modal');
+          // modalBody.html(data);
+        });
+      }
+    </script>
 
   </div>
 

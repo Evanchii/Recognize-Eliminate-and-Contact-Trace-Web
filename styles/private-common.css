@@ -142,6 +142,7 @@ h6 {
     grid-area: Header;
     display: grid;
     grid-template-areas: "dashboard-date dashboard-notif";
+    grid-template-columns: auto 20%;
     background-color: #F3F3F3;
     border-radius: 20px 0px 0px 20px;
     margin-bottom: 10px;
@@ -152,7 +153,8 @@ h6 {
 }
 
 .Header .dashboard-notif {
-    grid-area: dashboard-notif;
+    flex-grow: 1;
+    flex-basis: 0;
     text-align: right;
 }
 
@@ -367,22 +369,24 @@ h6 {
 .pagination {
     display: block;
     float: right;
-  }
-  
-  .pagination a {
+}
+
+.pagination a {
     color: black;
     float: left;
     padding: 8px 16px;
     text-decoration: none;
     margin-top: 15%;
-  }
+}
 
-  .pagination a.active {
+.pagination a.active {
     background-color: #4CAF50;
     color: white;
-  }
+}
 
-  .pagination a:hover:not(.active) {background-color: #ddd;}
+.pagination a:hover:not(.active) {
+    background-color: #ddd;
+}
 
 
 /* @media screen and (min-width: 736px){
@@ -397,3 +401,262 @@ h6 {
     ;
   }
 } */
+
+/* @import url('https://fonts.googleapis.com/css?family=Montserrat:400,600,700|Trade+Winds&display=swap');
+
+*{
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  list-style: none;
+  box-sizing: border-box;
+  font-family: 'Montserrat';
+}
+
+body{
+  background: #dfecff;
+  color: #7f8db0;
+}
+
+a{
+   color: #7f8db0;
+}
+
+.wrapper{
+  width: 100%;
+  height: 100%;
+}
+
+.navbar{
+  background: #fff;
+  width: 100%;
+  height: 60px;
+  padding: 0 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.navbar .navbar_left .logo a{
+   font-family: 'Trade Winds';
+   font-size: 20px;
+}
+
+.grid .Header{
+   display: flex;
+}
+
+.grid .Header img{
+  width: 35px;
+}
+
+.grid .Header .icon_wrap{
+  cursor: pointer;
+} */
+
+.grid .Header .notifications .icon_wrap {
+    font-size: 28px;
+}
+
+.grid .Header .notifications {
+    position: relative;
+}
+
+.notification_dd {
+    position: absolute;
+    top: 48px;
+    right: -15px;
+    user-select: none;
+    background: #fff;
+    border: 1px solid #c7d8e2;
+    width: 350px;
+    height: auto;
+    max-height: 400px;
+    overflow-y: scroll;
+    display: none;
+    border-radius: 3px;
+    box-shadow: 10px 10px 35px rgba(0, 0, 0, 0.125),
+        -10px -10px 35px rgba(0, 0, 0, 0.125);
+}
+
+.notification_dd:before {
+    content: "";
+    position: absolute;
+    top: -20px;
+    right: 15px;
+    border: 10px solid;
+    border-color: transparent transparent #fff transparent;
+}
+
+.notification_dd::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: #ffffff00;
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+}
+
+.notification_dd::-webkit-scrollbar {
+    width: 0.4em;
+    background-color: #ffffff00;
+}
+
+.notification_dd::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+    background-color: #555;
+}
+
+.notification_dd li {
+    border-bottom: 1px solid #f1f2f4;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+}
+
+.notification_dd li .notify_icon {
+    display: flex;
+}
+
+.notification_dd li .notify_icon .icon {
+    display: inline-block;
+    background: url('https://i.imgur.com/MVJNkqW.png') no-repeat 0 0;
+    width: 40px;
+    height: 42px;
+}
+
+.notification_dd li.baskin_robbins .notify_icon .icon {
+    background-position: 0 -43px;
+}
+
+.notification_dd li.mcd .notify_icon .icon {
+    background-position: 0 -86px;
+}
+
+.notification_dd li.pizzahut .notify_icon .icon {
+    background-position: 0 -129px;
+}
+
+.notification_dd li.kfc .notify_icon .icon {
+    background-position: 0 -178px;
+}
+
+.notification_dd li .notify_data {
+    margin: 0 15px;
+    width: 185px;
+}
+
+.notification_dd li .notify_data .title {
+    color: #000;
+    font-weight: 600;
+}
+
+.notification_dd li .notify_data .sub_title {
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 5px;
+}
+
+.notification_dd li .notify_status p {
+    font-size: 12px;
+}
+
+.notification_dd li.success .notify_status p {
+    color: #47da89;
+}
+
+.notification_dd li.failed .notify_status p {
+    color: #fb0001;
+}
+
+.notification_dd li.show_all {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.notification_dd li.show_all p {
+    font-weight: 700;
+    color: #3b80f9;
+    cursor: pointer;
+}
+
+.notification_dd li.show_all p:hover {
+    text-decoration: underline;
+}
+
+.grid .Header .profile .icon_wrap {
+    display: flex;
+    align-items: center;
+}
+
+.grid .Header .profile .name {
+    display: inline-block;
+    margin: 0 10px;
+}
+
+.grid .Header .icon_wrap:hover,
+.grid .Header .notifications.actived .icon_wrap {
+    color: #3b80f9;
+}
+
+.navbar .profile .profile_dd {
+    width: 225px;
+}
+
+.navbar .profile .profile_dd:before {
+    right: 10px;
+}
+
+.navbar .profile .profile_dd ul li {
+    border-bottom: 1px solid #f1f2f4;
+}
+
+.navbar .profile .profile_dd ul li a {
+    display: block;
+    padding: 15px 35px;
+    position: relative;
+}
+
+.navbar .profile .profile_dd ul li a .picon {
+    display: inline-block;
+    width: 30px;
+}
+
+.navbar .profile .profile_dd ul li a:hover {
+    color: #3b80f9;
+    background: #f0f5ff;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.navbar .profile .profile_dd ul li.profile_li a:hover {
+    background: transparent;
+    cursor: default;
+    color: #7f8db0;
+}
+
+.navbar .profile .profile_dd ul li .btn {
+    height: 32px;
+    padding: 7px 10px;
+    color: #fff;
+    border-radius: 3px;
+    cursor: pointer;
+    text-align: center;
+    background: #3b80f9;
+    width: 125px;
+    margin: 5px auto 15px;
+}
+
+.navbar .profile .profile_dd ul li .btn:hover {
+    background: #6593e4;
+}
+
+.show {
+    display: block;
+}
+
+.header-right {
+    display: flex;
+}

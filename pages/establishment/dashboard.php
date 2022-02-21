@@ -9,6 +9,10 @@ if (!isset($_SESSION['name'])) {
   $_SESSION["branch"] = $infoRef->getChild("branch")->getValue();
 }
 
+$subRef = $database->getReference('Users/' . $uid . '/sub');
+$userHisRef = $database->getReference('Users/' . $uid . '/history');
+$historyRef = $database->getReference('History');
+
 
 // Firebase Storage
 // $storage = $firebase->createStorage();
@@ -47,8 +51,8 @@ if (!isset($_SESSION['name'])) {
       <hr class="divider">
       <div class="user-profile">
         <!-- PHP Get from RTDB -->
-        <h2><?php echo $_SESSION['name'];?></h2>
-        <h3><?php echo $_SESSION['branch'];?></h3>
+        <h2><?php echo $_SESSION['name']; ?></h2>
+        <h3><?php echo $_SESSION['branch']; ?></h3>
       </div>
       <hr class="divider">
       <a href="#" class="active"><i class="fa fa-th-large" aria-hidden="true"></i>Dashboard</a>
@@ -64,13 +68,107 @@ if (!isset($_SESSION['name'])) {
       <div class="dashboard-date">
         <h2>Dashboard</h2>
       </div>
-      <div class="dashboard-notif">
-        <span class="dropdown"><i class="fa fa-user-circle dropbtn" aria-hidden="true"></i>My Account
-          <div class="dropdown-content">
-            <a href="profile.php"><i class="fa fa-user-circle" aria-hidden="true"></i>Profile</a>
-            <a href="../logout.php"><i class="fa fa-sign-out"></i>Log out</a>
+      <div class="header-right">
+        <div class="notifications">
+          <div class="icon_wrap"><i class="far fa-bell"></i></div>
+
+          <div class="notification_dd">
+            <ul class="notification_ul">
+              <li class="starbucks success">
+                <div class="notify_icon">
+                  <span class="icon"></span>
+                </div>
+                <div class="notify_data">
+                  <div class="title">
+                    Lorem, ipsum dolor.
+                  </div>
+                  <div class="sub_title">
+                    Lorem ipsum dolor sit amet consectetur.
+                  </div>
+                </div>
+                <div class="notify_status">
+                  <p>Success</p>
+                </div>
+              </li>
+              <li class="baskin_robbins failed">
+                <div class="notify_icon">
+                  <span class="icon"></span>
+                </div>
+                <div class="notify_data">
+                  <div class="title">
+                    Lorem, ipsum dolor.
+                  </div>
+                  <div class="sub_title">
+                    Lorem ipsum dolor sit amet consectetur.
+                  </div>
+                </div>
+                <div class="notify_status">
+                  <p>Failed</p>
+                </div>
+              </li>
+              <li class="mcd success">
+                <div class="notify_icon">
+                  <span class="icon"></span>
+                </div>
+                <div class="notify_data">
+                  <div class="title">
+                    Lorem, ipsum dolor.
+                  </div>
+                  <div class="sub_title">
+                    Lorem ipsum dolor sit amet consectetur.
+                  </div>
+                </div>
+                <div class="notify_status">
+                  <p>Success</p>
+                </div>
+              </li>
+              <li class="pizzahut failed">
+                <div class="notify_icon">
+                  <span class="icon"></span>
+                </div>
+                <div class="notify_data">
+                  <div class="title">
+                    Lorem, ipsum dolor.
+                  </div>
+                  <div class="sub_title">
+                    Lorem ipsum dolor sit amet consectetur.
+                  </div>
+                </div>
+                <div class="notify_status">
+                  <p>Failed</p>
+                </div>
+              </li>
+              <li class="kfc success">
+                <div class="notify_icon">
+                  <span class="icon"></span>
+                </div>
+                <div class="notify_data">
+                  <div class="title">
+                    Lorem, ipsum dolor.
+                  </div>
+                  <div class="sub_title">
+                    Lorem ipsum dolor sit amet consectetur.
+                  </div>
+                </div>
+                <div class="notify_status">
+                  <p>Success</p>
+                </div>
+              </li>
+              <li class="show_all">
+                <p class="link">Show All Activities</p>
+              </li>
+            </ul>
           </div>
-        </span>
+        </div>
+
+        <div class="dashboard-notif">
+          <span class="dropdown"><i class="fa fa-user-circle dropbtn" aria-hidden="true"></i>My Account
+            <div class="dropdown-content">
+              <a href="../logout.php"><i class="fas fa-sign-out" aria-hidden="true"></i>Log out</a>
+              <a href="profile.php"><i class="fa fa-user-circle" aria-hidden="true"></i>Profile</a>
+            </div>
+          </span>
+        </div>
       </div>
     </div>
     <div class="Content">
@@ -113,7 +211,7 @@ if (!isset($_SESSION['name'])) {
               <i class="fa fa-briefcase" aria-hidden="true"></i>
             </div>
             <div class="details">
-              <h2>405</h2>
+              <h2><?php echo $subRef->getSnapshot()->hasChildren() ? $subRef->getSnapshot()->numChild() : 0; ?></h2>
               <h4>Sub-accounts</h4>
             </div>
           </div>
@@ -122,7 +220,7 @@ if (!isset($_SESSION['name'])) {
               <i class="fa fa-users" aria-hidden="true"></i>
             </div>
             <div class="details">
-              <h2>505</h2>
+              <h2><?php echo $userHisRef->getChild(date("Y-m-d"))->getSnapshot()->hasChildren() ? $userHisRef->getChild(date("Y-m-d"))->getSnapshot()->numChild() : 0 ?></h2>
               <h4>Visitors</h4>
             </div>
           </div>
@@ -144,8 +242,6 @@ if (!isset($_SESSION['name'])) {
         <!-- Get data from RTDB -->
         <div class="list-history">
           <?php
-          $userHisRef = $database->getReference('Users/' . $uid . '/history');
-          $historyRef = $database->getReference('History');
           if ($userHisRef->getSnapshot()->hasChildren()) {
             // var_dump($userHisRef->getValue());
             $history = $userHisRef->getValue();
@@ -155,7 +251,7 @@ if (!isset($_SESSION['name'])) {
                             </div>';
               foreach ($keySet as $key => $timestamp) {
                 echo '<div class="history">
-                              <span>' . $historyRef->getChild($date . '/' . $timestamp . '/estName')->getValue() . '</span>
+                              <span>' . $historyRef->getChild($date . '/' . $timestamp . '/name')->getValue() . '</span>
                               <i class="fa fa-caret-right" aria-hidden="true"></i>
                             </div>';
               }
