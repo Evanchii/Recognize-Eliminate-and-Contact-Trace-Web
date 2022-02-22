@@ -7,26 +7,6 @@ $userHisRef = $database->getReference('Users/' . $uid . '/history');
 $historyRef = $database->getReference('History');
 
 $extension = "_" . str_replace(' ', '-', $infoRef->getChild("addCi")->getValue());
-
-// if (!isset($_SESSION['name'])) {
-//   $_SESSION["name"] = $infoRef->getChild("name")->getValue();
-//   $_SESSION["branch"] = $infoRef->getChild("branch")->getValue();
-// }
-
-
-// Firebase Storage
-// $storage = $firebase->createStorage();
-// $storageClient = $storage->getStorageClient();
-// $defaultBucket = $storage->getBucket();
-
-
-// $expiresAt = new DateTime('tomorrow', new DateTimeZone('Asia/Manila'));
-// // echo $expiresAt->getTimestamp();
-
-// $imageReference = $defaultBucket->object($infoRef->getChild("faceID")->getValue());
-// if ($imageReference->exists()) {
-//   $image = $imageReference->signedUrl($expiresAt);
-// }
 ?>
 
 <!DOCTYPE html>
@@ -38,8 +18,6 @@ $extension = "_" . str_replace(' ', '-', $infoRef->getChild("addCi")->getValue()
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="../../styles/private-common.css">
   <link rel="stylesheet" type="text/css" href="../../styles/history.css">
-  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
-  <script src="https://kit.fontawesome.com/a2501cd80b.js" crossorigin="anonymous"></script>
   <link rel="shortcut icon" href="../../assets/favicon.ico" type="image/x-icon">
   <title>Accounts | REaCT</title>
   <style>
@@ -287,7 +265,7 @@ $extension = "_" . str_replace(' ', '-', $infoRef->getChild("addCi")->getValue()
 
 
   </div>
-
+  <!-- FontAwesome -->
   <script src="https://kit.fontawesome.com/a2501cd80b.js" crossorigin="anonymous"></script>
 
   <!-- JQuery -->

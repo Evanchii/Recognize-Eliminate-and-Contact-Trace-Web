@@ -5,26 +5,6 @@ $uid = $_SESSION["uid"];
 $infoRef = $database->getReference("Users/" . $uid . "/info");
 $userHisRef = $database->getReference('Users/' . $uid . '/history');
 $historyRef = $database->getReference('History');
-
-// if (!isset($_SESSION['name'])) {
-//   $_SESSION["name"] = $infoRef->getChild("name")->getValue();
-//   $_SESSION["branch"] = $infoRef->getChild("branch")->getValue();
-// }
-
-
-// Firebase Storage
-// $storage = $firebase->createStorage();
-// $storageClient = $storage->getStorageClient();
-// $defaultBucket = $storage->getBucket();
-
-
-// $expiresAt = new DateTime('tomorrow', new DateTimeZone('Asia/Manila'));
-// // echo $expiresAt->getTimestamp();
-
-// $imageReference = $defaultBucket->object($infoRef->getChild("faceID")->getValue());
-// if ($imageReference->exists()) {
-//   $image = $imageReference->signedUrl($expiresAt);
-// }
 ?>
 
 <!DOCTYPE html>
@@ -36,8 +16,6 @@ $historyRef = $database->getReference('History');
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="../../styles/private-common.css">
   <link rel="stylesheet" type="text/css" href="../../styles/history.css">
-  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
-  <script src="https://kit.fontawesome.com/a2501cd80b.js" crossorigin="anonymous"></script>
   <link rel="shortcut icon" href="../../assets/favicon.ico" type="image/x-icon">
   <title>Applications | REaCT</title>
   <style>
@@ -190,9 +168,10 @@ $historyRef = $database->getReference('History');
       </div>
     </div>
     <div class="Content">
-      <div>
+      <div id="data">
         <table>
           <tr>
+            <th>Date</th>
             <th>Name</th>
             <th>UID</th>
             <th>User Type</th>
@@ -200,27 +179,10 @@ $historyRef = $database->getReference('History');
             <th>Action</th>
           </tr>
           <tr>
-            <td>Dela Cruz, Juan Martinez</td>
-            <td>78d4aece-3e66-4f1e-9800-22d170869fc3</td>
-            <td>Visitor</td>
-            <td>Vaccination Confirmation</td>
-            <td>
-              <button>
-                <i class="far fa-eye" aria-hidden="true"></i>
-              </button>
+            <td colspan="6">
+              <h2 style="text-align: center;">Loading Data...</h2>
             </td>
-          </tr>
           <tr>
-            <td>REaCT-Demo Dagupan-1</td>
-            <td>4476a9ee-a343-4fa3-bcc1-625b940d1c9d</td>
-            <td>Establishment</td>
-            <td>Account Confirmation</td>
-            <td>
-              <button>
-                <i class="far fa-eye" aria-hidden="true"></i>
-              </button>
-            </td>
-          </tr>
         </table>
         <div class="pagination">
           <a href="#" class="disabled-link">&laquo;</a>
@@ -275,8 +237,81 @@ $historyRef = $database->getReference('History');
 
   </div>
 
+  <!-- FontAwesome -->
   <script src="https://kit.fontawesome.com/a2501cd80b.js" crossorigin="anonymous"></script>
 
+  <!-- JQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+  <!-- jQuery Modal -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+
+  <script>
+    const currentDate = new Date();
+    loadPage(1);
+
+    function loadPage(page) {
+      $.ajax({
+        url: "data/application-handler.php",
+        type: "POST",
+        data: {
+          "page": page
+        }
+      }).done(function(data) {
+        $("#data").html(data);
+      });
+    }
+
+    function showData(ts) {
+      $("#modal-content").html('');
+      $.ajax({
+        url: "data/application-handler.php",
+        type: "POST",
+        data: {
+          "ts": ts
+        }
+      }).done(function(data) {
+        $('#appInfo').modal('show');
+        $("#modal-content").html(data);
+      });
+    }
+
+    function appApprove(ts) {
+      $.ajax({
+        url: "data/application-handler.php",
+        type: "POST",
+        data: {
+          "ts": ts,
+          "action" : true,
+          "tsNow" : currentDate.getTime()
+        }
+      }).done(function(data) {
+        $("#appInfo .close-modal").click();
+        loadPage(1);
+      });
+    }
+
+    function appDecline(ts) {
+      $.ajax({
+        url: "data/application-handler.php",
+        type: "POST",
+        data: {
+          "ts": ts,
+          "action" : false,
+          "tsNow" : currentDate.getTime()
+        }
+      }).done(function(data) {
+        $("#appInfo .close-modal").click();
+        loadPage(1);
+      });
+    }
+
+    
+  </script>
+
+  <div id="appInfo" class="modal" style="max-width: 60vw;">
+  <div id="modal-content"></div>
+  </div>
 
 </body>
 

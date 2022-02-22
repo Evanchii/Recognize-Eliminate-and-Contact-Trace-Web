@@ -541,6 +541,8 @@ a{
 }
 
 .notification_dd li .notify_data {
+    flex-basis: 0;
+    flex-grow: 1;
     margin: 0 15px;
     width: 185px;
 }
@@ -552,21 +554,22 @@ a{
 
 .notification_dd li .notify_data .sub_title {
     font-size: 14px;
-    white-space: nowrap;
+    overflow-wrap: break-word;
+    /* white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
+    text-overflow: ellipsis; */
     margin-top: 5px;
 }
 
-.notification_dd li .notify_status p {
+.notification_dd li .notify_date p {
     font-size: 12px;
 }
 
-.notification_dd li.success .notify_status p {
+.notification_dd li.success .notify_date p {
     color: #47da89;
 }
 
-.notification_dd li.failed .notify_status p {
+.notification_dd li.failed .notify_date p {
     color: #fb0001;
 }
 

@@ -44,7 +44,6 @@ $status = $infoRef->getChild("status")->getValue();
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="../../styles/private-common.css">
   <link rel="stylesheet" type="text/css" href="../../styles/health.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="shortcut icon" href="../../assets/favicon.ico" type="image/x-icon">
   <title>Health Status | REaCT</title>
 </head>
@@ -74,13 +73,107 @@ $status = $infoRef->getChild("status")->getValue();
       <div class="dashboard-date">
         <h2>Health Status</h2>
       </div>
-      <div class="dashboard-notif">
-        <span class="dropdown"><i class="fa fa-user-circle dropbtn" aria-hidden="true"></i>My Account
-          <div class="dropdown-content">
-            <a href="profile.php"><i class="fa fa-user-circle" aria-hidden="true"></i>Profile</a>
-            <a href="../logout.php"><i class="fa fa-sign-out"></i>Log out</a>
+      <div class="header-right">
+        <div class="notifications">
+          <div class="icon_wrap"><i class="far fa-bell"></i></div>
+
+          <div class="notification_dd">
+            <ul class="notification_ul">
+              <li class="starbucks success">
+                <div class="notify_icon">
+                  <span class="icon"></span>
+                </div>
+                <div class="notify_data">
+                  <div class="title">
+                    Lorem, ipsum dolor.
+                  </div>
+                  <div class="sub_title">
+                    Lorem ipsum dolor sit amet consectetur.
+                  </div>
+                </div>
+                <div class="notify_status">
+                  <p>Success</p>
+                </div>
+              </li>
+              <li class="baskin_robbins failed">
+                <div class="notify_icon">
+                  <span class="icon"></span>
+                </div>
+                <div class="notify_data">
+                  <div class="title">
+                    Lorem, ipsum dolor.
+                  </div>
+                  <div class="sub_title">
+                    Lorem ipsum dolor sit amet consectetur.
+                  </div>
+                </div>
+                <div class="notify_status">
+                  <p>Failed</p>
+                </div>
+              </li>
+              <li class="mcd success">
+                <div class="notify_icon">
+                  <span class="icon"></span>
+                </div>
+                <div class="notify_data">
+                  <div class="title">
+                    Lorem, ipsum dolor.
+                  </div>
+                  <div class="sub_title">
+                    Lorem ipsum dolor sit amet consectetur.
+                  </div>
+                </div>
+                <div class="notify_status">
+                  <p>Success</p>
+                </div>
+              </li>
+              <li class="pizzahut failed">
+                <div class="notify_icon">
+                  <span class="icon"></span>
+                </div>
+                <div class="notify_data">
+                  <div class="title">
+                    Lorem, ipsum dolor.
+                  </div>
+                  <div class="sub_title">
+                    Lorem ipsum dolor sit amet consectetur.
+                  </div>
+                </div>
+                <div class="notify_status">
+                  <p>Failed</p>
+                </div>
+              </li>
+              <li class="kfc success">
+                <div class="notify_icon">
+                  <span class="icon"></span>
+                </div>
+                <div class="notify_data">
+                  <div class="title">
+                    Lorem, ipsum dolor.
+                  </div>
+                  <div class="sub_title">
+                    Lorem ipsum dolor sit amet consectetur.
+                  </div>
+                </div>
+                <div class="notify_status">
+                  <p>Success</p>
+                </div>
+              </li>
+              <li class="show_all">
+                <p class="link">Show All Activities</p>
+              </li>
+            </ul>
           </div>
-        </span>
+        </div>
+
+        <div class="dashboard-notif">
+          <span class="dropdown"><i class="fa fa-user-circle dropbtn" aria-hidden="true"></i>My Account
+            <div class="dropdown-content">
+              <a href="profile.php"><i class="fa fa-user-circle" aria-hidden="true"></i>Profile</a>
+              <a href="../logout.php"><i class="fas fa-sign-out" aria-hidden="true"></i>Log out</a>
+            </div>
+          </span>
+        </div>
       </div>
     </div>
     <div class="Content">
@@ -92,13 +185,13 @@ $status = $infoRef->getChild("status")->getValue();
         <div class="covid">
           <!-- <button type="submit" class="c-btn negative active" value="Negative" id="negative"> -->
           <!-- <a href="#statusAlert" rel="modal:open"> -->
-            <label class="card-input-parent">
-              <input type="radio" onchange="statusAlert(this);" name="status" status="negative" id="statusNegative" class="card-input-radio covStatus" <?php echo !$status ? 'checked' : ''; ?>>
-              <div class="card-input negative">
-                <img src="../../assets/ic_negative.png" height="100" width="100" /><br>
-                <h2>Negative</h2>
-              </div>
-            </label>
+          <label class="card-input-parent">
+            <input type="radio" onchange="statusAlert(this);" name="status" status="negative" id="statusNegative" class="card-input-radio covStatus" <?php echo !$status ? 'checked' : ''; ?>>
+            <div class="card-input negative">
+              <img src="../../assets/ic_negative.png" height="100" width="100" /><br>
+              <h2>Negative</h2>
+            </div>
+          </label>
           <!-- </a> -->
           <!-- </button> -->
           <!-- <button type="submit" class="c-btn positive" value="Positive" id="positive"> -->
@@ -163,6 +256,9 @@ $status = $infoRef->getChild("status")->getValue();
       © 2021 REaCT. All right reserved
     </div>
   </div>
+
+  <!-- FontAwesome -->
+  <script src="https://kit.fontawesome.com/a2501cd80b.js" crossorigin="anonymous"></script>
 
   <!-- JQuery -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>

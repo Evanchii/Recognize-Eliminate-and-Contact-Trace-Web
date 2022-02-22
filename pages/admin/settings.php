@@ -8,27 +8,6 @@ include '../../functions/checkSession.php';
 $uid = $_SESSION["uid"];
 $infoRef = $database->getReference("Users/" . $uid . "/info");
 $linkRef = $database->getReference("appData/links/");
-
-// if (!isset($_SESSION['fName'])) {
-//   $_SESSION["lName"] = $infoRef->getChild("lName")->getValue();
-//   $_SESSION["fName"] = $infoRef->getChild("fName")->getValue();
-//   $_SESSION["mName"] = $infoRef->getChild("mName")->getValue();
-// }
-
-
-// // Firebase Storage
-// $storage = $firebase->createStorage();
-// $storageClient = $storage->getStorageClient();
-// $defaultBucket = $storage->getBucket();
-
-
-// $expiresAt = new DateTime('tomorrow', new DateTimeZone('Asia/Manila'));
-// // echo $expiresAt->getTimestamp();
-
-// $imageReference = $defaultBucket->object($infoRef->getChild("faceID")->getValue());
-// if ($imageReference->exists()) {
-//   $image = $imageReference->signedUrl($expiresAt);
-// }
 ?>
 
 <!DOCTYPE html>
@@ -235,7 +214,14 @@ $linkRef = $database->getReference("appData/links/");
     </div>
   </div>
 
+  <!-- FontAwesome -->
   <script src="https://kit.fontawesome.com/a2501cd80b.js" crossorigin="anonymous"></script>
+
+  <!-- JQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+  <!-- jQuery Modal -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
 
 </body>
 

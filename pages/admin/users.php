@@ -189,7 +189,7 @@ $historyRef = $database->getReference('History');
       </div>
     </div>
     <div class="Content">
-      <div>
+      <div id="data">
         <table>
           <tr>
             <th>Name</th>
@@ -307,7 +307,30 @@ $historyRef = $database->getReference('History');
 
 
   </div>
+  <!-- FontAwesome -->
   <script src="https://kit.fontawesome.com/a2501cd80b.js" crossorigin="anonymous"></script>
+
+  <!-- JQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+  <!-- jQuery Modal -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+
+  <script>
+    loadPage(1);
+
+    function loadPage(page) {
+      $.ajax({
+        url: "data/user-controller.php",
+        type: "POST",
+        data: {
+          "page": page
+        }
+      }).done(function(data) {
+        $("#data").html(data);
+      });
+    }
+  </script>
 </body>
 
 </html>

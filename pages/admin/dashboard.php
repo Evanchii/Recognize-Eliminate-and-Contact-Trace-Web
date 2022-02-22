@@ -12,12 +12,6 @@ $defaultBucket = $storage->getBucket();
 
 
 $expiresAt = new DateTime('tomorrow', new DateTimeZone('Asia/Manila'));
-// echo $expiresAt->getTimestamp();
-
-// $imageReference = $defaultBucket->object($infoRef->getChild("faceID")->getValue());
-// if ($imageReference->exists()) {
-//   $image = $imageReference->signedUrl($expiresAt);
-// }
 ?>
 
 <!DOCTYPE html>
@@ -29,8 +23,6 @@ $expiresAt = new DateTime('tomorrow', new DateTimeZone('Asia/Manila'));
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="../../styles/private-common.css">
   <link rel="stylesheet" type="text/css" href="../../styles/admin/dashboard.css">
-  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
-  <script src="https://kit.fontawesome.com/a2501cd80b.js" crossorigin="anonymous"></script>
   <link rel="shortcut icon" href="../../assets/favicon.ico" type="image/x-icon">
   <title>Dashboard | REaCT</title>
 </head>
@@ -69,7 +61,7 @@ $expiresAt = new DateTime('tomorrow', new DateTimeZone('Asia/Manila'));
 
           <div class="notification_dd">
             <ul class="notification_ul">
-              <li class="starbucks success">
+              <li>
                 <div class="notify_icon">
                   <span class="icon"></span>
                 </div>
@@ -178,7 +170,7 @@ $expiresAt = new DateTime('tomorrow', new DateTimeZone('Asia/Manila'));
               <i class="far fa-file" aria-hidden="true"></i>
             </div>
             <div class="details">
-              <h2>11</h2>
+              <h2><?php echo $database->getReference('Applications')->getSnapshot()->numChildren();?></h2>
               <h4>Applications Pending</h4>
             </div>
           </div>
@@ -187,7 +179,7 @@ $expiresAt = new DateTime('tomorrow', new DateTimeZone('Asia/Manila'));
               <i class="fas fa-users" aria-hidden="true"></i>
             </div>
             <div class="details">
-              <h2>1,985</h2>
+              <h2><?php echo $database->getReference('Users')->getSnapshot()->numChildren();?></h2>
               <h4>Users</h4>
             </div>
           </div>
@@ -196,7 +188,7 @@ $expiresAt = new DateTime('tomorrow', new DateTimeZone('Asia/Manila'));
               <i class="fas fa-chart-line" aria-hidden="true"></i>
             </div>
             <div class="details">
-              <h2>16</h2>
+              <h2><?php echo $database->getReference('Users/'.$uid.'/sub')->getSnapshot()->numChildren();?></h2>
               <h4>Accounts</h4>
             </div>
           </div>
@@ -212,16 +204,31 @@ $expiresAt = new DateTime('tomorrow', new DateTimeZone('Asia/Manila'));
 
     </div>
 
+    <!-- FontAwesome -->
+    <script src="https://kit.fontawesome.com/a2501cd80b.js" crossorigin="anonymous"></script>
+
     <!-- JQuery -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
     <!-- jQuery Modal -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
 
-    <script src="https://kit.fontawesome.com/a2501cd80b.js" crossorigin="anonymous"></script>
+    <!-- Chart.js -->
     <script src="../../node_modules/chart.js/dist/chart.js"></script>
 
     <script>
+      const currentDate = new Date();
+
+      $.ajax({
+          url: "../../functions/notificationHandler.php",
+          type: "POST",
+          data: {
+            "ts": currentDate.getTime()/1000
+          }
+        }).done(function(data) {
+          $(".notification_ul").html(data);
+        });
+
       $(".notifications .icon_wrap").click(function() {
         $(this).parent().toggleClass("actived");
         $(".notification_dd").toggleClass("show");

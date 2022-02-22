@@ -38,7 +38,6 @@ $extension = "_" . str_replace(' ', '-', $_SESSION['name']);
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="../../styles/private-common.css">
   <link rel="stylesheet" type="text/css" href="../../styles/history.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="shortcut icon" href="../../assets/favicon.ico" type="image/x-icon">
   <title>Accounts | REaCT</title>
   <style>
@@ -207,8 +206,8 @@ $extension = "_" . str_replace(' ', '-', $_SESSION['name']);
         <div class="dashboard-notif">
           <span class="dropdown"><i class="fa fa-user-circle dropbtn" aria-hidden="true"></i>My Account
             <div class="dropdown-content">
-              <a href="../logout.php"><i class="fas fa-sign-out" aria-hidden="true"></i>Log out</a>
               <a href="profile.php"><i class="fa fa-user-circle" aria-hidden="true"></i>Profile</a>
+              <a href="../logout.php"><i class="fas fa-sign-out" aria-hidden="true"></i>Log out</a>
             </div>
           </span>
         </div>
@@ -377,6 +376,14 @@ $extension = "_" . str_replace(' ', '-', $_SESSION['name']);
 
   </div>
 
+  <!-- FontAwesome -->
+  <script src="https://kit.fontawesome.com/a2501cd80b.js" crossorigin="anonymous"></script>
+
+  <!-- JQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+  <!-- jQuery Modal -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
 
 </body>
 
