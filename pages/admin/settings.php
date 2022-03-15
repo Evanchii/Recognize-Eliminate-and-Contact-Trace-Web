@@ -17,6 +17,7 @@ $linkRef = $database->getReference("appData/links/");
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
   <link rel="stylesheet" type="text/css" href="../../styles/private-common.css">
   <link rel="stylesheet" type="text/css" href="../../styles/settings.css">
   <link rel="shortcut icon" href="../../assets/favicon.ico" type="image/x-icon">
@@ -42,7 +43,14 @@ $linkRef = $database->getReference("appData/links/");
       <a href="cases.php"><i class="fas fa-line-chart" aria-hidden="true"></i>Covid Cases</a>
       <a href="applications.php"><i class="far fa-file" aria-hidden="true"></i>Applications</a>
       <a href="users.php"><i class="fas fa-users" aria-hidden="true"></i>Users</a>
-      <a href="accounts.php"><i class="fas fa-user-cog" aria-hidden="true"></i>Sub-Accounts</a>
+      <?php
+      if ($_SESSION['type'] == 'admin') {
+        echo '
+          <a href="accounts.php"><i class="fas fa-user-cog" aria-hidden="true"></i>Sub-Accounts</a>
+          <a href="logs.php"><i class="fa-solid fa-receipt" aria-hidden="true"></i>Audit Logs</a>
+          ';
+      }
+      ?>
       <div class="settings">
         <a href="#" class="active"><i class="fas fa-cog" aria-hidden="true"></i>Setttings</a>
       </div>
@@ -54,7 +62,6 @@ $linkRef = $database->getReference("appData/links/");
       <div class="header-right">
         <div class="notifications">
           <div class="icon_wrap"><i class="far fa-bell"></i></div>
-
           <div class="notification_dd">
             <ul class="notification_ul">
               <li class="starbucks success">
@@ -63,82 +70,12 @@ $linkRef = $database->getReference("appData/links/");
                 </div>
                 <div class="notify_data">
                   <div class="title">
-                    Lorem, ipsum dolor.
+                    Loading Data...
                   </div>
                   <div class="sub_title">
-                    Lorem ipsum dolor sit amet consectetur.
+                    Please Wait
                   </div>
                 </div>
-                <div class="notify_status">
-                  <p>Success</p>
-                </div>
-              </li>
-              <li class="baskin_robbins failed">
-                <div class="notify_icon">
-                  <span class="icon"></span>
-                </div>
-                <div class="notify_data">
-                  <div class="title">
-                    Lorem, ipsum dolor.
-                  </div>
-                  <div class="sub_title">
-                    Lorem ipsum dolor sit amet consectetur.
-                  </div>
-                </div>
-                <div class="notify_status">
-                  <p>Failed</p>
-                </div>
-              </li>
-              <li class="mcd success">
-                <div class="notify_icon">
-                  <span class="icon"></span>
-                </div>
-                <div class="notify_data">
-                  <div class="title">
-                    Lorem, ipsum dolor.
-                  </div>
-                  <div class="sub_title">
-                    Lorem ipsum dolor sit amet consectetur.
-                  </div>
-                </div>
-                <div class="notify_status">
-                  <p>Success</p>
-                </div>
-              </li>
-              <li class="pizzahut failed">
-                <div class="notify_icon">
-                  <span class="icon"></span>
-                </div>
-                <div class="notify_data">
-                  <div class="title">
-                    Lorem, ipsum dolor.
-                  </div>
-                  <div class="sub_title">
-                    Lorem ipsum dolor sit amet consectetur.
-                  </div>
-                </div>
-                <div class="notify_status">
-                  <p>Failed</p>
-                </div>
-              </li>
-              <li class="kfc success">
-                <div class="notify_icon">
-                  <span class="icon"></span>
-                </div>
-                <div class="notify_data">
-                  <div class="title">
-                    Lorem, ipsum dolor.
-                  </div>
-                  <div class="sub_title">
-                    Lorem ipsum dolor sit amet consectetur.
-                  </div>
-                </div>
-                <div class="notify_status">
-                  <p>Success</p>
-                </div>
-              </li>
-              <li class="show_all">
-                <p class="link">Show All Activities</p>
               </li>
             </ul>
           </div>
@@ -147,6 +84,8 @@ $linkRef = $database->getReference("appData/links/");
         <div class="dashboard-notif">
           <span class="dropdown"><i class="fa fa-user-circle dropbtn" aria-hidden="true"></i>My Account
             <div class="dropdown-content">
+              <a href="profile.php"><i class="fa fa-user-circle" aria-hidden="true"></i>Profile</a>
+              <a onclick="$('#change-pw').modal('show');"><i class="fa-solid fa-key" aria-hidden="true"></i>Change Password</a>
               <a href="../logout.php"><i class="fas fa-sign-out" aria-hidden="true"></i>Log out</a>
             </div>
           </span>
@@ -221,7 +160,10 @@ $linkRef = $database->getReference("appData/links/");
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
   <!-- jQuery Modal -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+
+  <div id="common-modal">
+    <?php include '../change.php'; ?>
+  </div>
 
 </body>
 

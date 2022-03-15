@@ -2,6 +2,8 @@ var mediaStream;
 let visID = document.getElementById("visID");
 let docInp = document.getElementById("docInp");
 
+var visFaceOK = true;
+
 visID.onchange = evt => {
     const idPreview = document.getElementById("IDPrev");
     const [file] = visID.files
@@ -41,8 +43,8 @@ function initCamera() {
                     canvas.height = video.videoHeight;
                     canvas.getContext("2d").drawImage(video, 0, 0);
                     // Other browsers will fall back to image/png
-                    img.src = canvas.toDataURL("image/webp");
-                    faceInput.value = canvas.toDataURL("image/webp");
+                    img.src = canvas.toDataURL();
+                    faceInput.value = canvas.toDataURL();
 
                     document.getElementById("faceVideo").style.display = "none";
                     document.getElementById("faceCanvas").style.display = "block";
@@ -55,6 +57,7 @@ function initCamera() {
                     document.getElementById("faceVideo").style.display = "block";
                     document.getElementById("faceCanvas").style.display = "none";
                     document.getElementById("camNext").style.display = "none";
+                    visFaceOK = false;
                     faceInput.value = "";
 
                     initCamera();
@@ -150,8 +153,38 @@ function checkData(formID) {
 function checkPassword(type) {
     var pass = document.getElementById(type + "Pass").value;
     var confPass = document.getElementById(type + "CPass").value;
-    if (pass == confPass && pass!="") {
+    if (pass == confPass && pass != "") {
         document.getElementById(type + "Submit").disabled = false;
     } else
         document.getElementById(type + "Submit").disabled = true;
+}
+
+function verifyFace() {
+    if (visFaceOK) {
+        changeForm(event, 'visId', 'visFace');
+    } else {
+        $('#loading').modal('show');
+        $.ajax({
+            type: "POST",
+            url: "../functions/recogFace.php",
+            data: {
+                "img": $('#visInpFace').val(),
+            },
+            // success: function(data) {},
+            // error: function(data) {}
+        }).done(function (data) {
+            $('#loading').modal('hide');
+            $('#feedback').modal('show');
+            $('#feedback-container').html(data);
+            const jsonData = JSON.parse(data);
+            console.log(jsonData);
+            if (data.includes('gallery name not found')) {
+                changeForm(event, 'visId', 'visFace');
+            } else if (jsonData.images.at(0).transaction.confidence * 100 >= 75) {
+                if (confirm('A match has been found with a confidence level of 75% and above. Do you still wish to proceed with the registration?\n\nPlease be aware that registering multiple accounts is against the system\'s terms of service.')) {
+                    changeForm(event, 'visId', 'visFace');
+                }
+            }
+        });
+    }
 }

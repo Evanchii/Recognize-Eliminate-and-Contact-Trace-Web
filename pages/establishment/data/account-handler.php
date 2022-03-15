@@ -1,6 +1,11 @@
 <?php
 include '../../../includes/dbconfig.php';
 session_start();
+
+if(isset($_POST['uid'])) {
+    $uid = $_POST['uid'];
+    $userRef = $database->getReference('Users/'.$uid); 
+}
 $auth = $firebase->createAuth();
 if(isset($_POST['create'])) {
     $username = $_POST["username"];
@@ -25,13 +30,26 @@ if(isset($_POST['create'])) {
     ]);
 
     $database->getReference("Users/".$_SESSION['uid']."/sub")->update([
-        $username.$extension => $createdUser->uid
+        $createdUser->uid => $username.$extension
     ]);
-} elseif (isset($_POST['delete'])) {
+
+    createLog('Accounts', 'has created sub-user ', $createdUser->uid);
+} elseif (isset($_POST['deleteUser'])) {
     $uid = $_POST['uid'];
-    $username = $_POST['username'];
+    $type = $userRef->getChild('info/Type')->getValue();
+    $username = $userRef->getChild('info/username')->getValue();
+
+    if(str_contains($type, 'sub')) {
+        $database->getReference('Users/'.$_SESSION['uid'].'/sub/'.$uid)->set(null);
+
+        echo $uid;
+        
+        createLog('Accounts', 'has deleted sub-user ', $uid);
+    } else {
+        createLog('Accounts', 'has deleted user ', $uid);
+    }
+
     $auth->deleteUser($uid);
-    $database->getReference('Users/'.$uid)->remove();
-    $database->getReference('Users/'.$_SESSION['uid'].'/sub')->getChild($username)->set(null);;
+    $userRef->set(null);
 }
 ?>

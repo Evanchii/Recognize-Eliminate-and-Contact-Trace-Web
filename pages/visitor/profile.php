@@ -107,6 +107,7 @@ if ($imageReference->exists()) {
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
   <link rel="stylesheet" type="text/css" href="../../styles/private-common.css">
   <link rel="stylesheet" type="text/css" href="../../styles/profile.css">
   <link rel="shortcut icon" href="../../assets/favicon.ico" type="image/x-icon">
@@ -356,13 +357,18 @@ if ($imageReference->exists()) {
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
   <!-- jQuery Modal -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
 
   <div id="modalFace" class="modal">
-    <h1>Update Face</h1>
+    <div class="modal-title">
+      <h3>Update Face</h3>
+    </div>
     <div class="faceVideo" id="faceVideo">
-      <video autoplay="true" poster="../../assets/loading.gif" id="videoElement" class="faceid"></video><br>
-      <button type="button" class="camButt" id="screenshot-button"> <img src="../../assets/ic_camera.svg" alt=""> Take photo</button>
+      <div class="modal-body">
+        <video autoplay="true" poster="../../assets/loading.gif" id="videoElement" class="faceid"></video><br>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="camButt btn-primary" id="screenshot-button"><i class="fa-solid fa-camera"></i>  Take photo</button>
     </div>
   </div>
 
@@ -407,6 +413,24 @@ if ($imageReference->exists()) {
           });
       }
     }
+
+    $(".notifications .icon_wrap").click(function() {
+        $(this).parent().toggleClass("actived");
+        $(".notification_dd").toggleClass("show");
+      });
+
+      const currentDate = new Date();
+
+      $.ajax({
+          url: "../../functions/notificationHandler.php",
+          type: "POST",
+          data: {
+            "ts": currentDate.getTime()/1000
+          }
+        }).done(function(data) {
+          $(".notification_ul").html(data);
+        });
+        
   </script>
 
 </body>

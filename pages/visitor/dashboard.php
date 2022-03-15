@@ -231,6 +231,25 @@ if ($imageReference->exists()) {
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
 
+  <script>
+    $(".notifications .icon_wrap").click(function() {
+        $(this).parent().toggleClass("actived");
+        $(".notification_dd").toggleClass("show");
+      });
+
+      const currentDate = new Date();
+
+      $.ajax({
+          url: "../../functions/notificationHandler.php",
+          type: "POST",
+          data: {
+            "ts": currentDate.getTime()/1000
+          }
+        }).done(function(data) {
+          $(".notification_ul").html(data);
+        });
+  </script>
+
 
 </body>
 

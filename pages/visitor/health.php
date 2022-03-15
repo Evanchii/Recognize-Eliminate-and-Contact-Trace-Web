@@ -31,8 +31,75 @@ if ($imageReference->exists()) {
   $image = $imageReference->signedUrl($expiresAt);
 }
 
+if (isset($_POST['action'])) {
+  $action = $_POST['action'];
+  if (str_contains($action, 'covid')) {
+    if (str_contains($action, 'positive')) {
+      $infoRef->update([
+        "status" => true
+      ]);
+
+      echo <<<HTML
+      <script>
+        $.ajax({
+          url: "../../functions/covidNotification.php",
+          type: "POST",
+          data: {
+            "uid": {$uid}
+          }
+        });
+      </script>
+      HTML;
+      createLog('Health Status', ' has set their Health Status as "Positive"', $uid);
+    } else {
+      $infoRef->update([
+        "status" => false
+      ]);
+      createLog('Health Status', ' has set their Health Status as "Negative"', $uid);
+    }
+  }
+} elseif (isset($_POST['vaccBrand'])) {
+  $brand = $_POST['vaccBrand'];
+  $status = $_POST['status'];
+
+  $appRef = $database->getReference('Applications');
+
+  $filename = $_FILES['vaccCard']['name'];
+  $tmp = (explode(".", $filename));
+  $ext = end($tmp);
+
+  $vaccCard = $_FILES['vaccCard']['tmp_name'];
+
+  $defaultBucket->upload(
+    file_get_contents($vaccCard),
+    [
+      'name' => "Vacc/" . $uid . "." . $ext
+    ]
+  );
+
+  $infoRef->update([
+    'vaccine' => 'pending',
+    'vaccID' => "Vacc/" . $uid . "." . $ext
+  ]);
+
+  $appRef->update([
+    time() => [
+      'name' => $_SESSION['lName'] . ', ' . $_SESSION['fName'] . ' ' . $_SESSION['mName'],
+      'uid' => $uid,
+      'usertype' => 'Visitor',
+      'type' => 'Vaccination Confirmation',
+      'vaccBrand' => $brand,
+      'vaccStatus' => $status,
+      'vaccID' => "Vacc/" . $uid . "." . $ext
+    ]
+  ]);
+
+  createLog('Application', ' has submitted their Vaccination Confirmation application', $uid);
+}
+
 $vaccine = $infoRef->getChild("vaccine")->getValue();
 $status = $infoRef->getChild("status")->getValue();
+
 ?>
 
 <!DOCTYPE html>
@@ -42,6 +109,7 @@ $status = $infoRef->getChild("status")->getValue();
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
   <link rel="stylesheet" type="text/css" href="../../styles/private-common.css">
   <link rel="stylesheet" type="text/css" href="../../styles/health.css">
   <link rel="shortcut icon" href="../../assets/favicon.ico" type="image/x-icon">
@@ -85,82 +153,12 @@ $status = $infoRef->getChild("status")->getValue();
                 </div>
                 <div class="notify_data">
                   <div class="title">
-                    Lorem, ipsum dolor.
+                    Loading Data...
                   </div>
                   <div class="sub_title">
-                    Lorem ipsum dolor sit amet consectetur.
+                    Please Wait
                   </div>
                 </div>
-                <div class="notify_status">
-                  <p>Success</p>
-                </div>
-              </li>
-              <li class="baskin_robbins failed">
-                <div class="notify_icon">
-                  <span class="icon"></span>
-                </div>
-                <div class="notify_data">
-                  <div class="title">
-                    Lorem, ipsum dolor.
-                  </div>
-                  <div class="sub_title">
-                    Lorem ipsum dolor sit amet consectetur.
-                  </div>
-                </div>
-                <div class="notify_status">
-                  <p>Failed</p>
-                </div>
-              </li>
-              <li class="mcd success">
-                <div class="notify_icon">
-                  <span class="icon"></span>
-                </div>
-                <div class="notify_data">
-                  <div class="title">
-                    Lorem, ipsum dolor.
-                  </div>
-                  <div class="sub_title">
-                    Lorem ipsum dolor sit amet consectetur.
-                  </div>
-                </div>
-                <div class="notify_status">
-                  <p>Success</p>
-                </div>
-              </li>
-              <li class="pizzahut failed">
-                <div class="notify_icon">
-                  <span class="icon"></span>
-                </div>
-                <div class="notify_data">
-                  <div class="title">
-                    Lorem, ipsum dolor.
-                  </div>
-                  <div class="sub_title">
-                    Lorem ipsum dolor sit amet consectetur.
-                  </div>
-                </div>
-                <div class="notify_status">
-                  <p>Failed</p>
-                </div>
-              </li>
-              <li class="kfc success">
-                <div class="notify_icon">
-                  <span class="icon"></span>
-                </div>
-                <div class="notify_data">
-                  <div class="title">
-                    Lorem, ipsum dolor.
-                  </div>
-                  <div class="sub_title">
-                    Lorem ipsum dolor sit amet consectetur.
-                  </div>
-                </div>
-                <div class="notify_status">
-                  <p>Success</p>
-                </div>
-              </li>
-              <li class="show_all">
-                <p class="link">Show All Activities</p>
               </li>
             </ul>
           </div>
@@ -183,35 +181,36 @@ $status = $infoRef->getChild("status")->getValue();
         <h1>Covid-19 Status</h1>
 
         <div class="covid">
-          <!-- <button type="submit" class="c-btn negative active" value="Negative" id="negative"> -->
+          <button class="c-btn negative <?php echo !$status ? 'selected' : ''; ?>" onclick="changeStatus(this.id);" value="Negative" id="negative">
+            <img src="../../assets/ic_negative.png" height="100" width="100" /><br>
+            <h2>Negative</h2>
+          </button>
+          <button class="c-btn positive <?php echo $status ? 'selected' : ''; ?>" onclick="changeStatus(this.id);" value="Positive" id="positive">
+            <img src="../../assets/ic_positive.png" height="100" width="100" /><br>
+            <h2>Positive</h2>
+          </button>
+
           <!-- <a href="#statusAlert" rel="modal:open"> -->
-          <label class="card-input-parent">
-            <input type="radio" onchange="statusAlert(this);" name="status" status="negative" id="statusNegative" class="card-input-radio covStatus" <?php echo !$status ? 'checked' : ''; ?>>
+          <!-- <label class="card-input-parent">
+            <button onclick="statusAlert(this);" name="status" status="negative" id="statusNegative" class="card-input-radio covStatus" <?php echo !$status ? 'checked' : ''; ?>>
             <div class="card-input negative">
-              <img src="../../assets/ic_negative.png" height="100" width="100" /><br>
-              <h2>Negative</h2>
             </div>
-          </label>
+          </label> -->
           <!-- </a> -->
           <!-- </button> -->
-          <!-- <button type="submit" class="c-btn positive" value="Positive" id="positive"> -->
-          <label class="card-input-parent">
-            <input type="radio" onchange="statusAlert(this);" name="status" status="positive" id="statusPositive" class="card-input-radio covStatus" <?php echo $status ? 'checked' : ''; ?>>
+          <!-- <label class="card-input-parent">
+            <button onclick="statusAlert(this);" name="status" status="positive" id="statusPositive" class="card-input-radio covStatus" <?php echo $status ? 'checked' : ''; ?>>
             <div class="card-input positive">
               <img src="../../assets/ic_positive.png" height="100" width="100" /><br>
               <h2>Positive</h2>
             </div>
-          </label>
+          </label> -->
           <!-- </button> -->
 
         </div>
 
 
 
-      </div>
-
-      <div class="health-advisory">
-        <img src="../../assets/health-advisory.jpg" class="health-adv">
       </div>
 
       <div class="vaccine-status">
@@ -219,36 +218,56 @@ $status = $infoRef->getChild("status")->getValue();
         <h1>Vaccine Status</h1>
 
         <div class="vaccine">
-          <!-- <button type="submit" class="v-btn vaccinated" value="vaccinated" id="vaccinated"> -->
-          <label class="card-input-parent">
-            <input type="radio" onclick="vaccInfo();" name="vaccine" value="vaccine" id="vaccine" class="card-input-radio" <?php echo $vaccine ? 'checked' : ''; ?>>
-            <div class="card-input vaccinated">
-              <img src="../../assets/ic_vaccinated.png" height="100" width="100" />
-              <h2>Vaccinated</h2>
-            </div>
-          </label>
-          <!-- </button> -->
+          <?php
+          if ($vaccine == 'pending') {
+            echo <<<HTML
+                <button class="v-btn vaccinated selected" style="cursor: not-allowed" value="Pending" id="vaccine">
+                  <img src="../../assets/ic_pending.png" height="100" width="100" /><br>
+                  <h2>Application Pending</h2>
+                </button>
 
-          <!-- <button type="submit" class="v-btn not-vaccinated active" value="not-vaccinated" id="not-vaccinated"> -->
-          <label class="card-input-parent" <?php echo $vaccine ? 'style="display:none;"' : ''; ?>>
-            <input type="radio" name="vaccine" value="not-vaccine" id="not-vaccine" class="card-input-radio" <?php echo !$vaccine ? 'checked' : ''; ?>>
-            <div class="card-input not-vaccinated">
-              <img src="../../assets/ic_not-vaccinated.png" height="100" width="100" />
-              <h2>Not Vaccinated</h2>
-            </div>
-          </label>
-          <!-- </button> -->
+                <button class="v-btn not-vaccinated" style="cursor: not-allowed" value="not-vaccinated" id="not-vaccinated">
+                  <img src="../../assets/ic_not-vaccinated.png" height="100" width="100" /><br>
+                  <h2>Not Vaccinated</h2>
+                </button>
+              HTML;
+          } else {
+            if ($vaccine) {
+              echo <<<HTML
+                <button class="v-btn vaccinated selected" style="cursor: not-allowed" value="vaccinated" id="vaccine">
+                  <img src="../../assets/ic_vaccinated.png" height="100" width="100" /><br>
+                  <h2>Vaccinated</h2>
+                </button>
 
-          <label class="card-input-parent" <?php echo !$vaccine ? 'style="display:none;"' : ''; ?>>
-            <input type="radio" name="vaccine" value="change-vaccine" id="change-vaccine" class="card-input-radio" <?php echo !$vaccine ? 'checked' : ''; ?>>
-            <div class="card-input vaccinated">
-              <!-- <img src="../../assets/ic_vaccinated.png" height="100" width="100"/> -->
-              <h2>Change Vaccine Info</h2>
-            </div>
-          </label>
+                <button class="v-btn not-vaccinated" style="cursor: not-allowed" value="not-vaccinated" id="not-vaccinated">
+                  <img src="../../assets/ic_not-vaccinated.png" height="100" width="100" /><br>
+                  <h2>Not Vaccinated</h2>
+                </button>
+              HTML;
+            } else {
+              echo <<<HTML
+                <button class="v-btn vaccinated" style="cursor: pointer" onclick="applyVacc();" value="vaccinated" id="vaccine">
+                  <img src="../../assets/ic_vaccinated.png" height="100" width="100" /><br>
+                  <h2>Vaccinated</h2>
+                </button>
+
+                <button class="v-btn not-vaccinated selected" style="cursor: pointer" value="not-vaccinated" id="not-vaccinated">
+                  <img src="../../assets/ic_not-vaccinated.png" height="100" width="100" /><br>
+                  <h2>Not Vaccinated</h2>
+                </button>
+              HTML;
+            }
+          }
+          ?>
 
         </div>
 
+      </div>
+
+      <div class="health-advisory">
+        <img src="../../assets/health-advisory.jpg" class="health-adv">
+        <br>
+        <button class="btn-primary" style="margin: 20px;" onclick="makeQR('<?php echo $uid; ?>');">Generate QR Code</button>
       </div>
 
     </div>
@@ -264,68 +283,158 @@ $status = $infoRef->getChild("status")->getValue();
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
   <!-- jQuery Modal -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+  <!-- QR Code -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
   <script>
+    $(".notifications .icon_wrap").click(function() {
+      $(this).parent().toggleClass("actived");
+      $(".notification_dd").toggleClass("show");
+    });
+
+    const currentDate = new Date();
+
+    $.ajax({
+      url: "../../functions/notificationHandler.php",
+      type: "POST",
+      data: {
+        "ts": currentDate.getTime() / 1000
+      }
+    }).done(function(data) {
+      $(".notification_ul").html(data);
+    });
+
+    function changeStatus(id) {
+      var button = $('#' + id);
+      if (!button.hasClass('selected')) {
+        $('#statusAlert').modal('show');
+        if (button.val() == 'Positive') {
+          $('#action').val("covid - positive");
+        } else {
+          $('#action').val("covid - negative");
+        }
+        $('#statusYes').click(function() {
+          frm = $('#statusFrm');
+          frm.submit();
+        });
+      }
+    }
+
+
     $('.covStatus').click(function() {
       $('#statusAlert').modal('show');
     });
-    $('#vaccine').click(function() {
+
+    function applyVacc() {
       $('#confVacc').modal('show');
-    });
-    $('#change-vaccine').click(function() {
-      $('#editVacc').modal('show');
-    });
+    }
+
+    const makeQR = (uid) => {
+      var qrcode = new QRCode(document.getElementById("qrcode"), {
+        text: "http://jindo.dev.naver.com/collie",
+        width: 128,
+        height: 128,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+      qrcode.makeCode(uid);
+      $('#qrmodal').modal('show');
+
+      setTimeout(() => {
+        let qelem = document.querySelector('#qrcode img');
+        let dlink = document.createElement('a');
+        let qr = qelem.getAttribute('src');
+        dlink.setAttribute('href', qr);
+        dlink.setAttribute('download', 'REaCT-QR_<?php echo $_SESSION['lName']; ?>.png');
+        dlink.click();
+      }, 500);
+    }
   </script>
 
   <div id="confVacc" class="modal">
-    <h1>Confirm Vaccination Information</h1>
-    <span>Upload Vaccination Card</span>
-    <input type="image" src="" alt="" required>
-    <input type="file" name="" id="">
-    <img src="" alt="">
-    <span>Vaccine Brand</span>
-    <select name="vaccBrand" id="" required>
-      <option value="null" disabled selected>-Select Vaccine Brand-</option>
-    </select>
-    <label for="1d">1st Dose</label>
-    <input type="radio" name="dose" id="1d" value="1st Dose">
-    <label for="fd">Fully Vaccinated</label>
-    <input type="radio" name="dose" id="fd" value="Fully Vaccinated">
-    <span>Last dose</span>
-    <input type="date" name="lastShot" id="lastShot">
-    <p>Booster Shot</p>
-    <input type="checkbox" name="booster" id="booster">
-    <span>Booster Vaccine Brand</span>
-    <select name="vaccBrand" id="" required>
-      <option value="null" disabled selected>-Select Vaccine Brand-</option>
-    </select>
+    <div class="modal-title">
+      <h3>Confirm Vaccination Information</h3>
+    </div>
+    <form action="health.php" method="post" enctype="multipart/form-data">
+      <div class="modal-body">
+        <label>Upload Vaccination Card</label>
+        <input type="file" name="vaccCard" id="vaccCard" required><br>
+        <!-- <img src="" alt=""> -->
+        <label for="vaccBrand">Vaccine Brand: </span>
+          <select name="vaccBrand" id="vaccBrand" required>
+            <option value="null" disabled selected>-Select Vaccine Brand-</option>
+            <option value="Pfizer - BioNTech">Pfizer - BioNTech</option>
+            <option value="Oxford - AstraZeneca">Oxford - AstraZeneca</option>
+            <option value="CoronaVac (Sinovac)">CoronaVac (Sinovac)</option>
+            <option value="Gamaleya Sputnik V">Gamaleya Sputnik V</option>
+            <option value="Johnson and Johnson - Janssen">Johnson and Johnson - Janssen</option>
+            <option value="Bharat BioTech">Bharat BioTech</option>
+            <option value="Moderna">Moderna</option>
+            <option value="Sinopharm">Sinopharm</option>
+          </select><br>
+          <span for="status">Status: </label>
+        <select name="status" id="status" required>
+          <option value="null" disabled selected>-Select Status-</option>
+          <option value="Partially Vaccinated (1st Dose)">Partially Vaccinated (1st Dose)</option>
+          <option value="Fully Vaccinated">Fully Vaccinated</option>
+        </select><br>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-success" type="submit">Submit</button>
+      </div>
+    </form>
   </div>
-  <div id="editVacc" class="modal">
-    <h1>Edit Vaccination Information</h1>
-    <span>Upload Vaccination Card</span>
-    <input type="image" src="" alt="" required>
-    <img src="" alt="">
-    <span>Vaccine Brand</span>
-    <select name="vaccBrand" id="" required>
-      <option value="null" disabled selected>-Select Vaccine Brand-</option>
-    </select>
-    <input type="radio" name="dose" id="" value="1st Dose">
-    <input type="radio" name="dose" id="" value="Fully Vaccinated">
-    <span>Last dose</span>
-    <input type="date" name="lastShot" id="lastShot">
-    <p>Booster Shot</p>
-    <input type="checkbox" name="booster" id="booster">
-    <span>Booster Vaccine Brand</span>
-    <select name="vaccBrand" id="" required>
-      <option value="null" disabled selected>-Select Vaccine Brand-</option>
-    </select>
+
+  <!-- <div id="editVacc" class="modal">
+    <div class="modal-title">
+      <h3>Edit Vaccination Information</h3>
+    </div>
+    <div class="modal-body">
+      <span>Upload Vaccination Card</span>
+      <input type="file" name="" id="" required><br>
+      <span>Vaccine Brand</span>
+      <select name="vaccBrand" id="" required>
+        <option value="null" disabled selected>-Select Vaccine Brand-</option>
+      </select><br>
+      <input type="radio" name="dose" id="" value="1st Dose">
+      <input type="radio" name="dose" id="" value="Fully Vaccinated">
+      </select>
+    </div>
+  </div> -->
+
+  <div id="qrmodal" class="modal">
+    <div class="modal-title">
+      <h4>QR Code Instructions</h4>
+    </div>
+    <div class="modal-body">
+      <div id="qrcode"></div>
+      <h4>Reminders</h4>
+      <ul>
+        <li>No need to scan your face when entering an establishment</li>
+        <li>The QR Code can be scanned when entering an establishment that supports REaCT</li>
+        <li>Once the system validates that the QR Code is valid, it will automatically generate a log or record for you</li>
+      </ul>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-primary" onclick="$('#qrmodal .close-modal').click();">Close</button>
+    </div>
   </div>
+
   <div id="statusAlert" class="modal">
-    <h1>Confirm Action</h1>
-    <p>Do you want to continue with changin your status? This action will send an alert to the LGU and all close contacts in the past 14 days.</p>
-    <button>Yes</button>
-    <button>No</button>
+    <div class="modal-title">
+      <h3>Confirm Action</h3>
+    </div>
+    <div class="modal-body">
+      <p>Do you want to continue with changin your status? This action will send an alert to the LGU and all close contacts in the past 14 days.</p>
+    </div>
+    <div class="modal-footer" style="display:inline-flex; justify-content: flex-end;">
+      <button type="button" class="btn-error" onclick="$('#statusAlert .close-modal').click();">No</button>
+      <button type="submit" class="btn-success" id="statusYes">Yes</button>
+      <form action="health.php" method="POST" id="statusFrm">
+        <input type="hidden" name="action" id="action">
+      </form>
+    </div>
   </div>
 </body>
 

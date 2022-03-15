@@ -169,8 +169,47 @@ if ($imageReference->exists()) {
         </div>
       </div>
     </div>
-    <div class="Content">
-      <div>
+    <div class="Content" style="display: flex;flex-direction: column;">
+    <form id="frmSearch" name="userSearch">
+        <div class="">
+          <div id="error"></div>
+          <br>
+          <div style="float: right; margin-bottom: 1%; text-align: right;" id="search">
+            <input type="search" name="search" id="search" placeholder="Search" required>
+            <style>
+              .has-error,
+              .has-error:focus {
+                border: red 2px solid;
+                outline: none;
+              }
+
+              #error {
+                color: red;
+                float: right;
+              }
+
+              #search button {
+                border: none;
+                cursor: pointer;
+              }
+            </style>
+            <label><button onclick="searchData();"><i class="fa-solid fa-magnifying-glass"></i></button></label>
+            <br>
+            <div id="advancedOptions" class="hide">in
+              <select name="sType" id="sType" onchange="selectCategory(this.value)" disabled required>
+                <option value="" id="sTypeDef" selected disabled>Select Category</option>
+                <option value="name">Name</option>
+                <option value="uid">UID</option>
+                <option value="type">User Type</option>
+                <option value="application">Application Type</option>
+              </select>
+            </div>
+            <label for="advanced">Advanced Search</label>
+            <input type="checkbox" name="advanced" id="advanced" onChange="$('#advancedOptions').toggleClass('hide'); $('#sType').prop('disabled', (i, v) => !v); $('#sTypeDef').prop('selected', (i,v) => v=true);">
+          </div>
+        </div>
+      </form>
+      <div id="data">
         <table>
           <tr>
             <th>Date</th>
@@ -219,6 +258,25 @@ if ($imageReference->exists()) {
   <!-- jQuery Modal -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+
+  <script>
+    $(".notifications .icon_wrap").click(function() {
+        $(this).parent().toggleClass("actived");
+        $(".notification_dd").toggleClass("show");
+      });
+
+      const currentDate = new Date();
+
+      $.ajax({
+          url: "../../functions/notificationHandler.php",
+          type: "POST",
+          data: {
+            "ts": currentDate.getTime()/1000
+          }
+        }).done(function(data) {
+          $(".notification_ul").html(data);
+        });
+  </script>
 
 
 </body>

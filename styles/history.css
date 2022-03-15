@@ -34,3 +34,19 @@
   table tr:first-child th:last-child {
     border-radius: 0px 10px 0px 0px;
   }
+
+  .app-details tr:nth-child(even) td {
+    background-color: unset;
+  }
+
+  .app-details tr>td:last-child {
+    text-align: unset !important;
+  }
+
+  .app-details tr td:first-child {
+    width:25ch;
+  }
+  
+  .app-details tr {
+    line-height: 1em;
+  }

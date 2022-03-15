@@ -3,8 +3,6 @@ include '../../functions/checkSession.php';
 
 $uid = $_SESSION["uid"];
 $infoRef = $database->getReference("Users/" . $uid . "/info");
-$userHisRef = $database->getReference('Users/' . $uid . '/history');
-$historyRef = $database->getReference('History');
 ?>
 
 <!DOCTYPE html>
@@ -14,6 +12,7 @@ $historyRef = $database->getReference('History');
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
   <link rel="stylesheet" type="text/css" href="../../styles/private-common.css">
   <link rel="stylesheet" type="text/css" href="../../styles/history.css">
   <link rel="shortcut icon" href="../../assets/favicon.ico" type="image/x-icon">
@@ -40,13 +39,10 @@ $historyRef = $database->getReference('History');
 <body>
   <div class="grid">
     <div class="Navigation">
-      <!-- <h2>REaCT</h2> -->
       <img class="text-logo" src="../../assets/text-logo.png" alt="REaCT ">
       <hr class="divider">
       <div class="user-profile">
-        <!-- PHP Get from Storage -->
         <img src="../../assets/logo.png">
-        <!-- PHP Get from RTDB -->
         <span>
           <?php echo (str_contains($uid, "Uv8vqq4rlrM2ADvfKv6t9KVvndA2")) ? 'Admin Demo' : $infoRef->getChild("addCi")->getValue(); ?>
         </span>
@@ -56,7 +52,14 @@ $historyRef = $database->getReference('History');
       <a href="cases.php"><i class="fas fa-line-chart" aria-hidden="true"></i>Covid Cases</a>
       <a href="#" class="active"><i class="far fa-file" aria-hidden="true"></i>Applications</a>
       <a href="users.php"><i class="fas fa-users" aria-hidden="true"></i>Users</a>
-      <a href="accounts.php"><i class="fas fa-user-cog" aria-hidden="true"></i>Sub-Accounts</a>
+      <?php
+      if ($_SESSION['type'] == 'admin') {
+        echo '
+          <a href="accounts.php"><i class="fas fa-user-cog" aria-hidden="true"></i>Sub-Accounts</a>
+          <a href="logs.php"><i class="fa-solid fa-receipt" aria-hidden="true"></i>Audit Logs</a>
+          ';
+      }
+      ?>
       <div class="settings">
         <a href="settings.php"><i class="fas fa-cog" aria-hidden="true"></i>Setttings</a>
       </div>
@@ -68,7 +71,6 @@ $historyRef = $database->getReference('History');
       <div class="header-right">
         <div class="notifications">
           <div class="icon_wrap"><i class="far fa-bell"></i></div>
-
           <div class="notification_dd">
             <ul class="notification_ul">
               <li class="starbucks success">
@@ -77,82 +79,12 @@ $historyRef = $database->getReference('History');
                 </div>
                 <div class="notify_data">
                   <div class="title">
-                    Lorem, ipsum dolor.
+                    Loading Data...
                   </div>
                   <div class="sub_title">
-                    Lorem ipsum dolor sit amet consectetur.
+                    Please Wait
                   </div>
                 </div>
-                <div class="notify_status">
-                  <p>Success</p>
-                </div>
-              </li>
-              <li class="baskin_robbins failed">
-                <div class="notify_icon">
-                  <span class="icon"></span>
-                </div>
-                <div class="notify_data">
-                  <div class="title">
-                    Lorem, ipsum dolor.
-                  </div>
-                  <div class="sub_title">
-                    Lorem ipsum dolor sit amet consectetur.
-                  </div>
-                </div>
-                <div class="notify_status">
-                  <p>Failed</p>
-                </div>
-              </li>
-              <li class="mcd success">
-                <div class="notify_icon">
-                  <span class="icon"></span>
-                </div>
-                <div class="notify_data">
-                  <div class="title">
-                    Lorem, ipsum dolor.
-                  </div>
-                  <div class="sub_title">
-                    Lorem ipsum dolor sit amet consectetur.
-                  </div>
-                </div>
-                <div class="notify_status">
-                  <p>Success</p>
-                </div>
-              </li>
-              <li class="pizzahut failed">
-                <div class="notify_icon">
-                  <span class="icon"></span>
-                </div>
-                <div class="notify_data">
-                  <div class="title">
-                    Lorem, ipsum dolor.
-                  </div>
-                  <div class="sub_title">
-                    Lorem ipsum dolor sit amet consectetur.
-                  </div>
-                </div>
-                <div class="notify_status">
-                  <p>Failed</p>
-                </div>
-              </li>
-              <li class="kfc success">
-                <div class="notify_icon">
-                  <span class="icon"></span>
-                </div>
-                <div class="notify_data">
-                  <div class="title">
-                    Lorem, ipsum dolor.
-                  </div>
-                  <div class="sub_title">
-                    Lorem ipsum dolor sit amet consectetur.
-                  </div>
-                </div>
-                <div class="notify_status">
-                  <p>Success</p>
-                </div>
-              </li>
-              <li class="show_all">
-                <p class="link">Show All Activities</p>
               </li>
             </ul>
           </div>
@@ -161,13 +93,54 @@ $historyRef = $database->getReference('History');
         <div class="dashboard-notif">
           <span class="dropdown"><i class="fa fa-user-circle dropbtn" aria-hidden="true"></i>My Account
             <div class="dropdown-content">
+              <a href="profile.php"><i class="fa fa-user-circle" aria-hidden="true"></i>Profile</a>
+              <a onclick="$('#change-pw').modal('show');"><i class="fa-solid fa-key" aria-hidden="true"></i>Change Password</a>
               <a href="../logout.php"><i class="fas fa-sign-out" aria-hidden="true"></i>Log out</a>
             </div>
           </span>
         </div>
       </div>
     </div>
-    <div class="Content">
+    <div class="Content" style="display: flex; flex-direction: column;">
+      <form id="frmSearch" name="userSearch">
+        <div class="">
+          <div id="error"></div>
+          <br>
+          <div style="float: right; margin-bottom: 1%; text-align: right;" id="search">
+            <input type="search" name="search" id="search" placeholder="Search" required>
+            <style>
+              .has-error,
+              .has-error:focus {
+                border: red 2px solid;
+                outline: none;
+              }
+
+              #error {
+                color: red;
+                float: right;
+              }
+
+              #search button {
+                border: none;
+                cursor: pointer;
+              }
+            </style>
+            <label><button onclick="searchData();"><i class="fa-solid fa-magnifying-glass"></i></button></label>
+            <br>
+            <div id="advancedOptions" class="hide">in
+              <select name="sType" id="sType" onchange="selectCategory(this.value)" disabled required>
+                <option value="" id="sTypeDef" selected disabled>Select Category</option>
+                <option value="name">Name</option>
+                <option value="uid">UID</option>
+                <option value="type">User Type</option>
+                <option value="application">Application Type</option>
+              </select>
+            </div>
+            <label for="advanced">Advanced Search</label>
+            <input type="checkbox" name="advanced" id="advanced" onChange="$('#advancedOptions').toggleClass('hide'); $('#sType').prop('disabled', (i, v) => !v); $('#sTypeDef').prop('selected', (i,v) => v=true);">
+          </div>
+        </div>
+      </form>
       <div id="data">
         <table>
           <tr>
@@ -189,40 +162,6 @@ $historyRef = $database->getReference('History');
           <a href="#" class="disabled-link active">1</a>
           <a href="#" class="disabled-link">&raquo;</a>
         </div>
-        <!-- <php
-          if ($userHisRef->getSnapshot()->hasChildren()) {
-            // var_dump($userHisRef->getValue());
-            $history = $userHisRef->getValue();
-            foreach ($history as $date => $keySet) {
-              foreach ($keySet as $key => $timestamp) {
-                echo '<tr>
-                      <td>' . $date . '</td>
-                      <td>' . $historyRef->getChild($date . '/' . $timestamp . '/time')->getValue() . '</td>
-                      <td>' . $historyRef->getChild($date . '/' . $timestamp . '/name')->getValue() . '</td>
-                      <td>' . $historyRef->getChild($date . '/' . $timestamp . '/backend')->getValue() . '</td>
-                      </tr>';
-              }
-            }
-            echo "</table>";
-            echo '
-              <div class="pagination">
-                <a href="#" class="disabled-link">&laquo;</a>
-                <a href="#" class="disabled-link active">1</a>
-                <a href="#" class="disabled-link">&raquo;</a>
-            </div>
-            ';
-          } else {
-            echo '<tr><td colspan="4"><h2 style="text-align: center;">No data found!</h2></td><tr>';
-            echo "</table>";
-            echo '
-              <div class="pagination">
-                <a href="#" class="disabled-link">&laquo;</a>
-                <a href="#" class="disabled-link active">1</a>
-                <a href="#" class="disabled-link">&raquo;</a>
-            </div>
-            ';
-          }
-          ?> -->
       </div>
     </div>
 
@@ -244,23 +183,20 @@ $historyRef = $database->getReference('History');
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
   <!-- jQuery Modal -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+  <!-- JQuery Validate -->
+  <script src="../../node_modules/jquery-validation/dist/jquery.validate.js"></script>
+  <!-- Common Scripts -->
+  <script src="../../scripts/common.js"></script>
 
   <script>
-    const currentDate = new Date();
-    loadPage(1);
-
-    function loadPage(page) {
-      $.ajax({
-        url: "data/application-handler.php",
-        type: "POST",
-        data: {
-          "page": page
-        }
-      }).done(function(data) {
-        $("#data").html(data);
-      });
+    <?php
+    if (isset($_GET['viewApp'])) {
+      $ts = $_GET['viewApp'];
+      echo 'showData(\'' . $ts . '\');';
     }
+    ?>
+
+    loadPage(1);
 
     function showData(ts) {
       $("#modal-content").html('');
@@ -282,10 +218,11 @@ $historyRef = $database->getReference('History');
         type: "POST",
         data: {
           "ts": ts,
-          "action" : true,
-          "tsNow" : currentDate.getTime()
+          "action": 'approve',
+          "tsNow": currentDate.getTime()
         }
       }).done(function(data) {
+        console.log(data);
         $("#appInfo .close-modal").click();
         loadPage(1);
       });
@@ -297,20 +234,104 @@ $historyRef = $database->getReference('History');
         type: "POST",
         data: {
           "ts": ts,
-          "action" : false,
-          "tsNow" : currentDate.getTime()
+          "action": 'decline',
+          "tsNow": currentDate.getTime()
         }
       }).done(function(data) {
+        console.log(data);
         $("#appInfo .close-modal").click();
         loadPage(1);
       });
     }
 
-    
+    function selectCategory(cat) {
+      $('#search').children().first().remove();
+      switch (cat) {
+        case "type":
+          var srch = `<select name="search" id="search" required>
+          <option disabled selected>Select User Type</option>
+          <option val="visitor">Visitor</option>
+          <option val="establishment">Establishment</option>
+          <option val="sub-establishment">Sub-Establishment</option>
+          </select>`;
+          break;
+        case "application":
+          var srch = `<select name="search" id="search" required>
+          <option disabled selected>Select Application</option>
+          <option val="Vaccination Confirmation">Vaccination Confirmation</option>
+          <option val="Account Verification">Account Verification</option>
+          </select>`;
+          break;
+        default:
+          var srch = '<input type="search" name="search" id="search" placeholder="Search" required>';
+      }
+      $('#search').children().first().before(srch);
+    }
+
+    // Loads data for the page
+function loadPage(page) {
+    $.ajax({
+        url: '../../functions/application-handler.php',
+        type: "POST",
+        data: {
+            "page": page
+        }
+    }).done(function (data) {
+        $("#data").html(data);
+    });
+}
+
+// Searches data in database
+function searchData() {
+    var frm = $('#frmSearch');
+    frm.validate({
+        rules: {
+            search: "required",
+            sType: "required"
+        },
+        messages: {
+            search: '',
+            sType: ''
+        },
+        errorLabelContainer: '#error',
+        showErrors: function (errorMap, errorList) {
+            $("#error").html("Please enter required information.");
+            this.defaultShowErrors();
+        },
+        highlight: function (element) {
+            $(element).addClass('has-error');
+        },
+        unhighlight: function (element) {
+            $(element).removeClass('has-error');
+        },
+        submitHandler: function (frm) {
+            event.preventDefault();
+            $.ajax({
+                url: '../../functions/application-handler.php',
+                type: 'POST',
+                data: $('#frmSearch').serialize()
+            }).done(function (data) {
+                $("#data").html(data);
+            });
+        }
+    });
+}
   </script>
 
-  <div id="appInfo" class="modal" style="max-width: 60vw;">
-  <div id="modal-content"></div>
+  <div id="appInfo" class="modal" style="max-width: 45vw;">
+    <div class="modal-title">
+      <h3>Application Information</h3>
+    </div>
+    <div id="modal-content">
+      <div class="modal-body">
+        <h5>Loading...</h5>
+      </div>
+      <div class="modal-footer"></div>
+    </div>
+  </div>
+
+  <div id="common-modal">
+    <?php include '../change.php'; ?>
   </div>
 
 </body>

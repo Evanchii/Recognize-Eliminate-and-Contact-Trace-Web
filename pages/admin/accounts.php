@@ -3,10 +3,6 @@ include '../../functions/checkSession.php';
 
 $uid = $_SESSION["uid"];
 $infoRef = $database->getReference("Users/" . $uid . "/info");
-$userHisRef = $database->getReference('Users/' . $uid . '/history');
-$historyRef = $database->getReference('History');
-
-$extension = "_" . str_replace(' ', '-', $infoRef->getChild("addCi")->getValue());
 ?>
 
 <!DOCTYPE html>
@@ -16,6 +12,7 @@ $extension = "_" . str_replace(' ', '-', $infoRef->getChild("addCi")->getValue()
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
   <link rel="stylesheet" type="text/css" href="../../styles/private-common.css">
   <link rel="stylesheet" type="text/css" href="../../styles/history.css">
   <link rel="shortcut icon" href="../../assets/favicon.ico" type="image/x-icon">
@@ -69,13 +66,10 @@ $extension = "_" . str_replace(' ', '-', $infoRef->getChild("addCi")->getValue()
 <body>
   <div class="grid">
     <div class="Navigation">
-      <!-- <h2>REaCT</h2> -->
       <img class="text-logo" src="../../assets/text-logo.png" alt="REaCT ">
       <hr class="divider">
       <div class="user-profile">
-        <!-- PHP Get from Storage -->
         <img src="../../assets/logo.png">
-        <!-- PHP Get from RTDB -->
         <span>
           <?php echo (str_contains($uid, "Uv8vqq4rlrM2ADvfKv6t9KVvndA2")) ? 'Admin Demo' : $infoRef->getChild("addCi")->getValue(); ?>
         </span>
@@ -85,7 +79,14 @@ $extension = "_" . str_replace(' ', '-', $infoRef->getChild("addCi")->getValue()
       <a href="cases.php"><i class="fas fa-line-chart" aria-hidden="true"></i>Covid Cases</a>
       <a href="applications.php"><i class="far fa-file" aria-hidden="true"></i>Applications</a>
       <a href="users.php"><i class="fas fa-users" aria-hidden="true"></i>Users</a>
-      <a href="#" class="active"><i class="fas fa-user-cog" aria-hidden="true"></i>Sub-Accounts</a>
+      <?php
+      if ($_SESSION['type'] == 'admin') {
+        echo '
+          <a href="#" class="active"><i class="fas fa-user-cog" aria-hidden="true"></i>Sub-Accounts</a>
+          <a href="logs.php"><i class="fa-solid fa-receipt" aria-hidden="true"></i>Audit Logs</a>
+          ';
+      }
+      ?>
       <div class="settings">
         <a href="settings.php"><i class="fas fa-cog" aria-hidden="true"></i>Setttings</a>
       </div>
@@ -97,7 +98,6 @@ $extension = "_" . str_replace(' ', '-', $infoRef->getChild("addCi")->getValue()
       <div class="header-right">
         <div class="notifications">
           <div class="icon_wrap"><i class="far fa-bell"></i></div>
-
           <div class="notification_dd">
             <ul class="notification_ul">
               <li class="starbucks success">
@@ -106,82 +106,12 @@ $extension = "_" . str_replace(' ', '-', $infoRef->getChild("addCi")->getValue()
                 </div>
                 <div class="notify_data">
                   <div class="title">
-                    Lorem, ipsum dolor.
+                    Loading Data...
                   </div>
                   <div class="sub_title">
-                    Lorem ipsum dolor sit amet consectetur.
+                    Please Wait
                   </div>
                 </div>
-                <div class="notify_status">
-                  <p>Success</p>
-                </div>
-              </li>
-              <li class="baskin_robbins failed">
-                <div class="notify_icon">
-                  <span class="icon"></span>
-                </div>
-                <div class="notify_data">
-                  <div class="title">
-                    Lorem, ipsum dolor.
-                  </div>
-                  <div class="sub_title">
-                    Lorem ipsum dolor sit amet consectetur.
-                  </div>
-                </div>
-                <div class="notify_status">
-                  <p>Failed</p>
-                </div>
-              </li>
-              <li class="mcd success">
-                <div class="notify_icon">
-                  <span class="icon"></span>
-                </div>
-                <div class="notify_data">
-                  <div class="title">
-                    Lorem, ipsum dolor.
-                  </div>
-                  <div class="sub_title">
-                    Lorem ipsum dolor sit amet consectetur.
-                  </div>
-                </div>
-                <div class="notify_status">
-                  <p>Success</p>
-                </div>
-              </li>
-              <li class="pizzahut failed">
-                <div class="notify_icon">
-                  <span class="icon"></span>
-                </div>
-                <div class="notify_data">
-                  <div class="title">
-                    Lorem, ipsum dolor.
-                  </div>
-                  <div class="sub_title">
-                    Lorem ipsum dolor sit amet consectetur.
-                  </div>
-                </div>
-                <div class="notify_status">
-                  <p>Failed</p>
-                </div>
-              </li>
-              <li class="kfc success">
-                <div class="notify_icon">
-                  <span class="icon"></span>
-                </div>
-                <div class="notify_data">
-                  <div class="title">
-                    Lorem, ipsum dolor.
-                  </div>
-                  <div class="sub_title">
-                    Lorem ipsum dolor sit amet consectetur.
-                  </div>
-                </div>
-                <div class="notify_status">
-                  <p>Success</p>
-                </div>
-              </li>
-              <li class="show_all">
-                <p class="link">Show All Activities</p>
               </li>
             </ul>
           </div>
@@ -190,6 +120,8 @@ $extension = "_" . str_replace(' ', '-', $infoRef->getChild("addCi")->getValue()
         <div class="dashboard-notif">
           <span class="dropdown"><i class="fa fa-user-circle dropbtn" aria-hidden="true"></i>My Account
             <div class="dropdown-content">
+              <a href="profile.php"><i class="fa fa-user-circle" aria-hidden="true"></i>Profile</a>
+              <a onclick="$('#change-pw').modal('show');"><i class="fa-solid fa-key" aria-hidden="true"></i>Change Password</a>
               <a href="../logout.php"><i class="fas fa-sign-out" aria-hidden="true"></i>Log out</a>
             </div>
           </span>
@@ -197,61 +129,65 @@ $extension = "_" . str_replace(' ', '-', $infoRef->getChild("addCi")->getValue()
       </div>
     </div>
     <div class="Content">
-      <div>
-        <button type="button" class="button right" id="btn-account">Add Account</button>
-        <div id="data">
-          <table>
-            <tr>
-              <th>Username</th>
-              <th>UID</th>
-              <th>Action</th>
-            </tr>
-            <tr>
-              <td colspan="3">
-                <h2 style="text-align: center;">Loading Data...</h2>
-              </td>
-            <tr>
-          </table>
-          <div class="pagination">
-            <a href="#" class="disabled-link">&laquo;</a>
-            <a href="#" class="disabled-link active">1</a>
-            <a href="#" class="disabled-link">&raquo;</a>
+      <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+        <button type="button" class="button left" id="btn-account" style="height:fit-content;">Add Account</button>
+        <form id="frmSearch" name="userSearch">
+          <div>
+            <div id="error"></div>
+            <br>
+            <div style="float: right; margin-bottom: 1%; text-align: right;" id="search">
+              <input type="search" name="search" id="search" placeholder="Search" required>
+              <style>
+                .has-error,
+                .has-error:focus {
+                  border: red 2px solid;
+                  outline: none;
+                }
+
+                #error {
+                  color: red;
+                  /* text-align: right; */
+                  float: right;
+                }
+
+                #search button {
+                  border: none;
+                  cursor: pointer;
+                }
+              </style>
+              <label><button onclick="searchData();"><i class="fa-solid fa-magnifying-glass"></i></button></label>
+              <br>
+              <div id="advancedOptions" class="hide">in
+                <select name="sType" id="sType" disabled required>
+                  <option value="" id="sTypeDef" selected disabled>Select Category</option>
+                  <option value="name">Email</option>
+                  <option value="uid">UID</option>
+                </select>
+              </div>
+              <label for="advanced">Advanced Search</label>
+              <input type="checkbox" name="advanced" id="advanced" onChange="$('#advancedOptions').toggleClass('hide'); $('#sType').prop('disabled', (i, v) => !v);">
+            </div>
           </div>
+        </form>
+      </div>
+      <div id="data">
+        <table>
+          <tr>
+            <th>Username</th>
+            <th>UID</th>
+            <th>Action</th>
+          </tr>
+          <tr>
+            <td colspan="3">
+              <h2 style="text-align: center;">Loading Data...</h2>
+            </td>
+          <tr>
+        </table>
+        <div class="pagination">
+          <a href="#" class="disabled-link">&laquo;</a>
+          <a href="#" class="disabled-link active">1</a>
+          <a href="#" class="disabled-link">&raquo;</a>
         </div>
-        <!-- <php
-          if ($userHisRef->getSnapshot()->hasChildren()) {
-            // var_dump($userHisRef->getValue());
-            $history = $userHisRef->getValue();
-            foreach ($history as $date => $keySet) {
-              foreach ($keySet as $key => $timestamp) {
-                echo '<tr>
-                      <td>' . $date . '</td>
-                      <td>' . $historyRef->getChild($date . '/' . $timestamp . '/time')->getValue() . '</td>
-                      <td>' . $historyRef->getChild($date . '/' . $timestamp . '/name')->getValue() . '</td>
-                      <td>' . $historyRef->getChild($date . '/' . $timestamp . '/backend')->getValue() . '</td>
-                      </tr>';
-              }
-            }
-            echo "</table>";
-            echo '
-              <div class="pagination">
-                <a href="#" class="disabled-link">&laquo;</a>
-                <a href="#" class="disabled-link active">1</a>
-                <a href="#" class="disabled-link">&raquo;</a>
-            </div>
-            ';
-          } else {
-            echo '<tr><td colspan="4"><h2 style="text-align: center;">No data found!</h2></td><tr>';
-            echo "</table>";
-            echo '
-              <div class="pagination">
-                <a href="#" class="disabled-link">&laquo;</a>
-                <a href="#" class="disabled-link active">1</a>
-                <a href="#" class="disabled-link">&raquo;</a>
-            </div>
-            ';
-          }
-          ?> -->
       </div>
     </div>
 
@@ -272,76 +208,148 @@ $extension = "_" . str_replace(' ', '-', $infoRef->getChild("addCi")->getValue()
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
   <!-- jQuery Modal -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+  <!-- JQuery Validate -->
+  <script src="../../node_modules/jquery-validation/dist/jquery.validate.js"></script>
+  <!-- Common Scripts -->
+  <script src="../../scripts/common.js"></script>
 
   <div class="modal" id="create-account">
-    <h1>Create Sub-account</h1>
-    <hr><br>
-    <form id="frm-account">
-      <label for="email">Email:</label>
-      <input type="email" class="email" name="email" placeholder="example@email.com" id="email" required />
-      <br>
-      <label for="password">Password: </label>
-      <input type="password" name="password" id="password" placeholder="••••••" required>
-      <input type="hidden" name="create">
-    </form>
-    <button class="button right" id="btn-create">Create</button>
+    <div class="modal-title">
+      <h3>Create Sub-account</h3>
+    </div>
+    <div class="modal-body">
+      <form id="frm-account">
+        <h3>Account Credentials</h3>
+        <label for="email">Email:</label>
+        <input type="email" class="email" name="email" placeholder="example@email.com" id="email" required />
+        <br>
+        <label for="password">Password: </label>
+        <input type="password" name="password" id="password" placeholder="••••••" required>
+        <input type="hidden" name="create">
+        <br><br>
+        <h3>Account Holder Information</h3>
+        <label for="uName">Username:</label>
+        <input type="text" name="uName" placeholder="" id="uName" required />
+        <br>
+        <label for="fName">First Name:</label>
+        <input type="text" name="fName" placeholder="" id="fName" required />
+        <br>
+        <label for="mName">Middle Name:</label>
+        <input type="text" name="mName" placeholder="" id="mName" required />
+        <br>
+        <label for="lName">Last Name:</label>
+        <input type="text" name="lName" placeholder="" id="lName" required />
+        <br>
+        <label for="cNo">Contact Number:</label>
+        <input type="tel" name="cNo" placeholder="63 9xxxxxxxxx" id="cNo" required />
+        <br>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="button" id="btn-create">Create</button>
+    </div>
   </div>
 
   <script>
+    // Loads page data on page load
     loadPage(1);
 
+    // Loads data for the page
+    function loadPage(page) {
+      $.ajax({
+        url: '../../functions/account-handler.php',
+        type: "POST",
+        data: {
+          "page": page
+        }
+      }).done(function(data) {
+        $("#data").html(data);
+      });
+    }
+
+    // Searches data in database
+    function searchData() {
+      var frm = $('#frmSearch');
+      frm.validate({
+        rules: {
+          search: "required",
+          sType: "required"
+        },
+        messages: {
+          search: '',
+          sType: ''
+        },
+        errorLabelContainer: '#error',
+        showErrors: function(errorMap, errorList) {
+          $("#error").html("Please enter required information.");
+          this.defaultShowErrors();
+        },
+        highlight: function(element) {
+          $(element).addClass('has-error');
+        },
+        unhighlight: function(element) {
+          $(element).removeClass('has-error');
+        },
+        submitHandler: function(frm) {
+          event.preventDefault();
+          $.ajax({
+            url: '../../functions/account-handler.php',
+            type: 'POST',
+            data: $('#frmSearch').serialize()
+          }).done(function(data) {
+            $("#data").html(data);
+          });
+        }
+      });
+    }
+
+    // Opens create acccount modal
     $("#btn-account").click(function() {
       $('#create-account').modal('show');
     });
 
+    // Creates sub-user account
     $("#btn-create").click(function() {
-        var frm = $("#frm-account");
+      var frm = $("#frm-account");
 
+      $.ajax({
+        type: "POST",
+        url: "data/account-handler.php",
+        data: frm.serialize(),
+        success: function(data) {
+          console.log(data);
+          $('#create-account .close-modal').click();
+          alert("Account created.");
+          loadPage(1);
+        },
+        error: function(data) {
+          alert("An error occured.");
+        },
+      });
+    });
+
+    // Deletes sub-user account
+    function deleteUser(uid, username) {
+      if (confirm('Do you wish to delete ' + username + '?')) {
         $.ajax({
           type: "POST",
           url: "data/account-handler.php",
-          data: frm.serialize(),
-          success: function(data) {
-            alert("Account created.");
-            loadPage(1);
-          },
-          error: function(data) {
-            alert("An error occured.");
-          },
-        });
-      });
-
-      function loadPage(page) {
-        $.ajax({
-          url: "data/account-controller.php",
-          type: "POST",
           data: {
-            "page": page
+            'deleteUser': '',
+            'uid': uid,
+            'username': username
           }
         }).done(function(data) {
-          $("#data").html(data);
+          console.log(data);
+          loadPage(1);
         });
       }
-
-      function deleteUser(uid, username) {
-        if (confirm('Do you wish to delete ' + username + '?')) {
-          $.ajax({
-            type: "POST",
-            url: "data/account-handler.php",
-            data: {
-              'delete' : '',
-              'uid': uid,
-              'username': username
-            }
-          }).done(function() {
-            loadPage(1);
-          });
-        }
-      }
+    }
   </script>
 
-
+  <div id="common-modal">
+    <?php include '../change.php'; ?>
+  </div>
 </body>
 
 </html>

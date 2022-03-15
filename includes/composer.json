@@ -1,6 +1,7 @@
 {
     "require": {
         "kreait/firebase-php": "^5.25",
-        "phpmailer/phpmailer": "^6.5"
+        "phpmailer/phpmailer": "^6.5",
+        "ympons/phpkairos": "dev-master"
     }
 }
