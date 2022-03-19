@@ -25,8 +25,10 @@ $lCount = 999;
 $total = 0;
 
 $subs = [];
+$dates = [];
 
 foreach ($data as $date => $keys) {
+    $dates[$date] = $date;
     $cnt = count($keys);
     $total += $cnt;
     if ($cnt > $hCount) {
@@ -42,15 +44,10 @@ foreach ($data as $date => $keys) {
         $subs[$entry['sub']][$date][$key] = $entry;
     }
 }
-foreach ($subs as $name => $date) {
-    foreach ($data as $kdate => $keys) {
-        foreach ($date as $key => $ts) {
-            foreach ($ts as $tKey => $info)
-                if ($key != $date) {
-                    $subs['name'][$key][$tKey] = $info;
-                }
-        }
-    }
+
+function rand_color()
+{
+    return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
 }
 
 $ave = round($total / count($data), 2);
@@ -120,6 +117,14 @@ $ave = round($total / count($data), 2);
         .detailsImg {
             width: 90vw;
         }
+
+        @media print {
+            .pagebreak {
+                page-break-before: always;
+            }
+
+            /* page-break-after works, as well */
+        }
     </style>
 </head>
 
@@ -158,7 +163,7 @@ $ave = round($total / count($data), 2);
     <!-- Graph -->
     <canvas id="traffic"></canvas>
     <img src="" class="detailsImg" alt="" id="imgTraf">
-    <br><br><br>
+    <div class="pagebreak"> </div>
 
     <h4>Traffic Per Account(/day)</h4>
     <!-- Graph -->
@@ -257,41 +262,19 @@ $ave = round($total / count($data), 2);
                             label: \'' . $name . '\',
                             data: [
                             ';
-                    foreach ($date as $kDate => $aTs) {
-                        echo count($aTs) . ',';
+                    foreach ($dates as $tmp => $strDate) {
+                        if (isset($date[$strDate])) {
+                            echo count($date[$strDate]) . ',';
+                        } else {
+                            echo '0, ';
+                        }
                     }
                     echo '],
                     fill: true,
-                    backgroundColor: \'#000\'
+                    backgroundColor: \'' . rand_color() . '\'
                     },';
                 }
                 ?>
-
-                //     {
-                //     label: 'CD',
-                //     data: [
-                //         <?php
-                            //         foreach ($data as $key => $info) {
-                            //             echo $userHisRef->getChild($key)->numChildren() . ',';
-                            //         }
-                            //         
-                            ?>
-                //     ],
-                //     fill: true,
-                //     backgroundColor: getRandomColor
-                // }, {
-                //     label: 'AB',
-                //     data: [
-                //         <?php
-                            //         foreach ($data as $key => $info) {
-                            //             echo $userHisRef->getChild($key)->numChildren() . ',';
-                            //         }
-                            //         
-                            ?>
-                //     ],
-                //     fill: true,
-                //     backgroundColor: getRandomColor
-                // }, ]
             ]
         };
 

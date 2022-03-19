@@ -6,7 +6,7 @@ $infoRef = $database->getReference("Users/" . $uid . "/info");
 $appDataRef = $database->getReference("appData/");
 $stats = $database->getReference('Stats/' . $infoRef->getChild('addCi')->getValue());
 $statsData = $stats->orderByKey()->limitToLast(1)->getSnapshot()->getValue();
-if($statsData != NULL) {
+if ($statsData != NULL) {
     $key = array_keys($statsData)[0];
 } else {
     $key = 0;
@@ -165,10 +165,10 @@ if (isset($_POST['submit'])) {
             <hr class="divider">
             <div class="user-profile">
                 <!-- PHP Get from Storage -->
-                <img src="../../assets/logo.png">
+                <img src="../../assets/logo.png" class="admin">
                 <!-- PHP Get from RTDB -->
                 <span>
-                    <?php echo (str_contains($uid, "Uv8vqq4rlrM2ADvfKv6t9KVvndA2")) ? 'Admin Demo' : $infoRef->getChild("addCi")->getValue(); ?>
+                    <h3><?php echo $_SESSION['type'] == 'admin' ? 'Admin Module' : $infoRef->getChild("addCi")->getValue(); ?></h3>
                 </span>
             </div>
             <hr class="divider">
@@ -229,7 +229,7 @@ if (isset($_POST['submit'])) {
             <div class="Content">
                 <div class="content-title">
                     <h4>Dagupan City, Pangasinan</h4>
-                    <span id=datetime>Covid-19 Status<br>As of <?php echo $appDataRef->getChild('covStatus/time')->getValue(); ?> | <?php echo $appDataRef->getChild('covStatus/date')->getValue(); ?></span>
+                    <span id=datetime>Covid-19 Status<br>As of <?php echo $statsData[$key]['time']; ?> | <?php echo $statsData[$key]['date']; ?></span>
                 </div>
                 <div class="stats">
                     <div class="box">
@@ -263,7 +263,7 @@ if (isset($_POST['submit'])) {
                     <h2>Daily Cases</h2>
                     <p>
                         <a href="https://www.facebook.com/DagupanPIO">
-                            <img src="../../assets/inforgraphics/<?php echo $statsData[$key]['daily'] ?>" class="right-data" alt="No DATA found" onerror="//this.src='img/undefined.jpg'">
+                            <img class="right-data" src="../../assets/inforgraphics/<?php echo $statsData[$key]['daily'] ?>" class="right-data" alt="No DATA found" onerror="this.src='../../assets/nodata/nd_daily.png'">
                         </a>
                     </p>
                     <button id="update">Update</button>

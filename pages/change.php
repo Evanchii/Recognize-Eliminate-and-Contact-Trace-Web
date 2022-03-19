@@ -13,7 +13,8 @@ if(isset($_POST['old-pw'])) {
         
         $auth->changeUserPassword($uid, $new);
     } catch (Exception $e) {
-        echo 'Invalid Email and/or Password!';
+        // echo 'Invalid Email and/or Password!';
+        echo 'Error> '.$e;
     }
 
     exit();

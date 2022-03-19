@@ -85,7 +85,7 @@ if (!isset($_SESSION['name'])) {
     </div>
     <div class="Content">
       <div style="display:flex; justify-content: space-between; align-items: flex-end;">
-        <button type="button" class="btn-primary" style="margin-bottom: unset;">Download Report</button>
+        <button type="button" class="btn-primary" style="margin-bottom: unset;" onclick="openDocument('data/generate-history.php');">Download Report</button>
         <form id="frmSearch" name="userSearch">
           <div class="">
             <div id="error"></div>

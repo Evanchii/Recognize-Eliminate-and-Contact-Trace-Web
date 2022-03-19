@@ -12,21 +12,6 @@ if (!isset($_SESSION['name'])) {
 }
 
 $extension = "_" . str_replace(' ', '-', $_SESSION['name']);
-
-
-// Firebase Storage
-// $storage = $firebase->createStorage();
-// $storageClient = $storage->getStorageClient();
-// $defaultBucket = $storage->getBucket();
-
-
-// $expiresAt = new DateTime('tomorrow', new DateTimeZone('Asia/Manila'));
-// // echo $expiresAt->getTimestamp();
-
-// $imageReference = $defaultBucket->object($infoRef->getChild("faceID")->getValue());
-// if ($imageReference->exists()) {
-//   $image = $imageReference->signedUrl($expiresAt);
-// }
 ?>
 
 <!DOCTYPE html>
@@ -234,13 +219,27 @@ $extension = "_" . str_replace(' ', '-', $_SESSION['name']);
       </div>
       <div class="modal-body">
         <form id="frm-account">
-          <label for="username">Username:</label>
-          <input type="text" class="username" name="username" placeholder="example" id="username" required />
-          <input type="text" name="extension" size="1" value="<?php echo $extension; ?>" style="width: <?php echo strlen($extension) + 5 ?>ch" readonly>
-          <!-- <input type="text" name="extension" id="extension" value="_<?php echo $_SESSION["name"]; ?>" readonly /> -->
-          <br>
-          <label for="password">Password: </label>
-          <input type="password" name="password" id="password" placeholder="••••••" required>
+          <table>
+            <tr>
+              <td>
+                <label for="username">Username:</label>
+              </td>
+              <td>
+                <input type="text" class="username" name="username" placeholder="example" id="username" required />
+              </td>
+              <td>
+                <input type="text" name="extension" size="1" value="<?php echo $extension; ?>" style="width: <?php echo strlen($extension) + 5 ?>ch" readonly>
+              </td>
+            </tr>
+            <tr>
+              <td style="background-color: unset;">
+                <label for="password">Password: </label>
+              </td>
+              <td colspan="2" style="background-color: unset;">
+                <input type="password" name="password" id="password" placeholder="••••••" required>
+              </td>
+            </tr>
+          </table>
           <input type="hidden" name="create">
         </form>
       </div>

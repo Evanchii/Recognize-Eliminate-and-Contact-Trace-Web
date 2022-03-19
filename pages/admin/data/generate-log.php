@@ -53,7 +53,13 @@ $end = (isset($_GET['start'])) ? $_GET['start'] : array_keys($logRef->orderByKey
         }
 
         table {
-            table-layout: fixed;
+            /* table-layout: fixed; */
+        }
+
+        @media print {
+            .tr {
+                page-break-inside: avoid;
+            }
         }
     </style>
 </head>
@@ -129,14 +135,15 @@ $end = (isset($_GET['start'])) ? $_GET['start'] : array_keys($logRef->orderByKey
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
-        var element = document.getElementById('toPDF');
-        var opt = {
-            filename:     'REaCT-'+Date.now()+'.pdf',
-            html2canvas:  { scale: 2 },
-            jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' },
-            mode:         ['avoid-all', 'css', 'legacy']
-        };
-        html2pdf().set(opt).from(element).outputPdf().save();
+        window.print();
+        // var element = document.getElementById('toPDF');
+        // var opt = {
+        //     filename:     'REaCT-'+Date.now()+'.pdf',
+        //     html2canvas:  { scale: 2 },
+        //     jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' },
+        //     mode:         ['avoid-all', 'css', 'legacy']
+        // };
+        // html2pdf().set(opt).from(element).outputPdf().save();
     </script>
 </body>
 

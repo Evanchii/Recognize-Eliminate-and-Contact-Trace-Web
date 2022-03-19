@@ -37,6 +37,8 @@ if (isset($_POST['submit'])) {
     $file = $folderPath . $fileName;
     file_put_contents($file, $image_base64);
 
+    include '../../functions/enrollFace.php';
+    enrollFace($photo, $uid);
     // print_r($fileName);
 
     $storage = $firebase->createStorage();
@@ -54,6 +56,8 @@ if (isset($_POST['submit'])) {
         'name' => $file
       ]
     );
+
+    unlink($file);
   }
 
   $updates = [
@@ -65,14 +69,14 @@ if (isset($_POST['submit'])) {
     "addPro" => $addPro,
     "addCo" => $addCo,
     "addZip" => $addZip,
-];
-if (isset($fileName) && $fileName != '') {
-  $updates["faceID"] = $fileName;
-}
+  ];
+  if (isset($fileName) && $fileName != '') {
+    $updates["faceID"] = $folderPath . $fileName;
+  }
 
 
-$infoRef // this is the root reference
-   ->update($updates);
+  $infoRef // this is the root reference
+    ->update($updates);
 } else {
   $cno = $infoRef->getChild("cNo")->getValue();
   $dob = $infoRef->getChild("DoB")->getValue();
@@ -112,6 +116,18 @@ if ($imageReference->exists()) {
   <link rel="stylesheet" type="text/css" href="../../styles/profile.css">
   <link rel="shortcut icon" href="../../assets/favicon.ico" type="image/x-icon">
   <title>Profile | REaCT</title>
+  <style>
+    #change-pw {
+      max-width: 500px !important;
+    }
+
+    #change-pw input {
+      padding: unset;
+      margin: unset;
+      width: 60%;
+      margin-right: unset;
+    }
+  </style>
 </head>
 
 <body>
@@ -144,7 +160,6 @@ if ($imageReference->exists()) {
       <div class="header-right">
         <div class="notifications">
           <div class="icon_wrap"><i class="far fa-bell"></i></div>
-
           <div class="notification_dd">
             <ul class="notification_ul">
               <li class="starbucks success">
@@ -153,82 +168,12 @@ if ($imageReference->exists()) {
                 </div>
                 <div class="notify_data">
                   <div class="title">
-                    Lorem, ipsum dolor.
+                    Loading Data...
                   </div>
                   <div class="sub_title">
-                    Lorem ipsum dolor sit amet consectetur.
+                    Please Wait
                   </div>
                 </div>
-                <div class="notify_status">
-                  <p>Success</p>
-                </div>
-              </li>
-              <li class="baskin_robbins failed">
-                <div class="notify_icon">
-                  <span class="icon"></span>
-                </div>
-                <div class="notify_data">
-                  <div class="title">
-                    Lorem, ipsum dolor.
-                  </div>
-                  <div class="sub_title">
-                    Lorem ipsum dolor sit amet consectetur.
-                  </div>
-                </div>
-                <div class="notify_status">
-                  <p>Failed</p>
-                </div>
-              </li>
-              <li class="mcd success">
-                <div class="notify_icon">
-                  <span class="icon"></span>
-                </div>
-                <div class="notify_data">
-                  <div class="title">
-                    Lorem, ipsum dolor.
-                  </div>
-                  <div class="sub_title">
-                    Lorem ipsum dolor sit amet consectetur.
-                  </div>
-                </div>
-                <div class="notify_status">
-                  <p>Success</p>
-                </div>
-              </li>
-              <li class="pizzahut failed">
-                <div class="notify_icon">
-                  <span class="icon"></span>
-                </div>
-                <div class="notify_data">
-                  <div class="title">
-                    Lorem, ipsum dolor.
-                  </div>
-                  <div class="sub_title">
-                    Lorem ipsum dolor sit amet consectetur.
-                  </div>
-                </div>
-                <div class="notify_status">
-                  <p>Failed</p>
-                </div>
-              </li>
-              <li class="kfc success">
-                <div class="notify_icon">
-                  <span class="icon"></span>
-                </div>
-                <div class="notify_data">
-                  <div class="title">
-                    Lorem, ipsum dolor.
-                  </div>
-                  <div class="sub_title">
-                    Lorem ipsum dolor sit amet consectetur.
-                  </div>
-                </div>
-                <div class="notify_status">
-                  <p>Success</p>
-                </div>
-              </li>
-              <li class="show_all">
-                <p class="link">Show All Activities</p>
               </li>
             </ul>
           </div>
@@ -238,6 +183,7 @@ if ($imageReference->exists()) {
           <span class="dropdown"><i class="fa fa-user-circle dropbtn" aria-hidden="true"></i>My Account
             <div class="dropdown-content">
               <a href="#"><i class="fa fa-user-circle" aria-hidden="true"></i>Profile</a>
+              <a onclick="$('#change-pw').modal('show');"><i class="fa-solid fa-key" aria-hidden="true"></i>Change Password</a>
               <a href="../logout.php"><i class="fas fa-sign-out" aria-hidden="true"></i>Log out</a>
             </div>
           </span>
@@ -330,7 +276,7 @@ if ($imageReference->exists()) {
 
           </table>
 
-          <input class="update-button" type="submit" value="Update" name="submit" ><a></a>
+          <input class="update-button" type="submit" value="Update" name="submit"><a></a>
 
         </form>
 
@@ -357,6 +303,8 @@ if ($imageReference->exists()) {
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
   <!-- jQuery Modal -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+  <!-- Common Scripts -->
+  <script src="../../scripts/common.js"></script>
 
   <div id="modalFace" class="modal">
     <div class="modal-title">
@@ -368,7 +316,7 @@ if ($imageReference->exists()) {
       </div>
     </div>
     <div class="modal-footer">
-      <button type="button" class="camButt btn-primary" id="screenshot-button"><i class="fa-solid fa-camera"></i>  Take photo</button>
+      <button type="button" class="camButt btn-primary" id="screenshot-button"><i class="fa-solid fa-camera"></i> Take photo</button>
     </div>
   </div>
 
@@ -413,25 +361,11 @@ if ($imageReference->exists()) {
           });
       }
     }
-
-    $(".notifications .icon_wrap").click(function() {
-        $(this).parent().toggleClass("actived");
-        $(".notification_dd").toggleClass("show");
-      });
-
-      const currentDate = new Date();
-
-      $.ajax({
-          url: "../../functions/notificationHandler.php",
-          type: "POST",
-          data: {
-            "ts": currentDate.getTime()/1000
-          }
-        }).done(function(data) {
-          $(".notification_ul").html(data);
-        });
-        
   </script>
+
+  <div id="common-modal">
+    <?php include '../change.php'; ?>
+  </div>
 
 </body>
 

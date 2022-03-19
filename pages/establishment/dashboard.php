@@ -26,6 +26,9 @@ $historyRef = $database->getReference('History');
   <link rel="stylesheet" type="text/css" href="../../styles/establishment/dashboard.css">
   <link rel="shortcut icon" href="../../assets/favicon.ico" type="image/x-icon">
   <title>Dashboard | REaCT</title>
+  <!-- Chart.js -->
+  <script src="../../node_modules/chart.js/dist/chart.min.js"></script>
+  <script src="../../node_modules/chart.js/dist/chart.js"></script>
 </head>
 
 <body>
@@ -90,7 +93,46 @@ $historyRef = $database->getReference('History');
     <div class="Content">
       <div class="graph">
         <h2>Overview</h2>
-        <canvas id="overview"></canvas>
+        <?php
+        if ($userHisRef->getSnapshot()->hasChildren()) {
+          echo '<canvas id="overview"></canvas>';
+          echo '
+            <script>
+              const chart = document.getElementById("overview").getContext("2d");
+              const labels = [';
+          if ($userHisRef->getSnapshot()->hasChildren()) {
+            foreach ($userHisRef->getValue() as $key => $info) {
+              echo '\'' . $key . '\',';
+            }
+          } else echo "'No data found'";
+          echo '];
+              const data = {
+                labels: labels,
+                datasets: [{
+                  label: \'Number of Visitors\',
+                  data: [';
+          if ($userHisRef->getSnapshot()->hasChildren()) {
+            foreach ($userHisRef->getValue() as $key => $info) {
+              echo $userHisRef->getSnapshot()->getChild($key)->numChildren() . ',';
+            }
+          } else echo '0';
+          echo '],
+                  fill: false,
+                  borderColor: \'rgb(12, 89, 207)\'
+                }]
+              };
+              const myChart = new Chart(chart, {
+                type: \'line\',
+                data: data,
+
+              });
+            </script>';
+        } else {
+          echo '<img src="../../assets/nodata/nd_daily.png" style="width: 100%;
+          height: 50vh;
+          object-fit: contain;">';
+        }
+        ?>
       </div>
       <div class="stats">
         <h2>Tracking</h2>
@@ -111,15 +153,6 @@ $historyRef = $database->getReference('History');
             <div class="details">
               <h2><?php echo $userHisRef->getChild(date("Y-m-d"))->getSnapshot()->hasChildren() ? $userHisRef->getChild(date("Y-m-d"))->getSnapshot()->numChildren() : 0 ?></h2>
               <h4>Visitors</h4>
-            </div>
-          </div>
-          <div class="stats-item">
-            <div class="icon">
-              <i class="fa fa-line-chart" aria-hidden="true"></i>
-            </div>
-            <div class="details">
-              <h2>910</h2>
-              <h4>Total People</h4>
             </div>
           </div>
         </div>
@@ -146,7 +179,7 @@ $historyRef = $database->getReference('History');
               }
             }
           } else {
-            echo '<h2 style="text-align: center; color: white;">No data found!</h2>';
+            echo '<h2 style="text-align: center; color: white; margin-top: 15px">No data found!</h2>';
           }
           ?>
         </div>
@@ -173,60 +206,10 @@ $historyRef = $database->getReference('History');
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
   <!-- jQuery Modal -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
-  <!-- Chart.js -->
-  <script src="../../node_modules/chart.js/dist/chart.js"></script>
   <!-- JQuery Validate -->
   <script src="../../node_modules/jquery-validation/dist/jquery.validate.js"></script>
   <!-- Common Scripts -->
   <script src="../../scripts/common.js"></script>
-
-  <script>
-    $(".notifications .icon_wrap").click(function() {
-      $(this).parent().toggleClass("actived");
-      $(".notification_dd").toggleClass("show");
-    });
-
-    const currentDate = new Date();
-
-    $.ajax({
-      url: "../../functions/notificationHandler.php",
-      type: "POST",
-      data: {
-        "ts": currentDate.getTime() / 1000
-      }
-    }).done(function(data) {
-      $(".notification_ul").html(data);
-    });
-
-    const chart = document.getElementById("overview").getContext("2d");
-    const labels = [
-      <?php
-      foreach ($userHisRef->getValue() as $key => $info) {
-        echo '\'' . $key . '\',';
-      }
-      ?>
-    ];
-    const data = {
-      labels: labels,
-      datasets: [{
-        label: 'Number of Visitors',
-        data: [
-          <?php
-          foreach ($userHisRef->getValue() as $key => $info) {
-            echo $userHisRef->getSnapshot()->getChild($key)->numChildren() . ',';
-          }
-          ?>
-        ],
-        fill: false,
-        borderColor: 'rgb(12, 89, 207)'
-      }]
-    };
-    const myChart = new Chart(chart, {
-      type: 'line',
-      data: data,
-
-    });
-  </script>
 
   <div id="common-modal">
     <?php include '../change.php'; ?>

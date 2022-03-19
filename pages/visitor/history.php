@@ -35,6 +35,7 @@ if ($imageReference->exists()) {
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
   <link rel="stylesheet" type="text/css" href="../../styles/private-common.css">
   <link rel="stylesheet" type="text/css" href="../../styles/history.css">
   <link rel="shortcut icon" href="../../assets/favicon.ico" type="image/x-icon">
@@ -69,7 +70,6 @@ if ($imageReference->exists()) {
       <div class="header-right">
         <div class="notifications">
           <div class="icon_wrap"><i class="far fa-bell"></i></div>
-
           <div class="notification_dd">
             <ul class="notification_ul">
               <li class="starbucks success">
@@ -78,82 +78,12 @@ if ($imageReference->exists()) {
                 </div>
                 <div class="notify_data">
                   <div class="title">
-                    Lorem, ipsum dolor.
+                    Loading Data...
                   </div>
                   <div class="sub_title">
-                    Lorem ipsum dolor sit amet consectetur.
+                    Please Wait
                   </div>
                 </div>
-                <div class="notify_status">
-                  <p>Success</p>
-                </div>
-              </li>
-              <li class="baskin_robbins failed">
-                <div class="notify_icon">
-                  <span class="icon"></span>
-                </div>
-                <div class="notify_data">
-                  <div class="title">
-                    Lorem, ipsum dolor.
-                  </div>
-                  <div class="sub_title">
-                    Lorem ipsum dolor sit amet consectetur.
-                  </div>
-                </div>
-                <div class="notify_status">
-                  <p>Failed</p>
-                </div>
-              </li>
-              <li class="mcd success">
-                <div class="notify_icon">
-                  <span class="icon"></span>
-                </div>
-                <div class="notify_data">
-                  <div class="title">
-                    Lorem, ipsum dolor.
-                  </div>
-                  <div class="sub_title">
-                    Lorem ipsum dolor sit amet consectetur.
-                  </div>
-                </div>
-                <div class="notify_status">
-                  <p>Success</p>
-                </div>
-              </li>
-              <li class="pizzahut failed">
-                <div class="notify_icon">
-                  <span class="icon"></span>
-                </div>
-                <div class="notify_data">
-                  <div class="title">
-                    Lorem, ipsum dolor.
-                  </div>
-                  <div class="sub_title">
-                    Lorem ipsum dolor sit amet consectetur.
-                  </div>
-                </div>
-                <div class="notify_status">
-                  <p>Failed</p>
-                </div>
-              </li>
-              <li class="kfc success">
-                <div class="notify_icon">
-                  <span class="icon"></span>
-                </div>
-                <div class="notify_data">
-                  <div class="title">
-                    Lorem, ipsum dolor.
-                  </div>
-                  <div class="sub_title">
-                    Lorem ipsum dolor sit amet consectetur.
-                  </div>
-                </div>
-                <div class="notify_status">
-                  <p>Success</p>
-                </div>
-              </li>
-              <li class="show_all">
-                <p class="link">Show All Activities</p>
               </li>
             </ul>
           </div>
@@ -163,6 +93,7 @@ if ($imageReference->exists()) {
           <span class="dropdown"><i class="fa fa-user-circle dropbtn" aria-hidden="true"></i>My Account
             <div class="dropdown-content">
               <a href="profile.php"><i class="fa fa-user-circle" aria-hidden="true"></i>Profile</a>
+              <a onclick="$('#change-pw').modal('show');"><i class="fa-solid fa-key" aria-hidden="true"></i>Change Password</a>
               <a href="../logout.php"><i class="fas fa-sign-out" aria-hidden="true"></i>Log out</a>
             </div>
           </span>
@@ -170,7 +101,7 @@ if ($imageReference->exists()) {
       </div>
     </div>
     <div class="Content" style="display: flex;flex-direction: column;">
-    <form id="frmSearch" name="userSearch">
+      <form id="frmSearch" name="userSearch">
         <div class="">
           <div id="error"></div>
           <br>
@@ -198,10 +129,8 @@ if ($imageReference->exists()) {
             <div id="advancedOptions" class="hide">in
               <select name="sType" id="sType" onchange="selectCategory(this.value)" disabled required>
                 <option value="" id="sTypeDef" selected disabled>Select Category</option>
-                <option value="name">Name</option>
-                <option value="uid">UID</option>
-                <option value="type">User Type</option>
-                <option value="application">Application Type</option>
+                <option value="estName">Establishment</option>
+                <option value="branch">Branch</option>
               </select>
             </div>
             <label for="advanced">Advanced Search</label>
@@ -217,7 +146,12 @@ if ($imageReference->exists()) {
             <th>Establishment</th>
             <th>Branch</th>
           </tr>
-          <?php
+          <tr>
+            <td colspan="4">
+              <h2 style="text-align: center;">Loading Data...</h2>
+            </td>
+          </tr>
+          <!-- <php
           if ($userHisRef->getSnapshot()->hasChildren()) {
             // var_dump($userHisRef->getValue());
             $history = $userHisRef->getValue();
@@ -234,7 +168,7 @@ if ($imageReference->exists()) {
           } else {
             echo '<tr><th colspan="4">No data found!</h2><tr>';
           }
-          ?>
+          ?> -->
         </table>
       </div>
     </div>
@@ -257,26 +191,68 @@ if ($imageReference->exists()) {
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
   <!-- jQuery Modal -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+  <!-- JQuery Validate -->
+  <script src="../../node_modules/jquery-validation/dist/jquery.validate.js"></script>
+  <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+  <!-- Common Scripts -->
+  <script src="../../scripts/common.js"></script>
 
   <script>
-    $(".notifications .icon_wrap").click(function() {
-        $(this).parent().toggleClass("actived");
-        $(".notification_dd").toggleClass("show");
-      });
+    loadPage(1);
 
-      const currentDate = new Date();
-
+    // Loads data for the page
+    function loadPage(page) {
       $.ajax({
-          url: "../../functions/notificationHandler.php",
-          type: "POST",
-          data: {
-            "ts": currentDate.getTime()/1000
-          }
-        }).done(function(data) {
-          $(".notification_ul").html(data);
-        });
+        url: '../../functions/history-handler.php',
+        type: "POST",
+        data: {
+          "page": page
+        }
+      }).done(function(data) {
+        $("#data").html(data);
+      });
+    }
+
+    // Searches data in database
+    function searchData() {
+      var frm = $('#frmSearch');
+      frm.validate({
+        rules: {
+          search: "required",
+          sType: "required"
+        },
+        messages: {
+          search: '',
+          sType: ''
+        },
+        errorLabelContainer: '#error',
+        showErrors: function(errorMap, errorList) {
+          $("#error").html("Please enter required information.");
+          this.defaultShowErrors();
+        },
+        highlight: function(element) {
+          $(element).addClass('has-error');
+        },
+        unhighlight: function(element) {
+          $(element).removeClass('has-error');
+        },
+        submitHandler: function(frm) {
+          event.preventDefault();
+          $.ajax({
+            url: '../../functions/history-handler.php',
+            type: 'POST',
+            data: $('#frmSearch').serialize()
+          }).done(function(data) {
+            $("#data").html(data);
+          });
+        }
+      });
+    }
   </script>
+
+  <div id="common-modal">
+    <?php include '../change.php'; ?>
+  </div>
 
 
 </body>

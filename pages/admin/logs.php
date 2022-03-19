@@ -68,10 +68,10 @@ $infoRef = $database->getReference("Users/" . $uid . "/info");
       <hr class="divider">
       <div class="user-profile">
         <!-- PHP Get from Storage -->
-        <img src="../../assets/logo.png">
+        <img src="../../assets/logo.png" class="admin">
         <!-- PHP Get from RTDB -->
         <span>
-          <?php echo (str_contains($uid, "Uv8vqq4rlrM2ADvfKv6t9KVvndA2")) ? 'Admin Demo' : $infoRef->getChild("addCi")->getValue(); ?>
+          <h3><?php echo $_SESSION['type'] == 'admin' ? 'Admin Module' : $infoRef->getChild("addCi")->getValue(); ?></h3>
         </span>
       </div>
       <hr class="divider">
@@ -129,45 +129,49 @@ $infoRef = $database->getReference("Users/" . $uid . "/info");
       </div>
     </div>
     <div class="Content" style="display: flex; flex-direction: column;">
-      <form id="frmSearch" name="userSearch">
-        <div class="">
-          <div id="error"></div>
-          <br>
-          <div style="float: right; margin-bottom: 1%; text-align: right;" id="search">
-            <input type="search" name="search" id="search" placeholder="Search" required>
-            <style>
-              .has-error,
-              .has-error:focus {
-                border: red 2px solid;
-                outline: none;
-              }
-
-              #error {
-                color: red;
-                /* text-align: right; */
-                float: right;
-              }
-
-              #search button {
-                border: none;
-                cursor: pointer;
-              }
-            </style>
-            <label><button onclick="searchData();"><i class="fa-solid fa-magnifying-glass"></i></button></label>
+      <div style="display:flex; justify-content: space-between; align-items: flex-end;">
+        <button type="button" class="btn-primary" style="margin-bottom: unset;" onclick="openDocument('data/generate-log.php');">Download Report</button>
+        <form id="frmSearch" name="userSearch">
+          <div class="">
+            <div id="error"></div>
             <br>
-            <div id="advancedOptions" class="hide">in
-              <select name="sType" id="sType" disabled required>
-                <option value="" id="sTypeDef" selected disabled>Select Category</option>
-                <option value="category">Catergory</option>
-                <option value="description">Description</option>
-                <option value="ip">IP Address</option>
-              </select>
+            <div style="float: right; margin-bottom: 1%; text-align: right;" id="search">
+              <input type="search" name="search" id="search" placeholder="Search" required>
+              <style>
+                .has-error,
+                .has-error:focus {
+                  border: red 2px solid;
+                  outline: none;
+                }
+
+                #error {
+                  color: red;
+                  /* text-align: right; */
+                  float: right;
+                }
+
+                #search button {
+                  border: none;
+                  cursor: pointer;
+                }
+              </style>
+              <label><button onclick="searchData();"><i class="fa-solid fa-magnifying-glass"></i></button></label>
+              <br>
+              <div id="advancedOptions" class="hide">in
+                <select name="sType" id="sType" disabled required>
+                  <option value="" id="sTypeDef" selected disabled>Select Category</option>
+                  <option value="category">Catergory</option>
+                  <option value="description">Description</option>
+                  <option value="ip">IP Address</option>
+                </select>
+              </div>
+              <label for="advanced">Advanced Search</label>
+              <input type="checkbox" name="advanced" id="advanced" onChange="$('#advancedOptions').toggleClass('hide'); $('#sType').prop('disabled', (i, v) => !v); $('#sTypeDef').prop('selected', (i,v) => v=true);">
             </div>
-            <label for="advanced">Advanced Search</label>
-            <input type="checkbox" name="advanced" id="advanced" onChange="$('#advancedOptions').toggleClass('hide'); $('#sType').prop('disabled', (i, v) => !v); $('#sTypeDef').prop('selected', (i,v) => v=true);">
           </div>
-        </div>
-      </form>
+        </form>
+      </div>
+
       <div id="data">
         <table>
           <tr>
@@ -218,53 +222,53 @@ $infoRef = $database->getReference("Users/" . $uid . "/info");
     loadPage(1);
 
     // Loads data for the page
-function loadPage(page, url) {
-    $.ajax({
+    function loadPage(page, url) {
+      $.ajax({
         url: '../../functions/logs-handler.php',
         type: "POST",
         data: {
-            "page": page
+          "page": page
         }
-    }).done(function (data) {
+      }).done(function(data) {
         $("#data").html(data);
-    });
-}
+      });
+    }
 
-// Searches data in database
-function searchData() {
-    var frm = $('#frmSearch');
-    frm.validate({
+    // Searches data in database
+    function searchData() {
+      var frm = $('#frmSearch');
+      frm.validate({
         rules: {
-            search: "required",
-            sType: "required"
+          search: "required",
+          sType: "required"
         },
         messages: {
-            search: '',
-            sType: ''
+          search: '',
+          sType: ''
         },
         errorLabelContainer: '#error',
-        showErrors: function (errorMap, errorList) {
-            $("#error").html("Please enter required information.");
-            this.defaultShowErrors();
+        showErrors: function(errorMap, errorList) {
+          $("#error").html("Please enter required information.");
+          this.defaultShowErrors();
         },
-        highlight: function (element) {
-            $(element).addClass('has-error');
+        highlight: function(element) {
+          $(element).addClass('has-error');
         },
-        unhighlight: function (element) {
-            $(element).removeClass('has-error');
+        unhighlight: function(element) {
+          $(element).removeClass('has-error');
         },
-        submitHandler: function (frm) {
-            event.preventDefault();
-            $.ajax({
-                url: '../../functions/logs-handler.php',
-                type: 'POST',
-                data: $('#frmSearch').serialize()
-            }).done(function (data) {
-                $("#data").html(data);
-            });
+        submitHandler: function(frm) {
+          event.preventDefault();
+          $.ajax({
+            url: '../../functions/logs-handler.php',
+            type: 'POST',
+            data: $('#frmSearch').serialize()
+          }).done(function(data) {
+            $("#data").html(data);
+          });
         }
-    });
-}
+      });
+    }
   </script>
 
   <div id="appInfo" class="modal" style="max-width: 45vw;">

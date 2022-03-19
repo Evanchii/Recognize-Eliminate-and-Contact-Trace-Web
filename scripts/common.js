@@ -42,15 +42,25 @@ function change() {
           data: frm.serialize(),
           success: function(result){
             // $("#newid").html(result);
+            if(result.includes('Error>'))
+              alert(result);
+            else
+              alert("Password Changed!")
             console.log(result);
+
+            $('#old-pw').val("");
+            $('#new-pw').val("");
+            $('#conf-pw').val("");
+            
+            $('#change-pw .close-modal').click();
           }
         });
 
       } else {
-        // Not same
+        alert("New password isn't the same");
       }
     } else {
-      // Can't be same
+      alert("New and old password can't be the same");
     }
   }
 

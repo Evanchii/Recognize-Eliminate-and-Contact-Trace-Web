@@ -42,9 +42,11 @@ $infoRef = $database->getReference("Users/" . $uid . "/info");
       <img class="text-logo" src="../../assets/text-logo.png" alt="REaCT ">
       <hr class="divider">
       <div class="user-profile">
-        <img src="../../assets/logo.png">
+        <!-- PHP Get from Storage -->
+        <img src="../../assets/logo.png" class="admin">
+        <!-- PHP Get from RTDB -->
         <span>
-          <?php echo (str_contains($uid, "Uv8vqq4rlrM2ADvfKv6t9KVvndA2")) ? 'Admin Demo' : $infoRef->getChild("addCi")->getValue(); ?>
+          <h3><?php echo $_SESSION['type'] == 'admin' ? 'Admin Module' : $infoRef->getChild("addCi")->getValue(); ?></h3>
         </span>
       </div>
       <hr class="divider">

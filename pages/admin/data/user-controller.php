@@ -15,7 +15,6 @@
 }
 
 .modal-body table {
-    table-layout: fixed;
     width: 100%;
 }
 
@@ -24,10 +23,6 @@
     text-align: center;
     background-color: unset;
 }
-
-/* .address-table tr td {
-    background-color: grey;
-} */
 
 .modal-body table {
     margin-bottom: 1em;
@@ -194,7 +189,7 @@ if(isset($_POST['openInfo'])) {
             ';
             if($data['vaccine'] == 'pending' || $data['vaccine']) {
                 echo '<tr>
-                <td>'.str_replace('VacID/', '', $data['vaccID']).'</td>
+                <td>'.str_replace('Vacc/', '', $data['vaccID']).'</td>
                 <td>Vaccination Card</td>
                 <td><button class="btn-primary" onclick="openDocument(\''.$vacc.'\');">
                     Open Photo

@@ -4,27 +4,30 @@ include '../../functions/checkSession.php';
 $uid = $_SESSION["uid"];
 $infoRef = $database->getReference("Users/" . $uid . "/info");
 $appDataRef = $database->getReference("appData/");
+$stats = $database->getReference('Stats/Dagupan City');
+$statsData = $stats->orderByKey()->limitToLast(1)->getSnapshot()->getValue();
+if ($statsData != NULL) {
+    $key = array_keys($statsData)[0];
+} else {
+    $key = 0;
+    $statsData = [
+        0 => [
+            "tActive" => 0,
+            "nCases" => 0,
+            "tDeaths" => 0,
+            "tRecoveries" => 0,
+            "tTested" => 0,
+            "tCases" => 0,
+            "daily" => null
+        ],
+    ];
+}
 
 if (!isset($_SESSION['fName'])) {
     $_SESSION["lName"] = $infoRef->getChild("lName")->getValue();
     $_SESSION["fName"] = $infoRef->getChild("fName")->getValue();
     $_SESSION["mName"] = $infoRef->getChild("mName")->getValue();
 }
-
-
-// Firebase Storage
-// $storage = $firebase->createStorage();
-// $storageClient = $storage->getStorageClient();
-// $defaultBucket = $storage->getBucket();
-
-
-// $expiresAt = new DateTime('tomorrow', new DateTimeZone('Asia/Manila'));
-// echo $expiresAt->getTimestamp();
-
-// $imageReference = $defaultBucket->object($infoRef->getChild("faceID")->getValue());
-// if ($imageReference->exists()) {
-//     $image = $imageReference->signedUrl($expiresAt);
-// }
 ?>
 
 <!DOCTYPE html>
@@ -103,32 +106,42 @@ if (!isset($_SESSION['fName'])) {
         <div class="Content">
             <div class="content-title">
                 <h4>Dagupan City, Pangasinan</h4>
-                <span>Covid-19 Status<br>As of <?php echo $appDataRef->getChild('covStatus/time')->getValue(); ?> | <?php echo $appDataRef->getChild('covStatus/date')->getValue(); ?></span>
+                <span id=datetime>Covid-19 Status<br>As of
+                    <?php
+                    $time = strtotime($statsData[$key]['time']);
+                    $date = strtotime($statsData[$key]['date']);
+                    echo date('h:i a', $time);
+                    ?> | <?php echo date('F j, Y', $date);?>
+                </span>
             </div>
 
             <div class="stats">
-
                 <div class="box">
                     <div class="cases mini-card">
-                        <h3>Total Cases</h3><br><?php echo $appDataRef->getChild('covStatus/cases')->getValue(); ?>
+                        <h3>Total Cases</h3><br>
+                        <div id="tCases"><?php echo $statsData[$key]['tCases']; ?></div>
                     </div>
                     <div class="tested mini-card">
-                        <h3>Total Tested</h3><br><?php echo $appDataRef->getChild('covStatus/tested')->getValue(); ?>
+                        <h3>Total Tested</h3><br>
+                        <div id="tTested"><?php echo $statsData[$key]['tTested']; ?></div>
                     </div>
                     <div class="recoveries mini-card">
-                        <h3>Total Recoveries</h3><br><?php echo $appDataRef->getChild('covStatus/recoveries')->getValue(); ?>
+                        <h3>Total Recoveries</h3><br>
+                        <div id="tRecoveries"><?php echo $statsData[$key]['tRecoveries']; ?></div>
                     </div>
                     <div class="deaths mini-card">
-                        <h3>Total Deaths</h3><br><?php echo $appDataRef->getChild('covStatus/death')->getValue(); ?>
+                        <h3>Total Deaths</h3><br>
+                        <div id="tDeaths"><?php echo $statsData[$key]['tDeaths']; ?></div>
                     </div>
                     <div class="newCases mini-card">
-                        <h3>New Cases</h3><br><?php echo $appDataRef->getChild('covStatus/newCases')->getValue(); ?>
+                        <h3>New Cases</h3><br>
+                        <div id="nCases"><?php echo $statsData[$key]['nCases']; ?></div>
                     </div>
                     <div class="activeCases mini-card">
-                        <h3>Total Active</h3><br><?php echo $appDataRef->getChild('covStatus/active')->getValue(); ?>
+                        <h3>Total Active</h3><br>
+                        <div id="tActive"><?php echo $statsData[$key]['tActive']; ?></div>
                     </div>
                 </div>
-
             </div>
 
             <div class="daily-cases">
@@ -136,7 +149,7 @@ if (!isset($_SESSION['fName'])) {
                 <h2>Daily Cases</h2>
                 <p>
                     <a href="https://www.facebook.com/DagupanPIO">
-                        <img class="right-data" src="<?php echo $appDataRef->getChild('links/daily')->getValue() ?>" alt="No DATA found" onerror="//this.src='img/undefined.jpg'">
+                        <img class="right-data" src="../../assets/inforgraphics/<?php echo $statsData[$key]['daily'] ?>" class="right-data" alt="No DATA found" onerror="this.src='../../assets/nodata/nd_daily.png'">
                     </a>
                 </p>
             </div>
@@ -161,29 +174,8 @@ if (!isset($_SESSION['fName'])) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
     <!-- jQuery Modal -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
-    <!-- JQuery Validate -->
-    <script src="../../node_modules/jquery-validation/dist/jquery.validate.js"></script>
     <!-- Common Scripts -->
     <script src="../../scripts/common.js"></script>
-    
-    <script>
-        $(".notifications .icon_wrap").click(function() {
-            $(this).parent().toggleClass("actived");
-            $(".notification_dd").toggleClass("show");
-        });
-
-        const currentDate = new Date();
-
-        $.ajax({
-            url: "../../functions/notificationHandler.php",
-            type: "POST",
-            data: {
-                "ts": currentDate.getTime() / 1000
-            }
-        }).done(function(data) {
-            $(".notification_ul").html(data);
-        });
-    </script>
 
     <div id="common-modal">
         <?php include '../change.php'; ?>

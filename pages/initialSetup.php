@@ -1,73 +1,21 @@
 <?php
-// include '../includes/dbconfig.php';
 session_start();
-
-// $userSnapshot = $database->getReference('Users')->getSnapshot();
 
 $dbError = false;
 
-if (!(file_exists('../includes/config.json') && file_exists('../includes/database.json'))) {
-} else {
-    try {
-        include '../includes/dbconfig.php';
+try {
+    include '../includes/dbconfig.php';
 
-        $userRef = $database->getReference('Users')->getSnapshot();
-        if ($userRef->hasChildren()) {
-            header('Location: ../');
-        }
-    } catch (Exception $e) {
-        // Database Error
-        echo '<script>Database Error!\n' . $e . '</script>';
-        $dbError = true;
+    $userRef = $database->getReference('Users')->getSnapshot();
+    if ($userRef->hasChildren()) {
+        header('Location: ../');
     }
+} catch (Exception $e) {
+    echo '<script>Database Error!\n' . $e . '</script>';
+    $dbError = true;
 }
 
 if (isset($_POST['submit'])) {
-    if (isset($_FILES['fbKey'])) {
-        $dbJson = $_FILES['fbKey'];
-
-        // File Naming and Pathing
-        $info = pathinfo($dbJson['name']);
-        $filetype = $info['extension']; // get the extension of the file
-        $filepath = '../includes/';
-        if (!file_exists($filepath)) {
-            mkdir($filepath, 0777, true);
-        }
-        $filename = 'database' . $filetype;
-        $temp_name = $dbJson['tmp_name'];
-        $file = $filepath . $filename;
-
-        if (file_exists($file)) {
-            unlink($file);
-        }
-
-        if (move_uploaded_file($temp_name, $file)) {
-            // echo 'OK';
-        }
-    }
-    if (isset($_POST['fbUri'])) {
-        $uri = $_POST['fbUri'];
-        $api = $_POST['kaiAPI'];
-        $id = $_POST['kaiAppId'];
-        $key = $_POST['kaiAppKey'];
-        $confJson = [
-            "firebase-uri" => $uri,
-            "kairos-api" => $api,
-            "kairos-id" => $id,
-            "kairos-key" => $key,
-        ];
-
-        $confName = "../includes/config.json";
-
-        if (!file_exists($confName)) {
-            unlink($confName);
-        }
-
-        $confFile = fopen($confName, "w") or die("Unable to open file!");
-        fwrite($confFile, json_encode($confJson));
-    }
-
-    include '../includes/dbconfig.php';
 
     $userRef = $database->getReference('Users');
     if (!$userRef->getSnapshot()->hasChildren()) {
@@ -117,12 +65,22 @@ if (isset($_POST['submit'])) {
 <html lang="en">
 
 <head>
-    <title>Terms of Service - REaCT</title>
+    <title>Initial Configuration - REaCT</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../styles/public-common.css">
+    <link rel="shortcut icon" href="../assets/favicon.ico" type="image/x-icon">
     <style>
         table {
             table-layout: fixed;
+            width: 100%;
+        }
+
+        td {
+            padding: 0px 1rem;
+        }
+
+        td input {
+            width: 100%;
         }
     </style>
 </head>
@@ -135,47 +93,6 @@ if (isset($_POST['submit'])) {
     <div class="content">
         <h2 class="center">Initial Configuration</h2>
         <form action="initialSetup.php" method="POST" enctype="multipart/form-data">
-            <div class="dropMenu">
-                <div class="menuTitle">
-                    <h3>Database and API Connection</h3>
-                </div>
-                <div class="menuContent">
-                    <table>
-                        <tr>
-                            <td>
-                                <h4>Firebase</h4>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><label for="fbKey">Firebase Private Key (.json)</label></td>
-                            <td><input type="file" name="fbKey" id="fbKey" <?php echo file_exists('../includes/database.json') ? 'disabled' : ''; ?>></td>
-                        </tr>
-                        <tr>
-                            <td><label for="fbUri">Firebase URI</label></td>
-                            <td><input type="text" name="fbUri" id="fbUri" <?php
-                                                                            if (!file_exists('../includes/config.json')) {
-                                                                            } else echo $dbError ? '' : 'disabled';
-                                                                            ?>></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <h4>Kairos</h4>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><label for="kaiAPI">API</label></td>
-                            <td><input type="text" name="kaiAPI" id="kaiAPI" <?php echo file_exists('../includes/config.json') ? 'disabled' : '' ?>></td>
-                            <td><label for="kaiAppId">Application ID</label></td>
-                            <td><input type="text" name="kaiAppId" id="kaiAppId" <?php echo file_exists('../includes/config.json') ? 'disabled' : '' ?>></td>
-
-                        </tr>
-                        <tr>
-                            <td><label for="kaiAppKey">Application Key</label></td>
-                            <td><input type="text" name="kaiAppKey" id="kaiAppKey" <?php echo file_exists('../includes/config.json') ? 'disabled' : '' ?>></td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
             <div class="dropMenu">
                 <div class="menuTitle">
                     <h3>Admin Account</h3>

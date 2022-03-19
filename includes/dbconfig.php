@@ -26,7 +26,7 @@ if (file_exists(__DIR__ . '/config.json') && file_exists(__DIR__ . '/database.js
         if (strpos($url, 'initialSetup.php') !== false) {
         } else {
             echo '<script>
-                window.location.href = "' . 'https://' . $_SERVER['SERVER_NAME'] . '/pages/initialSetup.php";
+                window.location.href = "' . 'https://' . $_SERVER['SERVER_NAME'] . '/REaCT-Web/pages/initialSetup.php";
                 </script>';
         }
     }
@@ -37,7 +37,7 @@ if (file_exists(__DIR__ . '/config.json') && file_exists(__DIR__ . '/database.js
     if (strpos($url, 'initialSetup.php') !== false) {
     } else {
         echo '<script>
-            window.location.href = "' . 'https://' . $_SERVER['SERVER_NAME'] . '/pages/initialSetup.php";
+            window.location.href = "' . 'https://' . $_SERVER['SERVER_NAME'] . '/REaCT-Web/pages/initialSetup.php";
             </script>';
         die();
     }

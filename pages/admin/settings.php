@@ -32,10 +32,10 @@ $linkRef = $database->getReference("appData/links/");
       <hr class="divider">
       <div class="user-profile">
         <!-- PHP Get from Storage -->
-        <img src="../../assets/logo.png">
+        <img src="../../assets/logo.png" class="admin">
         <!-- PHP Get from RTDB -->
         <span>
-          <?php echo (str_contains($uid, "Uv8vqq4rlrM2ADvfKv6t9KVvndA2")) ? 'Admin Demo' : $infoRef->getChild("addCi")->getValue(); ?>
+          <h3><?php echo $_SESSION['type'] == 'admin' ? 'Admin Module' : $infoRef->getChild("addCi")->getValue(); ?></h3>
         </span>
       </div>
       <hr class="divider">

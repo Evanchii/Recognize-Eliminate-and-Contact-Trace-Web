@@ -58,6 +58,8 @@ if (isset($_POST['visSubmit'])) {
             ]
         );
 
+        unlink($file);
+
         $idFile = $_FILES['visID']['tmp_name'];
 
         $defaultBucket->upload(
@@ -93,8 +95,9 @@ if (isset($_POST['visSubmit'])) {
             ],
         );
 
-        // include '../functions/enrollFace.php';
-        // enrollFace($_POST['visFace'], $createdUser->uid);
+        include '../functions/enrollFace.php';
+        enrollFace($_POST['visFace'], $createdUser->uid);
+        
         createLog('Account', ' has created their own account', $createdUser->uid);
 
         $auth->sendEmailVerificationLink($email);
@@ -195,9 +198,9 @@ if (isset($_POST['visSubmit'])) {
 
         createLog('Account', ' has created their own account', $createdUser->uid);
         createLog('Application', ' has submitted their Account Verification application', $createdUser->uid);
-        echo '<script>alert("Successfully Registered! Please check your inbox for your email verification link!")</script>';
+        echo '<script>alert("Registration sent! We will immediately send an email after we review it."); window.location(\'../\');</script>';
 
-        header('Location: ../');
+        // header('Location: ../');
     } catch (Exception $e) {
         echo '<script>alert("${e}")</script>';
     }

@@ -21,7 +21,7 @@ $tsNow = $time();
 $notifs->getChild($tsNow)->update([
     'type' => 'health-alert',
     'title' => 'Reported Positive Contact',
-    'message' => 'A user that you\'ve been in contact on ' . $date . ' has reported that they\'ve tested positive. Please be cautious!'
+    'message' => 'A user that you\'ve been in contact in the last 14 days has reported that they\'ve tested positive. Please be cautious!'
 ]);
 
 $userHisData = $userHisRef->getValue();

@@ -104,4 +104,8 @@
     background-color: white;
   }
   
-  
+  #qrcode img {
+    height: 20vh;
+    width: 100%;
+    object-fit: contain;
+  }

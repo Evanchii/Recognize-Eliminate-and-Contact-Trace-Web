@@ -8,7 +8,10 @@ session_start();
 
 if (isset($_SESSION['uid'])) {
     if ($_SESSION['type'] == "visitor") {
-        header('Location: pages/visitor/dashboard.php');
+        if ($database->getReference("Users/" . $_SESSION['uid'] . "/info/faceID")->getSnapshot()->exists())
+            header('Location: pages/visitor/dashboard.php');
+        else
+            header('Location: pages/regFace.php');
     } elseif ($_SESSION['type'] == "establishment") {
         header('Location: pages/establishment/dashboard.php');
     } else {
@@ -41,7 +44,10 @@ if (isset($_POST['inSubmit'])) {
             $_SESSION['type'] = $type;
 
             if ($_SESSION['type'] == "visitor") {
-                header('Location: pages/visitor/dashboard.php');
+                if ($database->getReference("Users/" . $_SESSION['uid'] . "/info/faceID")->getSnapshot()->exists())
+                    header('Location: pages/visitor/dashboard.php');
+                else
+                    header('Location: pages/regFace.php');
             } elseif ($_SESSION['type'] == "establishment") {
                 header('Location: pages/establishment/dashboard.php');
             } else {

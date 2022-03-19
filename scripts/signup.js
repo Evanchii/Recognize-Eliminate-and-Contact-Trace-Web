@@ -173,6 +173,7 @@ function verifyFace() {
             // success: function(data) {},
             // error: function(data) {}
         }).done(function (data) {
+            console.log(data);
             $('#loading').modal('hide');
             $('#feedback').modal('show');
             $('#feedback-container').html(data);
@@ -184,6 +185,8 @@ function verifyFace() {
                 if (confirm('A match has been found with a confidence level of 75% and above. Do you still wish to proceed with the registration?\n\nPlease be aware that registering multiple accounts is against the system\'s terms of service.')) {
                     changeForm(event, 'visId', 'visFace');
                 }
+            } else {
+                changeForm(event, 'visId', 'visFace');
             }
         });
     }

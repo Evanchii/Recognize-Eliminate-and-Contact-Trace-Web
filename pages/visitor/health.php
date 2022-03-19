@@ -168,6 +168,7 @@ $status = $infoRef->getChild("status")->getValue();
           <span class="dropdown"><i class="fa fa-user-circle dropbtn" aria-hidden="true"></i>My Account
             <div class="dropdown-content">
               <a href="profile.php"><i class="fa fa-user-circle" aria-hidden="true"></i>Profile</a>
+              <a onclick="$('#change-pw').modal('show');"><i class="fa-solid fa-key" aria-hidden="true"></i>Change Password</a>
               <a href="../logout.php"><i class="fas fa-sign-out" aria-hidden="true"></i>Log out</a>
             </div>
           </span>
@@ -284,26 +285,12 @@ $status = $infoRef->getChild("status")->getValue();
   <!-- jQuery Modal -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
   <!-- QR Code -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script> -->
+  <script src="../../node_modules/classyqr/jquery.classyqr.js"></script>
+  <!-- Common Scripts -->
+  <script src="../../scripts/common.js"></script>
 
   <script>
-    $(".notifications .icon_wrap").click(function() {
-      $(this).parent().toggleClass("actived");
-      $(".notification_dd").toggleClass("show");
-    });
-
-    const currentDate = new Date();
-
-    $.ajax({
-      url: "../../functions/notificationHandler.php",
-      type: "POST",
-      data: {
-        "ts": currentDate.getTime() / 1000
-      }
-    }).done(function(data) {
-      $(".notification_ul").html(data);
-    });
-
     function changeStatus(id) {
       var button = $('#' + id);
       if (!button.hasClass('selected')) {
@@ -329,27 +316,75 @@ $status = $infoRef->getChild("status")->getValue();
       $('#confVacc').modal('show');
     }
 
-    const makeQR = (uid) => {
-      var qrcode = new QRCode(document.getElementById("qrcode"), {
-        text: "http://jindo.dev.naver.com/collie",
-        width: 128,
-        height: 128,
-        colorDark: "#000000",
-        colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.H
+    const toDataURL = url => fetch(url)
+      .then(response => response.blob())
+      .then(blob => new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onloadend = () => resolve(reader.result)
+        reader.onerror = reject
+        reader.readAsDataURL(blob)
+      }))
+
+    function makeQR(uid) {
+      $("#qrcode").ClassyQR({
+        create: true,
+        size: 500,
+        type: 'text',
+        text: uid
       });
-      qrcode.makeCode(uid);
       $('#qrmodal').modal('show');
 
       setTimeout(() => {
         let qelem = document.querySelector('#qrcode img');
         let dlink = document.createElement('a');
-        let qr = qelem.getAttribute('src');
-        dlink.setAttribute('href', qr);
+        toDataURL(qelem.src).then(function(result) {
+          let qr = result;
+          dlink.setAttribute('href', qr);
+          // dlink.setAttribute('target', '_blank');
         dlink.setAttribute('download', 'REaCT-QR_<?php echo $_SESSION['lName']; ?>.png');
         dlink.click();
+        });
+
+        // console.log(qelem);
+
+        // var img = qelem.files[0];
+
+        // var reader = new FileReader();
+
+        // reader.onloadend = function() {
+        //   dlink.attr("href", reader.result);
+        //   dlink.text(reader.result);
+        //   dlink.attr("src", reader.result);
+        // }
+        // reader.readAsDataURL(img);
+        // dlink.setAttribute('target', '_blank');
+        // dlink.setAttribute('download', 'REaCT-QR_<?php echo $_SESSION['lName']; ?>.png');
+        // dlink.click();
       }, 500);
     }
+
+    // const makeQR = (uid) => {
+    //   $('#qrcode').empty();
+    //   var qrcode = new QRCode(document.getElementById("qrcode"), {
+    //     text: uid,
+    //     width: 500,
+    //     height: 500,
+    //     colorDark: "#000000",
+    //     colorLight: "#ffffff",
+    //     correctLevel: QRCode.CorrectLevel.M
+    //   });
+    //   qrcode.makeCode(uid);
+    //   $('#qrmodal').modal('show');
+
+    //   setTimeout(() => {
+    //     let qelem = document.querySelector('#qrcode img');
+    //     let dlink = document.createElement('a');
+    //     let qr = qelem.getAttribute('src');
+    //     dlink.setAttribute('href', qr);
+    //     dlink.setAttribute('download', 'REaCT-QR_<?php echo $_SESSION['lName']; ?>.png');
+    //     dlink.click();
+    //   }, 500);
+    // }
   </script>
 
   <div id="confVacc" class="modal">
@@ -435,6 +470,10 @@ $status = $infoRef->getChild("status")->getValue();
         <input type="hidden" name="action" id="action">
       </form>
     </div>
+  </div>
+
+  <div id="common-modal">
+    <?php include '../change.php'; ?>
   </div>
 </body>
 

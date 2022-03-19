@@ -57,7 +57,9 @@ if (!function_exists('createLog')) {
                 'ip' => $_SERVER['REMOTE_ADDR'],
             ]
         ]);
-        unset($_SESSION['uid']);
+
+        if(!isset($_SESSION['token']))
+            unset($_SESSION['uid']);
     }
 }
 

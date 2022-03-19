@@ -1,104 +1,59 @@
-<!-- <php
+<?php
 include '../../functions/checkSession.php';
 $auth = $firebase->createAuth();
 
 $uid = $_SESSION["uid"];
 
 $infoRef = $database->getReference("Users/" . $uid . "/info");
-$linkRef = $database->getReference("appData/links/");
 
-if (!isset($_SESSION['fName'])) {
-  $_SESSION["lName"] = $infoRef->getChild("lName")->getValue();
-  $_SESSION["fName"] = $infoRef->getChild("fName")->getValue();
-  $_SESSION["mName"] = $infoRef->getChild("mName")->getValue();
+if (!isset($_SESSION['name'])) {
+  $_SESSION["name"] = $infoRef->getChild("name")->getValue();
+  $_SESSION["branch"] = $infoRef->getChild("branch")->getValue();
 }
 
 if (isset($_POST['submit'])) {
-  $photo = $_POST['updateFace'];
-  $cno = $_POST['contact-num'];
-  $dob = $_POST['birthday'];
-  $addNo = $_POST['house-num'];
-  $addBa = $_POST['barangay'];
-  $addCi = $_POST['city'];
-  $addPro = $_POST['province'];
-  $addCo = $_POST['country'];
-  $addZip = $_POST['zip-code'];
-
-  if ($photo != '') {
-    $folderPath = "Face/";
-
-    $image_parts = explode(";base64,", $photo);
-    // $image_type_aux = explode("image/", $image_parts[0]);
-    // $image_type = $image_type_aux[1];
-
-    $image_base64 = base64_decode($image_parts[1]);
-    $fileName = $uid . '.png'; //INSERT UID HERE
-
-    $file = $folderPath . $fileName;
-    file_put_contents($file, $image_base64);
-
-    // print_r($fileName);
-
-    $storage = $firebase->createStorage();
-    $storageClient = $storage->getStorageClient();
-    $defaultBucket = $storage->getBucket();
-
-    $imageReference = $defaultBucket->object($infoRef->getChild("faceID")->getValue());
-    if ($imageReference->exists()) {
-      $imageReference->delete();
-    }
-
-    $defaultBucket->upload(
-      file_get_contents($file),
-      [
-        'name' => $file
-      ]
-    );
-  }
+  $addNo = $_POST['addNo'];
+  $addBa = $_POST['addBa'];
+  $addCi = $_POST['addCi'];
+  $addPro = $_POST['addPro'];
+  $addCo = $_POST['addCo'];
+  $addZip = $_POST['addZip'];
+  $cno = $_POST['cNo'];
+  $fName = $_POST['fName'];
+  $mName = $_POST['mName'];
+  $lName = $_POST['lName'];
+  $pos = $_POST['pos'];
 
   $updates = [
-    "cNo" => $cno,
-    "DoB" => $dob,
     "addNo" => $addNo,
     "addBa" => $addBa,
     "addCi" => $addCi,
     "addPro" => $addPro,
     "addCo" => $addCo,
     "addZip" => $addZip,
-];
-if (isset($fileName) && $fileName != '') {
-  $updates["faceID"] = $fileName;
-}
+    "cNo" => $cno,
+    "fName" => $fName,
+    "mName" => $mName,
+    "lName" => $lName,
+    "pos" => $pos,
+  ];
 
-
-$infoRef // this is the root reference
-   ->update($updates);
+  $infoRef // this is the root reference
+    ->update($updates);
 } else {
-  $cno = $infoRef->getChild("cNo")->getValue();
-  $dob = $infoRef->getChild("DoB")->getValue();
   $addNo = $infoRef->getChild("addNo")->getValue();
   $addBa = $infoRef->getChild("addBa")->getValue();
   $addCi = $infoRef->getChild("addCi")->getValue();
   $addPro = $infoRef->getChild("addPro")->getValue();
   $addCo = $infoRef->getChild("addCo")->getValue();
   $addZip = $infoRef->getChild("addZip")->getValue();
+  $cno = $infoRef->getChild("cNo")->getValue();
+  $fName = $infoRef->getChild("fName")->getValue();
+  $mName = $infoRef->getChild("mName")->getValue();
+  $lName = $infoRef->getChild("lName")->getValue();
+  $pos = $infoRef->getChild("pos")->getValue();
 }
-
-
-// Firebase Storage
-$storage = $firebase->createStorage();
-$storageClient = $storage->getStorageClient();
-$defaultBucket = $storage->getBucket();
-
-
-$expiresAt = new DateTime('tomorrow', new DateTimeZone('Asia/Manila'));
-// echo $expiresAt->getTimestamp();
-
-$imageReference = $defaultBucket->object($infoRef->getChild("faceID")->getValue());
-if ($imageReference->exists()) {
-  $image = $imageReference->signedUrl($expiresAt);
-}
-?> -->
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -112,6 +67,30 @@ if ($imageReference->exists()) {
   <link rel="stylesheet" type="text/css" href="../../styles/profile.css">
   <link rel="shortcut icon" href="../../assets/favicon.ico" type="image/x-icon">
   <title>Profile | REaCT</title>
+  <style>
+    table {
+      table-layout: fixed;
+    }
+
+    th {
+      margin-left: 20px;
+    }
+
+    td:nth-child(odd) {
+      padding: 0px 30px;
+    }
+
+    .modal {
+      max-width: 500px !important;
+    }
+
+    .modal input {
+      padding: unset;
+      margin: unset;
+      width: 60%;
+      margin-right: unset;
+    }
+  </style>
 </head>
 
 <body>
@@ -121,18 +100,16 @@ if ($imageReference->exists()) {
       <img class="text-logo" src="../../assets/text-logo.png" alt="REaCT ">
       <hr class="divider">
       <div class="user-profile">
-        <!-- PHP Get from Storage -->
         <i class="fa-solid fa-city"></i>
         <!-- PHP Get from RTDB -->
-        <span>
-          <?php echo $_SESSION['lName'] . ', ' . $_SESSION['fName'] . ' ' . $_SESSION['mName'] ?>
-        </span>
+        <h2><?php echo $_SESSION['name']; ?></h2>
+        <h3><?php echo $_SESSION['branch']; ?></h3>
       </div>
       <hr class="divider">
       <a href="dashboard.php"><i class="fa fa-th-large" aria-hidden="true"></i>Dashboard</a>
       <a href="cases.php"><i class="fa fa-line-chart" aria-hidden="true"></i>Covid Cases</a>
-      <!-- <a href="health.php"><i class="fa fa-heartbeat" aria-hidden="true"></i>Health Status</a> -->
-      <a href="history.php"><i class="fa fa-lightbulb-o" aria-hidden="true"></i>Location History</a>
+      <a href="history.php"><i class="fa fa-lightbulb-o" aria-hidden="true"></i>Visitor History</a>
+      <a href="accounts.php"><i class="fa fa-users" aria-hidden="true"></i>Accounts</a>
       <div class="settings">
         <a href="settings.php"><i class="fa fa-cog" aria-hidden="true"></i>Setttings</a>
       </div>
@@ -174,9 +151,9 @@ if ($imageReference->exists()) {
         </div>
       </div>
     </div>
-    <div class="Content">
+    <div class="Content" style="display: block;">
 
-      <div class="profile">
+      <!-- <div class="profile">
         <h3>Update Facial Information</h3><br>
         <a href="#modalFace" onclick="initCamera();" rel="modal:open" id="retry-button">
           <img src="../../assets/ic_upload.png" id="imgFace" alt="Avatar" class="avatar">
@@ -191,7 +168,7 @@ if ($imageReference->exists()) {
         <hr>
         </hr>
         <span><?php echo $auth->getUser($uid)->__get('email'); ?></span>
-      </div>
+      </div> -->
 
       <div class="profile-data">
 
@@ -202,60 +179,53 @@ if ($imageReference->exists()) {
           <input type="hidden" name="updateFace" id="updateFace">
           <table>
             <tr>
-              <th>First Name:</th>
-              <td><input type="text" name="fname" value="<?php echo $_SESSION['fName']; ?>" id="fname" disabled /></td>
+              <td>Establishment Name:</td>
+              <td><input type="text" value="<?php echo $_SESSION['name']; ?>" required disabled></td>
+              <td>Branch:</td>
+              <td><input type="text" value="<?php echo $_SESSION['branch']; ?>" required disabled></td>
             </tr>
-
             <tr>
-              <th>Middle Name:</th>
-              <td><input type="text" name="mname" value="<?php echo $_SESSION['mName']; ?>" id="mname" disabled /></td>
+              <th colspan="4">Current Address</th>
             </tr>
-
             <tr>
-              <th>Last Name:</th>
-              <td><input type="text" name="lname" value="<?php echo $_SESSION['lName']; ?>" id="lname" disabled /></td>
+              <td>Establishment Number/Street</td>
+              <td><input type="text" name="addNo" value="<?php echo $addNo; ?>" required></td>
+              <td>Barangay</td>
+              <td><input type="text" name="addBa" value="<?php echo $addBa; ?>" required></td>
             </tr>
-
             <tr>
-              <th>Contact Number:</th>
-              <td><input type="tel" name="contact-num" value="<?php echo $cno; ?>" id="contact-num" /></td>
+              <td>City</td>
+              <td><input type="text" name="addCi" value="<?php echo $addCi; ?>" required></td>
+              <td>Province</td>
+              <td><input type="text" name="addPro" value="<?php echo $addPro; ?>" required></td>
             </tr>
-
             <tr>
-              <th>Date of Birth:</th>
-              <td><input type="date" value="<?php echo $dob; ?>" name="birthday" id="birthday"></td>
+              <td>Country</td>
+              <td><input type="text" name="addCo" value="<?php echo $addCo; ?>" required></td>
+              <td>Zipcode</td>
+              <td><input type="number" name="addZip" value="<?php echo $addZip; ?>" required></td>
             </tr>
-          </table>
-          <h1 style="text-align: center;">CURRENT ADDRESS</h1>
-          <table>
+            <th colspan="4">Contact Details</th>
             <tr>
-              <th>House Number &<br>Street Address:</th>
-              <td><input type="text" name="house-num" value="<?php echo $addNo; ?>" id="house-num" /></td>
+              <td>Contact/Telephone Number</td>
+              <td><input type="tel" name="cNo" value="<?php echo $cno; ?>" required></td>
+              <td>Email Address</td>
+              <td><input type="email" value="<?php echo $auth->getUser($uid)->__get('email'); ?>" required disabled></td>
             </tr>
-
             <tr>
-              <th>Barangay:</th>
-              <td><input type="text" name="barangay" value="<?php echo $addBa; ?>" id="barangay" /></td>
+              <th colspan="4">Account Holder's Information</th>
             </tr>
-
             <tr>
-              <th>City/Municipality:</th>
-              <td><input type="text" name="city" value="<?php echo $addCi; ?>" id="city" /></td>
+              <td>First Name</td>
+              <td><input type="text" name="fName" value="<?php echo $fName; ?>" required></td>
+              <td>Middle Name</td>
+              <td><input type="text" name="mName" value="<?php echo $mName; ?>" required></td>
             </tr>
-
             <tr>
-              <th>Province:</th>
-              <td><input type="text" name="province" value="<?php echo $addPro; ?>" id="province" /></td>
-            </tr>
-
-            <tr>
-              <th>Country:</th>
-              <td><input type="text" name="country" value="<?php echo $addCo; ?>" id="country" /></td>
-            </tr>
-
-            <tr>
-              <th>Zip Code:</th>
-              <td><input type="number" name="zip-code" value="<?php echo $addZip; ?>" id="zip-code" /></td>
+              <td>Last Name</td>
+              <td><input type="text" name="lName" value="<?php echo $lName; ?>" required></td>
+              <td>Position</td>
+              <td><input type="text" name="pos" value="<?php echo $pos; ?>" required></td>
             </tr>
 
           </table>
