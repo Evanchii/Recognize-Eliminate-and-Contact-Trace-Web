@@ -29,7 +29,7 @@ if (isset($_POST['submit'])) {
         // File Naming and Pathing
         $info = pathinfo($img['name']);
         $filetype = $info['extension']; // get the extension of the file
-        $filepath = '../../assets/inforgraphics/' . $infoRef->getChild('addCi')->getValue() . "/";
+        $filepath = '../../assets/infographics/' . $infoRef->getChild('addCi')->getValue() . "/";
         if (!file_exists($filepath)) {
             mkdir($filepath, 0777, true);
         }
@@ -53,7 +53,7 @@ if (isset($_POST['submit'])) {
         // File Naming and Pathing
         $info = pathinfo($img['name']);
         $filetype = $info['extension']; // get the extension of the file
-        $filepath = '../../assets/inforgraphics/' . $infoRef->getChild('addCi')->getValue() . "/";
+        $filepath = '../../assets/infographics/' . $infoRef->getChild('addCi')->getValue() . "/";
         if (!file_exists($filepath)) {
             mkdir($filepath, 0777, true);
         }
@@ -77,7 +77,7 @@ if (isset($_POST['submit'])) {
         // File Naming and Pathing
         $info = pathinfo($img['situationer']);
         $filetype = $info['extension']; // get the extension of the file
-        $filepath = '../../assets/inforgraphics/' . $infoRef->getChild('addCi')->getValue() . "/";
+        $filepath = '../../assets/infographics/' . $infoRef->getChild('addCi')->getValue() . "/";
         if (!file_exists($filepath)) {
             mkdir($filepath, 0777, true);
         }

@@ -3,8 +3,7 @@ include '../../functions/checkSession.php';
 
 $uid = $_SESSION["uid"];
 $infoRef = $database->getReference("Users/" . $uid . "/info");
-$appDataRef = $database->getReference("appData/");
-$stats = $database->getReference('Stats/' . $infoRef->getChild('addCi')->getValue());
+$stats = $database->getReference('Stats');
 $statsData = $stats->orderByKey()->limitToLast(1)->getSnapshot()->getValue();
 if ($statsData != NULL) {
     $key = array_keys($statsData)[0];
@@ -49,7 +48,7 @@ if (isset($_POST['submit'])) {
         // File Naming and Pathing
         $info = pathinfo($img['name']);
         $filetype = $info['extension']; // get the extension of the file
-        $filepath = '../../assets/inforgraphics/' . $infoRef->getChild('addCi')->getValue() . "/";
+        $filepath = '../../assets/infographics/';
         if (!file_exists($filepath)) {
             mkdir($filepath, 0777, true);
         }
@@ -60,11 +59,17 @@ if (isset($_POST['submit'])) {
         if (file_exists($file)) {
             unlink($file);
             // file_put_contents($file, $testecho);
-            $daily = $infoRef->getChild('addCi')->getValue() . "/" . $filename;
+            $daily = $filename;
         }
 
         if (move_uploaded_file($temp_name, $file)) {
-            // echo 'OK';
+            $defaultBucket->upload(
+                file_get_contents($file),
+                [
+                    'name' => 'Infographics/'.$filename
+                ]
+            );
+            $daily = $filename;
         }
     }
     if ($_FILES['brgy']['name'] != '') {
@@ -73,7 +78,7 @@ if (isset($_POST['submit'])) {
         // File Naming and Pathing
         $info = pathinfo($img['name']);
         $filetype = $info['extension']; // get the extension of the file
-        $filepath = '../../assets/inforgraphics/' . $infoRef->getChild('addCi')->getValue() . "/";
+        $filepath = '../../assets/infographics/';
         if (!file_exists($filepath)) {
             mkdir($filepath, 0777, true);
         }
@@ -84,11 +89,17 @@ if (isset($_POST['submit'])) {
         if (file_exists($file)) {
             unlink($file);
             // file_put_contents($file, $testecho);
-            $brgy = $infoRef->getChild('addCi')->getValue() . "/" . $filename;
+            $brgy = $filename;
         }
 
         if (move_uploaded_file($temp_name, $file)) {
-            // echo 'OK';
+            $defaultBucket->upload(
+                file_get_contents($file),
+                [
+                    'name' => 'Infographics/'.$filename
+                ]
+            );
+            $brgy = $filename;
         }
     }
     if ($_FILES['situationer']['name'] != '') {
@@ -97,7 +108,7 @@ if (isset($_POST['submit'])) {
         // File Naming and Pathing
         $info = pathinfo($img['name']);
         $filetype = $info['extension']; // get the extension of the file
-        $filepath = '../../assets/inforgraphics/' . $infoRef->getChild('addCi')->getValue() . "/";
+        $filepath = '../../assets/infographics/';
         if (!file_exists($filepath)) {
             mkdir($filepath, 0777, true);
         }
@@ -111,8 +122,13 @@ if (isset($_POST['submit'])) {
         }
 
         if (move_uploaded_file($temp_name, $file)) {
-            // echo 'OK';
-            $situationer = $infoRef->getChild('addCi')->getValue() . "/" . $filename;
+            $defaultBucket->upload(
+                file_get_contents($file),
+                [
+                    'name' => 'Infographics/'.$filename
+                ]
+            );
+            $situationer = $filename;
         }
     }
 
@@ -229,7 +245,13 @@ if (isset($_POST['submit'])) {
             <div class="Content">
                 <div class="content-title">
                     <h4>Dagupan City, Pangasinan</h4>
-                    <span id=datetime>Covid-19 Status<br>As of <?php echo $statsData[$key]['time']; ?> | <?php echo $statsData[$key]['date']; ?></span>
+                    <span id=datetime>Covid-19 Status<br>As of
+                        <?php
+                        $time = strtotime($statsData[$key]['time']);
+                        $date = strtotime($statsData[$key]['date']);
+                        echo date('h:i a', $time);
+                        ?> | <?php echo date('F j, Y', $date); ?>
+                    </span>
                 </div>
                 <div class="stats">
                     <div class="box">
@@ -263,7 +285,7 @@ if (isset($_POST['submit'])) {
                     <h2>Daily Cases</h2>
                     <p>
                         <a href="https://www.facebook.com/DagupanPIO">
-                            <img class="right-data" src="../../assets/inforgraphics/<?php echo $statsData[$key]['daily'] ?>" class="right-data" alt="No DATA found" onerror="this.src='../../assets/nodata/nd_daily.png'">
+                            <img class="right-data" src="../../assets/infographics/<?php echo $statsData[$key]['daily'] ?>" class="right-data" alt="No DATA found" onerror="this.src='../../assets/nodata/nd_daily.png'">
                         </a>
                     </p>
                     <button id="update">Update</button>

@@ -43,16 +43,26 @@ if (isset($_POST['inSubmit'])) {
             $_SESSION['token'] = $token;
             $_SESSION['type'] = $type;
 
-            if ($_SESSION['type'] == "visitor") {
-                if ($database->getReference("Users/" . $_SESSION['uid'] . "/info/faceID")->getSnapshot()->exists())
-                    header('Location: pages/visitor/dashboard.php');
-                else
-                    header('Location: pages/regFace.php');
-            } elseif ($_SESSION['type'] == "establishment") {
-                header('Location: pages/establishment/dashboard.php');
+            if ($auth->getUser($uid)->__get('emailVerified')) {
+                if (!$auth->getUser($uid)->__get('disabled')) {
+                    if ($_SESSION['type'] == "visitor") {
+                        if ($database->getReference("Users/" . $_SESSION['uid'] . "/info/faceID")->getSnapshot()->exists())
+                            header('Location: pages/visitor/dashboard.php');
+                        else
+                            header('Location: pages/regFace.php');
+                    } elseif ($_SESSION['type'] == "establishment") {
+                        header('Location: pages/establishment/dashboard.php');
+                    } else {
+                        header('Location: pages/admin/dashboard.php');
+                    }
+                } else {
+                    echo '<script>alert("Account is disabled! Please contact your administrator."); window.location.href = "pages/logout.php";</script>';
+                }
             } else {
-                header('Location: pages/admin/dashboard.php');
+                echo '<script>alert("We sent you an email\nPlease check your inbox/spam to confirm your email address"); window.location.href = "pages/logout.php";</script>';
+                $auth->sendEmailVerificationLink($email);
             }
+
             exit();
         } catch (InvalidToken $e) {
             echo '<script>alert("The token is invalid!")</script>';

@@ -102,7 +102,7 @@ if (isset($_POST['visSubmit'])) {
 
         $auth->sendEmailVerificationLink($email);
 
-        echo '<script>alert("Successfully Registered! Please check your inbox for your email verification link!")</script>';
+        echo '<script>alert("Successfully Registered! Please check your inbox for your email verification link!");  window.location = \'../\';</script></script>';
 
         // header('Location: ../');
     } catch (Exception $e) {
@@ -195,10 +195,11 @@ if (isset($_POST['visSubmit'])) {
         ]);
 
         $auth->sendEmailVerificationLink($email);
-
+        $auth->disableUser($createdUser->uid);
+        
         createLog('Account', ' has created their own account', $createdUser->uid);
         createLog('Application', ' has submitted their Account Verification application', $createdUser->uid);
-        echo '<script>alert("Registration sent! We will immediately send an email after we review it."); window.location(\'../\');</script>';
+        echo '<script>alert("Registration sent! We will immediately send an email after we review it."); window.location = \'../\';</script>';
 
         // header('Location: ../');
     } catch (Exception $e) {
@@ -220,7 +221,7 @@ if (isset($_POST['visSubmit'])) {
 
 <body>
     <header>
-        <img src="../assets/text-logo.png" alt="REaCT">
+        <a href="../"><img src="../assets/text-logo.png" alt="REaCT"></a>
         <h2>Sign up</h2>
     </header>
     <div class="content">

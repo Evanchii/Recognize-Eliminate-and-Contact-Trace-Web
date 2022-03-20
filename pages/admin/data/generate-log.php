@@ -52,10 +52,6 @@ $end = (isset($_GET['start'])) ? $_GET['start'] : array_keys($logRef->orderByKey
             width: 20ch;
         }
 
-        table {
-            /* table-layout: fixed; */
-        }
-
         @media print {
             .tr {
                 page-break-inside: avoid;

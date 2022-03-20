@@ -3,8 +3,7 @@ include '../../functions/checkSession.php';
 
 $uid = $_SESSION["uid"];
 $infoRef = $database->getReference("Users/" . $uid . "/info");
-$appDataRef = $database->getReference("appData/");
-$stats = $database->getReference('Stats/Dagupan City');
+$stats = $database->getReference('Stats');
 $statsData = $stats->orderByKey()->limitToLast(1)->getSnapshot()->getValue();
 if ($statsData != NULL) {
     $key = array_keys($statsData)[0];
@@ -165,7 +164,7 @@ if ($imageReference->exists()) {
                 <h2>Daily Cases</h2>
                 <p>
                     <a href="https://www.facebook.com/DagupanPIO">
-                        <img class="right-data" src="../../assets/inforgraphics/<?php echo $statsData[$key]['daily'] ?>" class="right-data" alt="No DATA found" onerror="this.src='../../assets/nodata/nd_daily.png'">
+                        <img class="right-data" src="../../assets/infographics/<?php echo $statsData[$key]['daily'] ?>" class="right-data" alt="No DATA found" onerror="this.src='../../assets/nodata/nd_daily.png'">
                     </a>
                 </p>
             </div>

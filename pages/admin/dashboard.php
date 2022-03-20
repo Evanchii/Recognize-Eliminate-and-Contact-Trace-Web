@@ -3,9 +3,8 @@ include '../../functions/checkSession.php';
 
 $uid = $_SESSION["uid"];
 $infoRef = $database->getReference("Users/" . $uid . "/info");
-$linkRef = $database->getReference("appData/links/");
 
-$stats = $database->getReference('Stats/' . $infoRef->getChild('addCi')->getValue());
+$stats = $database->getReference('Stats');
 $statsData = $stats->orderByKey()->limitToLast(7)->getSnapshot()->getValue();
 if ($statsData != NULL) {
   $keys = array_keys($statsData);

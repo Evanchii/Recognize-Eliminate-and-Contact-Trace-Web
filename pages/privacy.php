@@ -4,58 +4,58 @@
     <title>Privacy Policy - REaCT</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Asap:wght@400;500&family=Quicksand:wght@400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Asap:wght@400;500&family=Quicksand:wght@400;500&display=swap');
 
-    *,
-    *:before,
-    *:after {
-        font-family: 'Asap', sans-serif;
-        font-family: 'Quicksand', sans-serif;
-        text-decoration: none;
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        -moz-box-sizing: border-box;
-    }
+        *,
+        *:before,
+        *:after {
+            font-family: 'Asap', sans-serif;
+            font-family: 'Quicksand', sans-serif;
+            text-decoration: none;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+        }
 
-    body {
-        background-image: radial-gradient(#b5b5b5 10%, transparent 0%);
-        background-color: #e0e0e0;
-        background-position: 0 0, 50px 50px;
-        background-size: 20px 20px;
-        line-height: 200%;
-    }
+        body {
+            background-image: radial-gradient(#b5b5b5 10%, transparent 0%);
+            background-color: #e0e0e0;
+            background-position: 0 0, 50px 50px;
+            background-size: 20px 20px;
+            line-height: 200%;
+        }
 
-    header {
-        color: white;
-        display: flex;
-        justify-content: space-between;
-        background: #0C112D;
-        padding: 0.5% 2%;
-        align-items: center;
-    }
+        header {
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            background: #0C112D;
+            padding: 0.5% 2%;
+            align-items: center;
+        }
 
-    header img {
-        width: 15vw;
-        filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(91deg) brightness(104%) contrast(104%);
-    }
+        header img {
+            width: 15vw;
+            filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(91deg) brightness(104%) contrast(104%);
+        }
 
-    .content {
-        background: white;
-        width: 60vw;
-        margin: 5% auto;
-        padding: 2% 3%;
-        border-radius: 15px;
-        box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.75);
-        -webkit-box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.75);
-        -moz-box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.75);
-    }
+        .content {
+            background: white;
+            width: 60vw;
+            margin: 5% auto;
+            padding: 2% 3%;
+            border-radius: 15px;
+            box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.75);
+            -webkit-box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.75);
+            -moz-box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.75);
+        }
     </style>
 </head>
 
 <body>
     <header>
-        <img src="../assets/text-logo.png" alt="REaCT - CORE">
+        <a href="../"><img src="../assets/text-logo.png" alt="REaCT - CORE"></a>
         <h2>Privacy Policy</h2>
     </header>
     <div class="content">
@@ -67,8 +67,7 @@
         <p>We use Your Personal data to provide and improve the Service. By using the Service, You agree to the
             collection
             and use of information in accordance with this Privacy Policy. This Privacy Policy has been created with the
-            help of the <a href="https://www.freeprivacypolicy.com/blog/sample-privacy-policy-template/"
-                target="_blank">Privacy Policy Template</a>.</p><br>
+            help of the <a href="https://www.freeprivacypolicy.com/blog/sample-privacy-policy-template/" target="_blank">Privacy Policy Template</a>.</p><br>
         <h1>Interpretation and Definitions</h1><br>
         <h2>Interpretation</h2>
         <p>The words of which the initial letter is capitalized have meanings defined under the following conditions.
@@ -134,8 +133,7 @@
                     Service or from the Service infrastructure itself (for example, the duration of a page visit).</p>
             </li>
             <li>
-                <p><strong>Website</strong> refers to REaCT, accessible from <a href="https://react-app.ga/"
-                        rel="external nofollow noopener" target="_blank">https://react-app.ga/</a></p>
+                <p><strong>Website</strong> refers to REaCT, accessible from <a href="https://react-app.ga/" rel="external nofollow noopener" target="_blank">https://react-app.ga/</a></p>
             </li>
             <li>
                 <p><strong>You</strong> means the individual accessing or using the Service, or the company, or other
@@ -209,10 +207,7 @@
                 Cookies are not managed by the same browser settings as those used for Browser Cookies. For more
                 information
                 on how You can delete Flash Cookies, please read &quot;Where can I change the settings for disabling, or
-                deleting local shared objects?&quot; available at <a
-                    href="https://helpx.adobe.com/flash-player/kb/disable-local-shared-objects-flash.html#main_Where_can_I_change_the_settings_for_disabling__or_deleting_local_shared_objects_"
-                    rel="external nofollow noopener"
-                    target="_blank">https://helpx.adobe.com/flash-player/kb/disable-local-shared-objects-flash.html#main_Where_can_I_change_the_settings_for_disabling__or_deleting_local_shared_objects_</a>
+                deleting local shared objects?&quot; available at <a href="https://helpx.adobe.com/flash-player/kb/disable-local-shared-objects-flash.html#main_Where_can_I_change_the_settings_for_disabling__or_deleting_local_shared_objects_" rel="external nofollow noopener" target="_blank">https://helpx.adobe.com/flash-player/kb/disable-local-shared-objects-flash.html#main_Where_can_I_change_the_settings_for_disabling__or_deleting_local_shared_objects_</a>
             </li>
             <li><strong>Web Beacons.</strong> Certain sections of our Service and our emails may contain small
                 electronic
@@ -227,9 +222,7 @@
             personal
             computer or mobile device when You go offline, while Session Cookies are deleted as soon as You close Your
             web
-            browser. Learn more about cookies: <a
-                href="https://www.freeprivacypolicy.com/blog/sample-privacy-policy-template/#Use_Of_Cookies_And_Tracking"
-                target="_blank">Use of Cookies by Free Privacy Policy</a>.</p>
+            browser. Learn more about cookies: <a href="https://www.freeprivacypolicy.com/blog/sample-privacy-policy-template/#Use_Of_Cookies_And_Tracking" target="_blank">Use of Cookies by Free Privacy Policy</a>.</p>
         <p>We use both Session and Persistent Cookies for the purposes set out below:</p>
         <ul>
             <li>

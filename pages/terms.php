@@ -55,7 +55,7 @@
 
 <body>
 <header>
-        <img src="../assets/text-logo.png" alt="REaCT - CORE">
+        <a href="../"><img src="../assets/text-logo.png" alt="REaCT - CORE"></a>
         <h2>Terms of Service</h2>
     </header>
     <div class="content">

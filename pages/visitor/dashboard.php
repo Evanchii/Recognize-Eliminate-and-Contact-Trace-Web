@@ -3,8 +3,7 @@ include '../../functions/checkSession.php';
 
 $uid = $_SESSION["uid"];
 $infoRef = $database->getReference("Users/" . $uid . "/info");
-$linkRef = $database->getReference("appData/links/");
-$stats = $database->getReference('Stats/' . $infoRef->getChild('addCi')->getValue());
+$stats = $database->getReference('Stats/');
 $statsData = $stats->orderByKey()->limitToLast(1)->getSnapshot()->getValue();
 if ($statsData != NULL) {
     $key = array_keys($statsData)[0];
@@ -124,8 +123,8 @@ if ($imageReference->exists()) {
       </div>
       <div class="status-image">
         <!-- Get photo/resources from FB -->
-        <img src="../../assets/inforgraphics/<?php echo $statsData[$key]['brgy']; ?>" alt="COVID STATUS" onerror="this.src='../../assets/nodata/nd_brgy.png'">
-        <img src="../../assets/inforgraphics/<?php echo $statsData[$key]['situationer']; ?>" alt="COVID STATUS" onerror="this.src='../../assets/nodata/nd_situationer.png'">
+        <img src="../../assets/infographics/<?php echo $statsData[$key]['brgy']; ?>" alt="COVID STATUS" onerror="this.src='../../assets/nodata/nd_brgy.png'">
+        <img src="../../assets/infographics/<?php echo $statsData[$key]['situationer']; ?>" alt="COVID STATUS" onerror="this.src='../../assets/nodata/nd_situationer.png'">
       </div>
       <div class="loc-history">
         <div class="loc-title">
