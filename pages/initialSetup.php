@@ -1,4 +1,6 @@
 <?php
+use PhpKairos\PhpKairos;
+include '../includes/vendor/autoload.php';
 session_start();
 
 $dbError = false;
@@ -6,6 +8,7 @@ $dbError = false;
 try {
     include '../includes/dbconfig.php';
 
+    $auth = $firebase->createAuth();
     $userRef = $database->getReference('Users')->getSnapshot();
     if ($userRef->hasChildren()) {
         header('Location: ../');
@@ -16,6 +19,37 @@ try {
 }
 
 if (isset($_POST['submit'])) {
+
+    // drop all data
+    // Kairos
+    $api     = 'http://api.kairos.com/';
+    $app_id  = '345b9a6b';
+    $app_key = '0ee46186eb4310b5e7936385b2f32a32';
+    $client = new PhpKairos($api, $app_id, $app_key);
+
+    $gallery_name = 'users';
+
+    // $response = $client->removeGallery($gallery_name);
+    // $result   = $response->getBody()->getContents();
+
+    // Firebase Storage
+
+    $storage = $firebase->createStorage();
+    $storageClient = $storage->getStorageClient();
+    $defaultBucket = $storage->getBucket();
+
+    $files = $defaultBucket->objects();
+    foreach($files as $obj) {
+        $obj->delete();
+    }
+
+    // Firebase Auth
+    $users = $auth->listUsers($defaultMaxResults = 1000, $defaultBatchSize = 1000);
+    $forceDeleteEnabledUsers = true; // default: false
+
+    foreach ($users as $user) {
+        $auth->deleteUser($user->__get('uid'));    
+    }
 
     $userRef = $database->getReference('Users');
     if (!$userRef->getSnapshot()->hasChildren()) {
@@ -31,8 +65,6 @@ if (isset($_POST['submit'])) {
         $lName = $_POST['lName'];
         $cNo = $_POST['cNo'];
 
-        $auth = $firebase->createAuth();
-
         $userProperties = [
             "email" => $email,
             "password" => $password,
@@ -41,7 +73,7 @@ if (isset($_POST['submit'])) {
 
         $createdUser = $auth->createUser($userProperties);
 
-        $userRef->getChild($createdUser->uid.'/info')->update([
+        $userRef->getChild($createdUser->uid . '/info')->update([
             'Type' => 'admin',
             'addCi' => $city,
             'addPro' => $province,
@@ -54,9 +86,12 @@ if (isset($_POST['submit'])) {
             'lName' => $lName,
             'username' => $username,
         ]);
-        
-        header('Location: ../');
 
+        $database->getReference("AppInfo")->update([
+            'Admin' => $createdUser->uid
+        ]);
+
+        header('Location: ../');
     }
 }
 ?>

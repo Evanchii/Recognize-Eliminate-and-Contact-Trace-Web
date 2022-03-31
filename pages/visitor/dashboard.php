@@ -17,7 +17,9 @@ if ($statsData != NULL) {
             "tRecoveries" => 0,
             "tTested" => 0,
             "tCases" => 0,
-            "daily" => null
+            "daily" => null,
+            "brgy" => null,
+            "situationer" => null
         ],
     ];
 }

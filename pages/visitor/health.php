@@ -40,13 +40,18 @@ if (isset($_POST['action'])) {
       ]);
 
       echo <<<HTML
+      <!-- JQuery -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+
       <script>
         $.ajax({
           url: "../../functions/covidNotification.php",
           type: "POST",
           data: {
-            "uid": {$uid}
+            "uid": '{$uid}'
           }
+        }).done(function(data) {
+          console.log(data);
         });
       </script>
       HTML;

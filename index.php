@@ -113,9 +113,9 @@ if (isset($_POST['inSubmit'])) {
     <!-- jQuery Modal -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
 
-    <a href="#debugMenu" rel="modal:open" class="float">
+    <!-- <a href="#debugMenu" rel="modal:open" class="float">
         <i class="fa fa-bug my-float"></i>
-    </a>
+    </a> -->
 
     <div id="forgot" class="modal">
         <div class="modal-title" style="--c: white;">

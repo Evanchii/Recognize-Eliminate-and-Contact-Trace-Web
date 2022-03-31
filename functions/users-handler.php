@@ -18,6 +18,7 @@ $header = [
 $data = [];
 if($userRef->getSnapshot()->hasChildren()) {
     $rawData = $userRef->getValue();
+    unset($rawData['admin']);
     foreach($rawData as $uid => $info) {
         if (str_contains($info['info']['Type'], 'admin')) {
             continue;
